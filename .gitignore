@@ -1,7 +1,39 @@
+# dependencies
 node_modules/
+.pnp
+.pnp.js
+
+# next / build output
 .next/
 out/
+build/
+dist/
+*.tsbuildinfo
+next-env.d.ts
+
+# local secrets — never commit
 .env
 .env.local
 .env.*.local
+.env.development
+.env.production
+
+# student data and uploads (local development store) — never commit
+.data/
+uploads/
+*.sqlite
+*.db
+
+# generated exports
+go-abroad-bd-applications-*.csv
+
+# editor / OS
 .DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# logs
+npm-debug.log*
+yarn-error.log*
+.env*.log

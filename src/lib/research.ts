@@ -2,6 +2,9 @@ import { colleges } from "./colleges";
 
 export const VERIFIED_ON = "5 November 2026";
 
+/** Folder the editorial guide was based on. Used for the "poster" audit notes only. */
+export const POSTER_BASED = true;
+
 export const sources = {
   vuAdmissions: { label: "VU international admissions", url: "https://admissions.vu.lt/" },
   vuApply: { label: "VU application guide", url: "https://vu.lt/en/studies/bachelor-and-integrated-studies" },
@@ -66,6 +69,38 @@ export const sources = {
   vdaRecognition: { label: "VDA foreign qualification recognition", url: "https://www.vda.lt/en/admission/recognition" },
   alytus: { label: "Kauno kolegija on Alytus merger", url: "https://www.kaunokolegija.lt/en/strategy/" },
   lcss: { label: "LCSS institutional profile", url: "https://lcss.lt/en/about-lcss/" },
+  // Kaunas University of Technology (KTU)
+  ktuHome: { label: "KTU official site", url: "https://en.ktu.edu/" },
+  ktuAdmissions: { label: "KTU admissions portal", url: "https://admissions.ktu.edu/" },
+  ktuApply: { label: "KTU online application (apply.ktu.edu)", url: "https://apply.ktu.edu/" },
+  ktuNews2027: { label: "KTU opens admissions for international students 2027", url: "https://admissions.ktu.edu/news/ktu-opens-admissions-for-international-students-2027/" },
+  ktuBachelor: { label: "KTU Bachelor's admission & fees", url: "https://admissions.ktu.edu/bachelor/" },
+  ktuMaster: { label: "KTU Master's admission & fees", url: "https://admissions.ktu.edu/master/" },
+  ktuRecognition: { label: "KTU academic recognition & OMPT rules", url: "https://admissions.ktu.edu/academic-recognition/" },
+  ktuProgrammesB: { label: "KTU Bachelor's programme catalogue", url: "https://admissions.ktu.edu/programmes/b/" },
+  ktuProgrammesM: { label: "KTU Master's programme catalogue", url: "https://admissions.ktu.edu/programmes/m/" },
+  ktuRules2026: { label: "KTU 2026 Admission Rules (EN, PDF)", url: "https://admissions.ktu.edu/wp-content/uploads/sites/299/2026/06/Renewed-STUDENTU-PRIEMIMO-2026-M.-TAISYKLES_lyginamoji-versija_pakeitimas-2026-05-12_EN.pdf" },
+  ktuAI: { label: "KTU BSc Artificial Intelligence", url: "https://apply.ktu.edu/courses/course/189-bsc-artificial-intelligence" },
+  ktuInformatics: { label: "KTU BSc Informatics", url: "https://apply.ktu.edu/courses/course/18-bsc-informatics" },
+  ktuBusinessDigital: { label: "KTU BSc Business Digitalization Management", url: "https://apply.ktu.edu/courses/course/190-bsc-business-digitalization-management" },
+  ktuMechatronics: { label: "KTU BSc Mechatronics", url: "https://apply.ktu.edu/courses/course/54-bsc-mechatronics" },
+  ktuMScAI: { label: "KTU MSc Artificial Intelligence in Computer Science", url: "https://apply.ktu.edu/courses/course/19-msc-artificial-intelligence-computer-science" },
+  ktuMScAccounting: { label: "KTU MSc Accounting and Auditing", url: "https://apply.ktu.edu/courses/course/59-msc-accounting-and-auditing" },
+  // Mykolas Romeris University (MRU)
+  mruHome: { label: "MRU official site", url: "https://www.mruni.eu/en/" },
+  mruAdmission: { label: "MRU admission information & 2027–28 deadlines", url: "https://www.mruni.eu/en/admission_procedure/" },
+  mruCountry: { label: "MRU Bangladesh country-specific requirements", url: "https://www.mruni.eu/en/admission_procedure/country-specific-requirements/" },
+  mruApply: { label: "MRU online application (apply.mruni.eu)", url: "https://apply.mruni.eu/" },
+  mruRules2026: { label: "MRU Rules of Admission 2026 (PDF)", url: "https://www.mruni.eu/wp-content/uploads/2025/12/Rules-of-Admission-2026.pdf" },
+  mruOMPT: { label: "MRU OMPT requirements (PDF)", url: "https://www.mruni.eu/wp-content/uploads/2026/11/OMP_requirements_MRU_2026.pdf" },
+  mruPsych: { label: "MRU BSc Psychology", url: "https://www.mruni.eu/en/study_program/psychology/" },
+  mruMarketing: { label: "MRU BSc Communication and Digital Marketing", url: "https://www.mruni.eu/en/study_program/communication-and-digital-marketing/" },
+  mruLawSecurity: { label: "MRU BSc Law and Global Security", url: "https://www.mruni.eu/en/study_program/law-and-global-security-2/" },
+  mruESP: { label: "MRU BSc English for Specific Purposes & Second Foreign Language", url: "https://www.mruni.eu/en/study_program/english-for-specific-purposes-and-the-second-foreign-language/" },
+  mruEUlaw: { label: "MRU MA European Union Law and Governance", url: "https://www.mruni.eu/en/study_program/european-union-law-and-governance/" },
+  mruLawTech: { label: "MRU MA Law, Technology and Business", url: "https://www.mruni.eu/en/study_program/law-technology-and-business/" },
+  mruBizEcon: { label: "MRU MA Business Economics and Sustainable Development", url: "https://www.mruni.eu/en/study_program/business-economics-and-sustainable-development/" },
+  mruFunding: { label: "MRU funding and scholarships", url: "https://www.mruni.eu/en/funding-and-scholarships/" },
   // Colleges
   kkApply: { label: "Kauno kolegija application", url: "https://kaunokolegija.lt/english/application/" },
   kkRules: { label: "KK admission procedure PDF", url: "https://kaunokolegija.lt/english/wp-content/uploads/sites/13/2025/12/PROCEDURE-FOR-THE-ADMISSION-OF-PERSONS-EDUCATED-ABROAD-TO-ENGLISH-TAUGHT-STUDY-PROGRAMMES-IN-2026.pdf" },
@@ -134,11 +169,61 @@ export const sources = {
 } as const;
 
 export type SourceKey = keyof typeof sources;
-export type FactStatus = "published" | "earlier" | "unconfirmed";
-export type Fact = { text: string; sources?: SourceKey[]; status?: FactStatus };
+export type FactStatus = "published" | "programme" | "earlier" | "unconfirmed" | "conflicting";
+
+export type VerificationStatus =
+  | "Officially Confirmed"
+  | "Published – Programme Specific"
+  | "Previous Intake Information"
+  | "Awaiting Official Confirmation"
+  | "Conflicting Official Information";
+
+export type Fact = {
+  text: string;
+  sources?: SourceKey[];
+  status?: FactStatus;
+  /** Applicable intake the fact was published for, e.g. "September 2027" or "2026/27". */
+  intake?: string;
+  /** Degree level the rule applies to. */
+  level?: "Bachelor" | "Master" | "Both";
+  /** Date this individual fact was last checked against the official source. */
+  verifiedOn?: string;
+};
+
 const fact = (text: string, sourceKeys: SourceKey[] = [], status: FactStatus = "published"): Fact => ({ text, sources: sourceKeys, status });
 const pending = (text: string, sourceKeys: SourceKey[] = []): Fact => fact(`Not officially confirmed — ${text}`, sourceKeys, "unconfirmed");
 const earlier = (text: string, sourceKeys: SourceKey[]): Fact => fact(text, sourceKeys, "earlier");
+
+/** The five research states counsellors are trained to read. */
+export const factStatusLabels: Record<FactStatus, VerificationStatus> = {
+  published: "Officially Confirmed",
+  programme: "Published – Programme Specific",
+  earlier: "Previous Intake Information",
+  unconfirmed: "Awaiting Official Confirmation",
+  conflicting: "Conflicting Official Information",
+};
+
+export type ResearchRank = "verified" | "partial" | "open";
+
+/** Worst case across every section: one "earlier" or unconfirmed fact downgrades the whole profile. */
+export function verificationRank(university: { facts: Record<SectionKey, Fact[]> }): ResearchRank {
+  const all = Object.values(university.facts).flat();
+  if (!all.length) return "open";
+  if (all.some((item) => (item.status ?? "published") === "unconfirmed" || (item.status ?? "published") === "conflicting")) return "open";
+  if (all.some((item) => (item.status ?? "published") === "earlier")) return "partial";
+  return "verified";
+}
+
+/** Sections that still need a counsellor to re-check before quoting the profile to a student. */
+export function sectionsNeedingUpdate(university: { facts: Record<SectionKey, Fact[]> }) {
+  return researchSections
+    .filter((section) => university.facts[section.key].some((item) => (item.status ?? "published") !== "published"))
+    .map((section) => section.key);
+}
+
+export function getResearchFreshness(university: { verifiedOn?: string }) {
+  return university.verifiedOn ?? VERIFIED_ON;
+}
 
 export const researchSections = [
   { key: "fee", title: "Application Fee" },
@@ -172,6 +257,8 @@ export type University = {
   description: string;
   status: "dates" | "partial" | "waiting" | "none";
   category?: "university" | "college";
+  /** Date this individual profile was last checked against official sources. Falls back to VERIFIED_ON. */
+  verifiedOn?: string;
   feeSummary: string;
   deadlineSummary: string;
   omptSummary: string;
@@ -580,6 +667,358 @@ export const universities: University[] = [
     importantNotes: [fact("Many Master's courses are principally taught in Lithuanian despite English support. VDA says a programme runs only if its minimum cohort of four is admitted.", ["vdaMasters"]), fact("VDA's published entrance assessment is 50% portfolio and 50% online exam/interview; keep high-quality portfolio links accessible to the committee.", ["vdaHow", "vdaMasters"])],
     officialLinks: ["vdaPortal", "vdaMasters", "vdaFees", "vdaHow", "vdaRecognition"],
   },
+  {
+    slug: "kaunas-university-of-technology",
+    name: "Kaunas University of Technology",
+    abbreviation: "KTU",
+    city: "Kaunas",
+    accent: "#8a2f2f",
+    initial: "KT",
+    area: "Engineering · Informatics · Technology · Business",
+    status: "dates",
+    verifiedOn: "15 November 2026",
+    description:
+      "Lithuania's largest technical university and its highest-ranked technological institution. KTU has published its own September 2027 international admission window and runs 50+ English-taught bachelor's and master's programmes.",
+    feeSummary: "€100",
+    deadlineSummary: "31 May 2027",
+    omptSummary: "Required for some qualifications · 75%",
+    facts: {
+      fee: [
+        fact(
+          "€100 non-refundable application fee for the institutional admission of foreign citizens. The fee is not refunded once the application has been registered, and the personal invoice reference number must be quoted in the payment purpose. Transfer applicants pay the same €100.",
+          ["ktuBachelor", "ktuMaster", "ktuRules2026"]
+        ),
+        fact(
+          "After an invitation to study, KTU requires an advance tuition payment covering the first study year (60 credits) before a learning agreement is signed. From the second year the tuition fee can be paid per semester.",
+          ["ktuBachelor", "ktuMaster"]
+        ),
+        pending(
+          "a separate 2027/28 application-fee amount. The consulted official pages state €100 without tying the figure to a specific intake year, so confirm it on your own invoice before paying.",
+          ["ktuBachelor"]
+        ),
+      ],
+      opening: [
+        fact(
+          "KTU officially opened international admission for September 2027 on 15 October 2026: “Today, Kaunas University of Technology (KTU) opens admissions for international students… apply by 31 May, and start your studies in September 2027.”",
+          ["ktuNews2027"]
+        ),
+        fact(
+          "The application period for the 2026/27 intake ran 15 October 2025 – 1 June 2026 with studies starting 1 September 2026, so the 2027 cycle opened at the same point in the calendar one year later.",
+          ["ktuBachelor", "ktuMaster"]
+        ),
+        fact(
+          "KTU runs one international intake per year (autumn). There is no spring intake for international applicants.",
+          ["ktuBachelor"]
+        ),
+      ],
+      deadline: [
+        fact(
+          "31 May 2027 is the published application deadline for September 2027 entry, per KTU's own 2027 admission announcement.",
+          ["ktuNews2027"]
+        ),
+        earlier(
+          "The previous cycle closed on 1 June 2026, so a late-May closing date is the consistent pattern; do not assume the 2027 date will be extended.",
+          ["ktuBachelor", "ktuMaster"]
+        ),
+        pending(
+          "a published Bangladesh-specific deadline, and a separate final document/visa cut-off after 31 May 2027. KTU states document submission and any online tests are set per applicant after fee confirmation.",
+          ["ktuBachelor"]
+        ),
+      ],
+      academic: [
+        fact(
+          "Bachelor's entry: completed secondary education with a minimum average grade (CGPA) above 60% in each entry subject, plus at least one passed state or equivalent examination in any subject — or the entrance examination organised by KTU. Applicants who completed secondary education before 2018 must sit KTU's own entrance examinations.",
+          ["ktuBachelor", "ktuRules2026"]
+        ),
+        fact(
+          "Master's entry: a Bachelor's qualification degree (or integrated studies diploma) in the fields listed in Appendix 6 to the Admission Rules, a weighted grade point average of at least 60%, and a mandatory motivation assessment — a motivation letter or a motivation interview depending on the programme. An applicant who skips the motivation assessment cannot compete for admission.",
+          ["ktuMaster", "ktuRules2026"]
+        ),
+        fact(
+          "KTU is mandated by the Lithuanian Ministry of Education and Science to perform academic recognition of foreign qualifications itself, free of charge, under the Lisbon Recognition Convention. Bangladesh documents are assessed through SKVC country-specific requirements; grades are converted according to SKVC guidelines. Recognition normally takes up to one month and does not by itself guarantee admission.",
+          ["ktuRecognition", "ktuBachelor"]
+        ),
+        pending(
+          "a named Bangladesh SSC/HSC minimum GPA beyond the published 60% average, an explicit Alim/Diploma equivalence statement, and a written study-gap rule. These are assessed case by case by the International Studies Office rather than published as a Bangladesh table.",
+          ["ktuRecognition"]
+        ),
+      ],
+      english: [
+        fact(
+          "Bachelor's level: English at minimum CEFR B2 — IELTS overall 5.5 with every component at least 5.5, TOEFL iBT at least 75, or an equivalent international test taken within the last two years.",
+          ["ktuBachelor"]
+        ),
+        fact(
+          "Master's level: English at minimum CEFR C1 — IELTS overall 6.0 with components at least 5.5, TOEFL iBT at least 85, or an equivalent test taken within the last two years.",
+          ["ktuMaster"]
+        ),
+        fact(
+          "KTU explicitly states it may accept fully English-medium previous studies when this is stated in the degree certificate, transcript of records or a confirmation from the school, and that an applicant with no official English certificate may be given a free online English examination instead. PTE Academic is not named in the published list.",
+          ["ktuBachelor"]
+        ),
+        pending(
+          "a published PTE Academic minimum for each programme, and a formal acceptance policy for Bangladeshi MOI letters on their own. Ask the International Studies Office in writing before relying on either.",
+          ["ktuBachelor"]
+        ),
+      ],
+      tuition: [
+        earlier(
+          "Official 2026/27 non-EU annual tuition (published for students starting in 2026-2027): Business and Public Administration, Economics, Political Sciences, Communication and Linguistics programmes €3,250/year (€54.17 per credit); Engineering, Technology, Informatics, Physical Sciences, Mathematics, Education and Translation programmes €4,201/year (€70.02 per credit); Integrated Architecture €5,676/year for the first 240 credits and €6,985/year for credits 241–300.",
+          ["ktuBachelor"]
+        ),
+        earlier(
+          "Official Master's tuition as published for the 2025-2026 intake: Business, Public Administration, Economics, Political Sciences, Communication and Philosophy fields €4,690/year (€78.17 per credit); Engineering, Technology, Informatics, Physical and Mathematics Sciences, Education, Medical Technology and Translation fields €5,641/year (€94.02 per credit); Architecture €7,116/year (€118.60 per credit).",
+          ["ktuMaster"]
+        ),
+        pending(
+          "the Senate-approved 2027/28 fee table. KTU states fees are approved per intake by Senate decree and published on its admissions pages, so budget from the current figures but reconfirm before paying an advance tuition invoice.",
+          ["ktuBachelor", "ktuMaster"]
+        ),
+        fact(
+          "Tuition covers studies only — accommodation and food are charged separately. A tuition refund is possible if a temporary residence permit is refused, and a 100% refund applies before the academic year starts.",
+          ["ktuBachelor"]
+        ),
+      ],
+      programmes: [
+        fact(
+          "More than 50 English-taught bachelor's and master's programmes were open in the 2027 announcement. Undergraduate catalogue examples include Artificial Intelligence, Informatics, Business Digitalization Management, Mechatronics, Robotics, Electrical Engineering, Renewable Energy Engineering, Chemical Technology and Engineering, Engineering Physics, Aviation Engineering and New Media Language. Most bachelor's programmes are 3 or 4 years (180/240 ECTS); the single integrated programme is Architecture at 5 years (300 ECTS).",
+          ["ktuNews2027", "ktuApply", "ktuProgrammesB", "ktuBachelor", "ktuAI", "ktuInformatics", "ktuBusinessDigital", "ktuMechatronics"]
+        ),
+        fact(
+          "Master's programmes run 1.5 or 2 years (90 or 120 ECTS) and include Artificial Intelligence in Computer Science, Accounting and Auditing, Biomedical Engineering, Aeronautical Engineering, Applied Mathematics and Architecture. Applicants may list up to three programme preferences in the application.",
+          ["ktuProgrammesM", "ktuMaster", "ktuMScAI", "ktuMScAccounting"]
+        ),
+        pending(
+          "which individual programmes will be re-opened for September 2027 recruitment, since KTU states the programme list is confirmed per cycle.",
+          ["ktuNews2027", "ktuApply"]
+        ),
+      ],
+      ompt: [
+        fact(
+          "KTU requires the Online Mathematics Placement Test (OMPT) for holders of certain third-country qualifications — the OMPT-A or OMPT-D version — before they can be considered for admission to a specific programme. The minimum compulsory score is 75%.",
+          ["ktuRecognition"]
+        ),
+        fact(
+          "OMPT conditions: the test must be taken no later than 1 April of the current year, the certificate must be uploaded to the DreamApply application system before the application is submitted, results must be no more than two years old, and a maximum of two attempts is allowed — a third result is not accepted.",
+          ["ktuRecognition"]
+        ),
+        pending(
+          "whether Bangladesh is one of the nationalities in KTU's OMPT country list for your chosen programme. KTU presents this through an interactive country map rather than a published table, so confirm in writing with academic.recognition@ktu.lt before booking the test.",
+          ["ktuRecognition"]
+        ),
+      ],
+    },
+    featuredProgrammes: [
+      { name: "Artificial Intelligence", level: "Bachelor", duration: "4 years", language: "English", intake: "September 2027", tuition: "€4,201 / year · 2026/27 rate", source: "ktuAI" },
+      { name: "Informatics", level: "Bachelor", duration: "4 years", language: "English", intake: "September 2027", tuition: "€4,201 / year · 2026/27 rate", source: "ktuInformatics" },
+      { name: "Business Digitalization Management", level: "Bachelor", duration: "3 years", language: "English", intake: "September 2027", tuition: "€3,250 / year · 2026/27 rate", source: "ktuBusinessDigital" },
+      { name: "Mechatronics", level: "Bachelor", duration: "4 years", language: "English", intake: "September 2027", tuition: "€4,201 / year · 2026/27 rate", source: "ktuMechatronics" },
+      { name: "Artificial Intelligence in Computer Science", level: "Master", duration: "2 years", language: "English", intake: "September 2027", tuition: "€5,641 / year · 2025/26 rate", source: "ktuMScAI" },
+      { name: "Accounting and Auditing", level: "Master", duration: "1.5 years", language: "English", intake: "September 2027", tuition: "€4,690 / year · 2025/26 rate", source: "ktuMScAccounting" },
+    ],
+    eligibility:
+      "Yes in principle. KTU publishes an open international route with a 60% CGPA minimum, a Bachelor's/Secondary certificate route, an accepted entrance exam or state exam, and a country-specific recognition process it runs itself. For Bangladesh applicants the two decisive open questions are the OMPT requirement for the chosen programme and whether HSC evidence satisfies the 'passed state or equivalent examination' clause.",
+    bestFor: [
+      "Artificial Intelligence / Informatics · strong maths and programming",
+      "Mechatronics / Electrical Engineering · hands-on engineering applicants",
+      "Business Digitalization Management · business applicants who want a technical campus",
+    ],
+    importantNotes: [
+      fact(
+        "Apply through apply.ktu.edu only. KTU states applications are admitted exclusively through its electronic application form, and there is no spring intake.",
+        ["ktuBachelor", "ktuApply"]
+      ),
+      fact(
+        "Applications are reviewed within 2–3 working days once the fee is confirmed. A Conditional Letter does not let you start the residence-permit process — you need the Final Acceptance Letter and a mediation letter.",
+        ["ktuBachelor"]
+      ),
+      fact(
+        "KTU's strongest funding route is automatic: every applicant through apply.ktu.edu becomes a candidate for a partial or full tuition-fee waiver on academic merit, with results published after the application period closes.",
+        ["ktuBachelor", "ktuMaster"]
+      ),
+    ],
+    officialLinks: ["ktuAdmissions", "ktuNews2027", "ktuBachelor", "ktuMaster", "ktuRecognition", "ktuApply"],
+  },
+  {
+    slug: "mykolas-romeris-university",
+    name: "Mykolas Romeris University",
+    abbreviation: "MRU",
+    city: "Vilnius",
+    accent: "#2f5d8a",
+    initial: "MR",
+    area: "Law · Social sciences · Business · Psychology · Informatics",
+    status: "dates",
+    verifiedOn: "15 November 2026",
+    description:
+      "A Vilnius social-sciences university and Lithuania's top-ranked law school. MRU has already published the full 2027–28 cycle, including an explicit OMPT requirement for Bangladesh, and runs one intake each September.",
+    feeSummary: "€100 + €50",
+    deadlineSummary: "1 June 2027",
+    omptSummary: "Required for Bangladesh · mandatory",
+    facts: {
+      fee: [
+        fact(
+          "Non-EU citizens pay a €100 non-refundable application fee; EU citizens, MRU alumni and Ukrainians pay €50. An application is treated as submitted only once the fee is paid — applications are not reviewed without it.",
+          ["mruAdmission", "mruPsych"]
+        ),
+        fact(
+          "On acceptance, a €50 non-refundable registration fee is payable together with the first-year tuition fee before the study contract is signed.",
+          ["mruAdmission"]
+        ),
+        pending(
+          "a 2027/28 revision to the fee amounts. The published €100 / €50 structure appears on the current admission pages alongside the 2027–28 dates but is not separately dated as a 2027 figure.",
+          ["mruAdmission"]
+        ),
+      ],
+      opening: [
+        fact(
+          "MRU states that online applications for the 2027–2028 academic year open on 1 November 2026 through apply.mruni.eu. This is an already-published date, not an expectation.",
+          ["mruAdmission"]
+        ),
+        fact(
+          "MRU has one intake per year, with studies commencing on 1 September. There is no spring intake for degree applicants.",
+          ["mruAdmission"]
+        ),
+        fact(
+          "International students must arrive at the University by 1 September unless their programme specifies a later start; those still awaiting a temporary residence permit may begin remotely, and non-arrival without valid cause is reported to the Migration Department.",
+          ["mruPsych"]
+        ),
+      ],
+      deadline: [
+        fact(
+          "1 June 2027 is the closing date for applicants from non-EU countries, which includes Bangladesh.",
+          ["mruAdmission"]
+        ),
+        fact(
+          "24 July 2027 is the closing date for EU/EFTA applicants and for countries with a VFS Global centre or whose citizens do not need a temporary residence permit to enter Lithuania. Bangladesh applicants fall under the earlier 1 June 2027 date.",
+          ["mruAdmission"]
+        ),
+        fact(
+          "MRU caps a country at 200 submitted applications to protect programme diversity. Once the Bangladesh quota is reached, no further applications from Bangladesh can be submitted — so early submission is materially safer than submitting before the deadline.",
+          ["mruAdmission"]
+        ),
+      ],
+      academic: [
+        fact(
+          "Bachelor's entry: a secondary education diploma or equivalent including final grades, with a minimum of 60% of the maximum possible GPA to enter the competition. Meeting the minimum does not guarantee admission, because admission is competitive.",
+          ["mruAdmission"]
+        ),
+        fact(
+          "Master's entry: a Bachelor's degree or equivalent first university degree with a minimum three-year study duration, academic transcripts for each study year, a motivational letter, and a passport copy. Some programmes require a diploma in a specific field.",
+          ["mruAdmission"]
+        ),
+        fact(
+          "Bangladesh-specific document set: HSC certificate and transcript, SSC certificate and transcript, and an OMPT result. MRU adds four categorical exclusions in its own country table: provisional certificates are accepted only if the applicant graduated within the last two years; the Alim examination does not grant access to study at MRU; backgrounds outside humanities or science are not considered; and a Diploma in Engineering does not grant access.",
+          ["mruCountry"]
+        ),
+        fact(
+          "Study gap and motivation: there is no age limit, but a gap of three years or more after high school graduation may trigger additional knowledge evaluation tests. Motivational letters are screened with specialised software and must be written without AI assistance.",
+          ["mruAdmission"]
+        ),
+        pending(
+          "a published Bangladesh HSC GPA cut-off above the stated 60% overall minimum, and whether HSC Science/Commerce backgrounds map to specific programmes without a case-by-case review.",
+          ["mruCountry"]
+        ),
+      ],
+      english: [
+        fact(
+          "Required level B2, with these accepted equivalences: Duolingo 100–125 (MRU's recommended option), TOEFL iBT 72–94, IELTS 5.5–6.5, PTE Academic 59–75, IGCSE English First Language grade E/3 or above, Cambridge O Level/GCSE English Language grade E/3 or above, and Cambridge English B2 First / C1 Advanced at 162 or above on the Cambridge scale.",
+          ["mruAdmission"]
+        ),
+        fact(
+          "If you have no certificate, you can sit MRU's own online English level test free of charge and select it inside the application. No certificate is required if English is your native language or your previous studies were conducted fully in English.",
+          ["mruAdmission"]
+        ),
+        fact(
+          "Applicants below B2 can take MRU's Preparatory English Language Courses online before degree studies.",
+          ["mruAdmission"]
+        ),
+        pending(
+          "whether a Bangladeshi MOI letter alone is accepted as the 'previous studies fully in English' proof. MRU states the principle but does not publish a Bangladesh-specific acceptance statement.",
+          ["mruAdmission"]
+        ),
+      ],
+      tuition: [
+        earlier(
+          "Official 2026–2027 tuition, as published on each programme page: Psychology €4,200/year (3.5 years, 210 ECTS); English for Specific Purposes and the Second Foreign Language €4,200/year (3.5 years); Communication and Digital Marketing €3,250/year (3 years, 180 ECTS); Law and Global Security €3,250/year (3.5 years, 210 ECTS).",
+          ["mruPsych", "mruESP", "mruMarketing", "mruLawSecurity"]
+        ),
+        earlier(
+          "Official 2026–2027 Master's tuition: European Union Law and Governance (double degree) €4,690/year; Business Economics and Sustainable Development €4,690/year; Law, Technology and Business €3,518/year.",
+          ["mruEUlaw", "mruBizEcon", "mruLawTech"]
+        ),
+        fact(
+          "MRU states it charges the same tuition to EU and non-EU citizens, and that a student continues to pay the tuition fee that applied at the time of admission.",
+          ["mruPsych", "mruBizEcon"]
+        ),
+        pending(
+          "the 2027–28 tuition table. Every figure above is explicitly labelled 2026-2027 on the programme page, so treat it as the current rate rather than a confirmed 2027 price.",
+          ["mruPsych", "mruAdmission"]
+        ),
+      ],
+      programmes: [
+        fact(
+          "English-taught bachelor's programmes include Psychology (3.5 years), Communication and Digital Marketing (3 years), Global Business and Modern Marketing, Business Management and Startup Building, Law and Global Security (3.5 years), English for Specific Purposes and the Second Foreign Language, English for Specific Purposes and Korean Studies, and joint Digital Media Design and Game Development programmes with Dongseo University in South Korea.",
+          ["mruPsych", "mruMarketing", "mruLawSecurity", "mruESP", "mruApply"]
+        ),
+        fact(
+          "English-taught master's programmes include European Union Law and Governance (double degree) and Business Economics and Sustainable Development at 1.5 years, Law, Technology and Business at 1.5 years, International Law, Cybersecurity Management, Financial Management, Project Management and an MBA.",
+          ["mruEUlaw", "mruBizEcon", "mruLawTech", "mruApply"]
+        ),
+        pending(
+          "the confirmed September 2027 opening for each individual programme, and whether the Dongseo joint degrees recruit a Bangladesh cohort for 2027.",
+          ["mruApply"]
+        ),
+      ],
+      ompt: [
+        fact(
+          "MRU's Bangladesh country-specific requirements list the Online Mathematics Placement Test (OMPT) result as a mandatory document for Bachelor's applicants from Bangladesh, alongside the HSC and SSC certificates and transcripts.",
+          ["mruCountry"]
+        ),
+        fact(
+          "MRU states the University may additionally require applicants to submit OMPT results, and publishes a dedicated OMPT requirements PDF with the applicable programmes and scores for the current cycle.",
+          ["mruAdmission", "mruOMPT"]
+        ),
+        pending(
+          "the exact OMPT version and passing score applicable to a Bangladesh applicant for a specific 2027 programme. The MRU OMPT PDF covers the 2026 cycle, so download the updated version before booking the test.",
+          ["mruOMPT"]
+        ),
+      ],
+    },
+    featuredProgrammes: [
+      { name: "Psychology", level: "Bachelor", duration: "3.5 years", language: "English", intake: "September 2027", tuition: "€4,200 / year · 2026–27", source: "mruPsych" },
+      { name: "Communication and Digital Marketing", level: "Bachelor", duration: "3 years", language: "English", intake: "September 2027", tuition: "€3,250 / year · 2026–27", source: "mruMarketing" },
+      { name: "Law and Global Security", level: "Bachelor", duration: "3.5 years", language: "English", intake: "September 2027", tuition: "€3,250 / year · 2026–27", source: "mruLawSecurity" },
+      { name: "English for Specific Purposes & Second Foreign Language", level: "Bachelor", duration: "3.5 years", language: "English", intake: "September 2027", tuition: "€4,200 / year · 2026–27", source: "mruESP" },
+      { name: "European Union Law and Governance", level: "Master", duration: "1.5 years", language: "English", intake: "September 2027", tuition: "€4,690 / year · 2026–27", source: "mruEUlaw" },
+      { name: "Law, Technology and Business", level: "Master", duration: "1.5 years", language: "English", intake: "September 2027", tuition: "€3,518 / year · 2026–27", source: "mruLawTech" },
+    ],
+    eligibility:
+      "Conditionally yes, and MRU is unusually explicit about Bangladesh. HSC and SSC certificates plus transcripts and an OMPT result are required; Alim is explicitly excluded, a Diploma in Engineering is explicitly excluded, only humanities or science backgrounds are considered, and provisional certificates are accepted only within two years of graduation. The 200-application country quota means the practical risk is the quota closing, not the deadline.",
+    bestFor: [
+      "Law and Global Security / EU Law · law-oriented applicants",
+      "Psychology · social-science applicants with a science or humanities background",
+      "Communication and Digital Marketing · media, SEO and brand careers",
+    ],
+    importantNotes: [
+      fact(
+        "Bangladesh applicants need an OMPT result for Bachelor's admission. This is stated in MRU's own Bangladesh country table, so plan and budget for the test before the 1 June 2027 deadline.",
+        ["mruCountry", "mruOMPT"]
+      ),
+      fact(
+        "Alim does not give access to MRU, and a Diploma in Engineering does not either. If a student's route is one of those, redirect them to a different institution rather than submitting an application that will be refused.",
+        ["mruCountry"]
+      ),
+      fact(
+        "The motivational letter is checked for AI-generated text. MRU says authenticity is verified with specialised software, so a student should write it themselves.",
+        ["mruAdmission"]
+      ),
+      fact(
+        "Master's applicants from Africa, the Americas, Australia, Pakistan and Turkey must have transcripts sent directly by their previous institution to recognition@mruni.eu. Bangladesh is listed under the Bachelor's table rather than this Master's list, so confirm the transcript route with MRU before applying.",
+        ["mruCountry"]
+      ),
+    ],
+    officialLinks: ["mruAdmission", "mruCountry", "mruApply", "mruPsych", "mruOMPT"],
+  },
 ];
 
 export type Institution = University & { category: "university" | "college" };
@@ -627,3 +1066,85 @@ export const posterNotes: { title: string; body: string; slug?: string; source?:
     source: "lcssAbout",
   },
 ];
+
+/**
+ * Privacy copy kept in one place so the notice, the application form and the
+ * counsellor handover stay consistent.
+ */
+export const privacyFacts = {
+  summary:
+    "Go Abroad BD collects only what is needed to assess a Lithuanian university application and to contact the student about it. Records are held in a managed PostgreSQL database with row level security, documents sit in a private storage bucket, and nothing submitted through the form is published anywhere on this website.",
+  collected: [
+    "Name, date of birth, nationality, country of residence and address",
+    "Email, mobile, WhatsApp and optional alternative number",
+    "SSC, HSC, Diploma, Bachelor's or Master's results as entered by the student",
+    "IELTS, PTE, TOEFL, Duolingo or other English test scores",
+    "Preferred universities, programmes and intake",
+    "Documents the student chooses to upload",
+    "Optional background notes such as study gap or a previous visa refusal",
+  ],
+  protected: [
+    "Public form submissions are validated and rate limited on the server",
+    "Only signed staff sessions can read application records",
+    "Documents live in a private bucket and open through 10-minute signed links",
+    "The service-role key exists only on the server, never in browser code",
+    "Student data is never written to public JSON files or static folders",
+  ],
+  retention: [
+    "Active enquiries are kept while a September 2027 application is live",
+    "Records are deleted on request by email or WhatsApp",
+    "Uploaded documents can be removed without deleting the application",
+    "Closed applications with no activity are reviewed for deletion annually",
+  ],
+  sections: [
+    {
+      title: "Who controls the data",
+      body: [
+        "Go Abroad BD is the data controller for the information submitted through this website. The research desk publishes university admission information; the counselling team handles student records.",
+        "Contact for any privacy request: WhatsApp +880 1714 640238, or the email address used in your application correspondence.",
+      ],
+    },
+    {
+      title: "Why we process it",
+      body: [
+        "We process personal and academic information to assess eligibility against official university requirements, to advise on programme and university fit, to prepare and submit applications on your instruction, and to contact you about the progress of your application.",
+        "We do not sell student data, we do not use it for advertising retargeting, and we do not publish it on this website.",
+      ],
+    },
+    {
+      title: "Legal basis and consent",
+      body: [
+        "Submission requires three separate consents: processing of personal information, contact about your admission, and secure storage of uploaded documents. All three are recorded with a timestamp.",
+        "You can withdraw consent at any time by contacting us. Withdrawing consent for storage may end our ability to progress an application because universities require documentary evidence.",
+      ],
+    },
+    {
+      title: "Who can see a record",
+      body: [
+        "Only authorised Go Abroad BD administrators and counsellors with an active staff account can open an application. Access is enforced by database policies, not just by the interface.",
+        "If we submit your application to a university, the receiving institution receives the documents it requires. We tell you which institution an application has been sent to.",
+      ],
+    },
+    {
+      title: "Document uploads",
+      body: [
+        "Uploads are restricted to PDF, JPG, PNG and WEBP files up to 10 MB. Files are stored in a private bucket; there is no public URL for any document.",
+        "Staff open a document through a signed link that expires after ten minutes. Uploading a passport is optional at the enquiry stage.",
+      ],
+    },
+    {
+      title: "Your rights",
+      body: [
+        "You can ask for a copy of the information we hold, ask for corrections, ask us to delete a record, or ask us to stop contacting you.",
+        "We aim to respond to any request within 14 days. Deletion removes the application, its academic rows, test results, preferences, notes and uploaded files.",
+      ],
+    },
+    {
+      title: "Retention",
+      body: [
+        "We keep an active enquiry while a September 2027 application is in progress. Applications that are closed with no activity are reviewed for deletion each year.",
+        "Research pages on this site contain no student data at all — they are static editorial content with official source links.",
+      ],
+    },
+  ],
+} as const;

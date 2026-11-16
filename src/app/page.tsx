@@ -18,7 +18,7 @@ export default async function HomePage() {
               <div className="eyebrow"><span className="eyebrow-rule" /> THE 2027 / 28 ADMISSIONS EDITION</div>
               <h1 id="hero-title">A clearer path<br />to <em>Lithuania.</em></h1>
               <p className="hero-lead">University admissions, without the guesswork. Verified, source-linked guidance for students applying from Bangladesh.</p>
-              <div className="hero-buttons"><a href="#universities" className="button button-gold">Explore universities <ArrowUpRight size={18} /></a><Link href="/methodology" className="button button-outline">How we verify <ArrowRight size={17} /></Link></div>
+              <div className="hero-buttons"><a href="#universities" className="button button-gold">Explore universities <ArrowUpRight size={18} /></a><Link href="/apply" className="button button-outline">Apply for 2027 <ArrowRight size={17} /></Link></div>
               <div className="hero-trust"><span className="hero-trust-icon"><ShieldCheck size={20} strokeWidth={1.7} /></span><span><strong>Official sources, clearly cited</strong><small>Last researched {VERIFIED_ON} · Policies checked for Bangladesh</small></span></div>
             </div>
             <div className="hero-visual">
@@ -39,6 +39,7 @@ export default async function HomePage() {
         </section>
 
         <section className="universities-section" id="universities"><div className="container">
+          <div className="new-badge-row"><span className="new-badge"><Sparkles size={13} /> NEW IN THIS EDITION</span><p><strong>Kaunas University of Technology (KTU)</strong> and <strong>Mykolas Romeris University (MRU)</strong> are now fully researched, with their published September 2027 admission windows, programme-level requirements and official sources.</p><Link href="/universities/kaunas-university-of-technology">Read the KTU profile <ArrowUpRight size={14} /></Link></div>
           <div className="section-heading-row"><div><div className="section-kicker"><span>02</span> EXPLORE THE UNIVERSITIES</div><h2>Find the right <em>institution.</em></h2><p>Every university and college named on the Lithuania 2027 poster, researched separately. Search and compare what matters most to a Bangladeshi applicant.</p></div><div className="section-heading-side"><span className="tiny-spark">✳</span><span>RESEARCHED, NOT GUESSED<br />{VERIFIED_ON.toUpperCase()}</span></div></div>
           <UniversityDirectory initialSavedSlugs={savedSlugs} />
         </div></section>

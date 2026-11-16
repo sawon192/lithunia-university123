@@ -50,13 +50,14 @@ export function SiteHeader({ savedCount: initialCount = 0 }: { savedCount?: numb
             <Link href="/#universities">Universities</Link>
             <Link href="/#colleges">Colleges</Link>
             <Link href="/methodology">Our method</Link>
+            <Link href="/apply">Apply</Link>
           </nav>
           <div className="header-actions">
             <Link href="/shortlist" className="shortlist-link"><Heart size={17} strokeWidth={1.85} /><span>Shortlist</span><span className="shortlist-count">{savedCount}</span></Link>
             <details className="mobile-menu">
               <summary aria-label="Open navigation"><Menu size={22} /></summary>
               <nav aria-label="Mobile navigation">
-                <Link href="/">Overview</Link><Link href="/#universities">Universities</Link><Link href="/#colleges">Colleges</Link><Link href="/methodology">Our method</Link><Link href="/shortlist">Shortlist ({savedCount})</Link>
+                <Link href="/">Overview</Link><Link href="/#universities">Universities</Link><Link href="/#colleges">Colleges</Link><Link href="/methodology">Our method</Link><Link href="/apply">Apply for 2027</Link><Link href="/shortlist">Shortlist ({savedCount})</Link>
               </nav>
             </details>
           </div>
@@ -74,8 +75,8 @@ export function SiteFooter() {
           <div className="footer-brand"><span className="footer-brand-icon"><GraduationCap size={20} /></span><span>GO ABROAD BD</span></div>
           <p>Clearer decisions start with better sources.<br />Independent admission research for students applying from Bangladesh.</p>
         </div>
-        <div className="footer-links"><span>EXPLORE</span><Link href="/#universities">University research</Link><Link href="/#colleges">Other institutions</Link><Link href="/shortlist">Your shortlist</Link></div>
-        <div className="footer-links"><span>INFORMATION</span><Link href="/methodology">How we verify</Link><a href="https://studyin.lt/" target="_blank" rel="noreferrer">Study in Lithuania <ArrowUpRight size={14} /></a><a href="https://www.omptest.org/" target="_blank" rel="noreferrer">Official OMPT site <ArrowUpRight size={14} /></a></div>
+        <div className="footer-links"><span>EXPLORE</span><Link href="/#universities">University research</Link><Link href="/#colleges">Other institutions</Link><Link href="/shortlist">Your shortlist</Link><Link href="/apply">Apply for September 2027</Link></div>
+        <div className="footer-links"><span>INFORMATION</span><Link href="/methodology">How we verify</Link><Link href="/privacy">Privacy notice</Link><a href="https://studyin.lt/" target="_blank" rel="noreferrer">Study in Lithuania <ArrowUpRight size={14} /></a><a href="https://www.omptest.org/" target="_blank" rel="noreferrer">Official OMPT site <ArrowUpRight size={14} /></a></div>
         <div className="footer-contact"><span>HAVE A QUESTION?</span><p>Speak with the Go Abroad BD team about your next steps.</p><a href="https://wa.me/8801714640238" target="_blank" rel="noreferrer"><MapPin size={15} /> Bangladesh <span className="footer-contact-divider">/</span> WhatsApp +880 1714 640238 <ArrowUpRight size={15} /></a></div>
       </div>
       <div className="container footer-bottom"><span>© {new Date().getFullYear()} Go Abroad BD · Research desk</span><span>Policies change. Always confirm with the institution before payment.</span><span>Photo: <a href="https://www.pexels.com/photo/st-catherine-s-church-in-vilnius-cityscape-28322469/" target="_blank" rel="noreferrer">Mr Alex Photography / Pexels</a></span></div>
