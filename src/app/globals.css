@@ -775,3 +775,13 @@ h2{font-size:clamp(36px,4.1vw,55px);line-height:1.12}
 .english-profile-foot a{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:800;color:#1e6890;text-decoration:underline;text-underline-offset:2px;white-space:nowrap}
 .english-profile-foot a:hover{color:#a4743b}
 @media(max-width:880px){.english-tests{grid-template-columns:1fr}.english-tests>div{border-right:0;border-bottom:1px solid #eef2f3}.english-tests>div:last-child{border-bottom:0}.english-alt-grid{grid-template-columns:1fr}.english-alt-cell:nth-child(odd){border-right:0}}
+
+/* ── Brand emblem (official GO ABROAD BD logo) ─────────────────────── */
+.brand-mark-logo{background:transparent;border:0;box-shadow:none;border-radius:50%;overflow:hidden}
+.brand-mark-logo .brand-logo{border-radius:50%;display:block}
+.brand{transition:opacity .15s}
+.brand:hover{opacity:.88}
+.footer-brand-logo{background:transparent;border-color:rgba(214,176,110,.55);overflow:hidden}
+.footer-brand-logo .brand-logo{border-radius:50%;display:block}
+.admin-login-card .brand-mark-logo{margin:0 auto}
+.admin-header .brand-mark-logo{background:transparent;border:0;box-shadow:none}

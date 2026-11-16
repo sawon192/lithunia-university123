@@ -1,7 +1,8 @@
 import { redirect } from "next/navigation";
 import { getStaffSession } from "@/lib/auth";
 import { LoginForm } from "@/components/admin/login-form";
-import { GraduationCap, Lock, ShieldCheck } from "lucide-react";
+import { Lock, ShieldCheck } from "lucide-react";
+import { BrandLogo } from "@/components/brand-logo";
 import Link from "next/link";
 import type { Metadata } from "next";
 
@@ -20,7 +21,7 @@ export default async function AdminLoginPage() {
     <main className="admin-login">
       <div className="admin-login-card">
         <Link href="/" className="admin-brand">
-          <span className="brand-mark"><GraduationCap size={22} strokeWidth={1.75} /></span>
+          <span className="brand-mark brand-mark-logo"><BrandLogo size={42} /></span>
           <span className="brand-copy"><strong>GO ABROAD <em>BD</em></strong><small>ADMISSION DESK</small></span>
         </Link>
         <h1>Staff <em>sign in.</em></h1>

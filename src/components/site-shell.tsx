@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowUpRight, GraduationCap, Heart, MapPin, Menu, ShieldCheck } from "lucide-react";
+import { ArrowUpRight, Heart, MapPin, Menu, ShieldCheck } from "lucide-react";
+import { BrandLogo } from "./brand-logo";
 import { useEffect, useState } from "react";
 import { VERIFIED_ON } from "@/lib/research";
 
@@ -42,7 +43,7 @@ export function SiteHeader({ savedCount: initialCount = 0 }: { savedCount?: numb
       <header className="site-header">
         <div className="container header-inner">
           <Link href="/" className="brand" aria-label="Go Abroad BD home">
-            <span className="brand-mark"><GraduationCap size={24} strokeWidth={1.75} /><span className="brand-spark">✦</span></span>
+            <span className="brand-mark brand-mark-logo"><BrandLogo size={48} /></span>
             <span className="brand-copy"><strong>GO ABROAD <em>BD</em></strong><small>YOUR JOURNEY. OUR GUIDANCE.</small></span>
           </Link>
           <nav className="desktop-nav" aria-label="Main navigation">
@@ -72,7 +73,7 @@ export function SiteFooter() {
     <footer className="site-footer">
       <div className="container footer-top">
         <div>
-          <div className="footer-brand"><span className="footer-brand-icon"><GraduationCap size={20} /></span><span>GO ABROAD BD</span></div>
+          <div className="footer-brand"><span className="footer-brand-icon footer-brand-logo"><BrandLogo size={34} /></span><span>GO ABROAD BD</span></div>
           <p>Clearer decisions start with better sources.<br />Independent admission research for students applying from Bangladesh.</p>
         </div>
         <div className="footer-links"><span>EXPLORE</span><Link href="/#universities">University research</Link><Link href="/#colleges">Other institutions</Link><Link href="/shortlist">Your shortlist</Link><Link href="/apply">Apply for September 2027</Link></div>
