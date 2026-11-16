@@ -227,6 +227,59 @@ Explicitly flagged rather than invented: KTU's 2027/28 fee table, its Bangladesh
 list, MRU's 2027–28 tuition, and MRU's Alim / Diploma-in-Engineering exclusions (which MRU states
 positively).
 
+### English Test Alternatives
+
+A second, purpose-built layer sits on top of the eight research rows:
+`src/lib/english-alternatives.ts` holds one verified English profile per institution, keyed by the
+same slug, and `src/lib/research.ts` attaches it as `institution.english`. There is no parallel
+university model — the directory filter and the profile section read from this single source, so
+counts and labels can never disagree.
+
+```ts
+{
+  moiAccepted: "accepted" | "conditional" | "not_accepted" | "unconfirmed",
+  moiConditions?: string,                       // the exact condition, when there is one
+  internalEnglishTest: { available, name?, fee?, format?, minimumLevel?, notes? },
+  alternativeEnglishCertificates: [...],        // never IELTS / PTE / TOEFL
+  englishRequirementNotes: string,
+  englishRequirementSource: SourceKey,          // key into `sources`
+  englishRequirementVerifiedAt: "2026-11-16",
+  englishRequirementStatus: "officially_confirmed" | "programme_specific" | "previous_intake"
+                          | "not_officially_confirmed" | "conflicting",
+}
+```
+
+Published IELTS / PTE / TOEFL bands live next to it in `standardScoresBySlug` and are shown verbatim.
+
+**Classification counts (recomputed from the data, 16 November 2026):**
+
+| Filter option | Institutions | Which ones |
+|---|---|---|
+| MOI Accepted | **7** | Accepted: VMU, KVK. Conditional: VU, VILNIUS TECH, ISM, KTU, MRU |
+| University Internal English Test | **7** | KTU (free), MRU (free), VIKO (free), ISM, Kauno kolegija (€45), Alytus (€45), SMK (€50) |
+| Alternative English Certificate | **14** | Duolingo, LanguageCert IESOL, Cambridge, EF SET, EnglishScore, IGCSE |
+| Any of the three | **16** | the union of the above |
+
+**Explicitly *not* accepted:** LSU, LCC, Kauno kolegija and its Alytus faculty refuse an MOI
+certificate as proof of English — they are shown as "Not accepted", never as unknown.
+**Not officially confirmed:** VDA, LBC, Utenos, SMK, VBC, VCD, VIKO, Panevėžio, Šiaulių, ILK,
+Kolpingo, LCSS. LCSS is a research institute without its own degree intake.
+
+Two results worth calling out because they contradict the usual agent advice:
+
+- **KVK accepts an MOI certificate** and states the Duolingo test is *not* accepted
+  (EF SET 41–50, LanguageCert B1 and EnglishScore 317 are).
+- **Alytus College is now a faculty of Kauno kolegija**, so Kauno kolegija's stricter rule
+  (MOI refused, €45 Cambridge placement test) applies there too.
+
+A "conditional" MOI verdict means the institution accepts English-medium prior study but attaches
+conditions; it is never rendered as a general acceptance. Standard tests are listed in their own
+row above the alternatives grid so they can never be mistaken for an alternative.
+
+**Files:** `src/lib/english-alternatives.ts` (data + helpers), `src/components/english-alternatives-profile.tsx`
+(profile section), `src/components/university-directory.tsx` (filter + card chips),
+`src/app/globals.css` (`.english-*` blocks), `src/app/universities/[slug]/page.tsx` (section + anchor).
+
 ---
 
 ## 7. Student application form
@@ -320,7 +373,7 @@ npm run verify      # typecheck + lint + build
 
 ## 12. Testing status
 
-Verified on 15–16 November 2026 against a production build (`npm run build` + `npm run start`)
+Verified on 15–16 November 2026 (English Test Alternatives added 16 November) against a production build (`npm run build` + `npm run start`)
 in local mode, plus real PostgreSQL DDL for the migrations.
 
 | # | Test | Result |
@@ -345,6 +398,25 @@ in local mode, plus real PostgreSQL DDL for the migrations.
 | 22 | Migrations run clean; consent constraint + audit trigger fire | Pass |
 | 23 | Production build, all 23 routes | Pass |
 | 24 | Mobile layout | Reviewed at 650/760/820 px breakpoints in CSS; manual device pass recommended |
+
+### English Test Alternatives — acceptance tests
+
+Run against the production build with a headless Chromium (`node scripts/english-alternatives.test.mjs`,
+requires `npm run start` on port 3100 and `playwright` installed locally). **11/11 pass.**
+
+| # | Test | Result |
+|---|---|---|
+| E1 | Exactly three multi-select options are rendered | Pass — MOI Accepted / Internal Test / Alternative Certificate |
+| E2 | Per-option counts are computed from data | Pass — 7 / 7 / 14 |
+| E3 | MOI Accepted alone → 7 institutions | Pass |
+| E4 | Two options selected → union of 11, shared institutions counted once | Pass |
+| E5 | Active-filter indicator + clear-all button appear | Pass — "2 of 3 selected" |
+| E6 | Clear-all restores all 24 institutions | Pass |
+| E7 | English filter combines with the city filter | Pass — Vilnius-only subset |
+| E8 | Alternative-certificate result (14) and no IELTS/PTE/TOEFL anywhere in the alternative lists or chips | Pass |
+| E9 | 390 px mobile: single column, no horizontal overflow | Pass |
+| E10 | Profile section renders with anchor nav, IELTS/PTE/TOEFL bands, alternatives, "Last verified" | Pass |
+| E11 | A conditional policy is labelled "Conditionally accepted", never as a general acceptance | Pass — MRU |
 
 Not testable in this environment (needs your credentials):
 

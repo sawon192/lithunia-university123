@@ -1,4 +1,6 @@
 import { colleges } from "./colleges";
+import { englishAlternativesBySlug } from "./english-alternatives";
+import type { EnglishAlternatives } from "./english-alternatives";
 
 export const VERIFIED_ON = "5 November 2026";
 
@@ -141,7 +143,7 @@ export const sources = {
   vikoFees: { label: "VIKO tuition fees", url: "https://en.viko.lt/for-students/tuition-fees/" },
   vikoAdmission: { label: "VIKO faculty admission", url: "https://en.vvf.viko.lt/studies/admission/" },
   kvkOnline: { label: "KVK online application", url: "https://www.kvk.lt/en/degree-studies/online-application/" },
-  kvkAdmission: { label: "KVK admission", url: "https://www.kvk.lt/en/degree-studies/admission/" },
+  kvkAdmission: { label: "KVK admission & English requirements", url: "https://www.kvk.lt/en/admission/admission/" },
   kvkPortal: { label: "KVK programme catalogue", url: "https://apply.kvk.lt/courses/browse" },
   kvkFinance: { label: "KVK Finance", url: "https://www.kvk.lt/en/program/finance/" },
   kvkPhysio: { label: "KVK Physiotherapy", url: "https://www.kvk.lt/en/program/physiotherapy/" },
@@ -1021,11 +1023,30 @@ export const universities: University[] = [
   },
 ];
 
-export type Institution = University & { category: "university" | "college" };
+export type Institution = University & {
+  category: "university" | "college";
+  /** Verified English Test Alternatives profile (MOI / internal test / alternative certificates). */
+  english: EnglishAlternatives;
+};
+
+function withEnglish<T extends University>(institution: T): T & { english: EnglishAlternatives } {
+  return {
+    ...institution,
+    english: englishAlternativesBySlug[institution.slug] ?? {
+      moiAccepted: "unconfirmed",
+      internalEnglishTest: { available: false },
+      alternativeEnglishCertificates: [],
+      englishRequirementNotes: "No English-alternative policy has been verified for this institution yet.",
+      englishRequirementSource: "vuLanguage",
+      englishRequirementVerifiedAt: "2026-11-16",
+      englishRequirementStatus: "not_officially_confirmed",
+    },
+  };
+}
 
 export const institutions: Institution[] = [
-  ...universities.map((university) => ({ ...university, category: "university" as const })),
-  ...colleges,
+  ...universities.map((university) => withEnglish({ ...university, category: "university" as const })),
+  ...colleges.map((college) => withEnglish({ ...college, category: "college" as const })),
 ];
 
 export const universityCount = universities.length;
