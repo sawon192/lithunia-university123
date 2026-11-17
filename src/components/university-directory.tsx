@@ -2,16 +2,17 @@
 
 import type { Institution } from "@/lib/research";
 import { collegeCount, institutions, statusLabels, universityCount } from "@/lib/research";
-import { ArrowRight, ArrowUpRight, Check, Globe2, MapPin, Search, SlidersHorizontal, Sparkles, X } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Calculator, Check, Globe2, MapPin, Search, SlidersHorizontal, Sparkles, X } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import type { CSSProperties } from "react";
 import { BookmarkButton } from "./bookmark-button";
 import { englishAlternativeLabels, hasEnglishAlternative } from "@/lib/english-alternatives";
 import type { EnglishAlternativeKey } from "@/lib/english-alternatives";
+import { getOmpt, omptChipLabels, requiresOmpt } from "@/lib/ompt";
+import type { OmptStatus } from "@/lib/ompt";
 
-export function InstitutionCard({ institution, saved, onSavedChange }: { institution: Institution; saved: boolean; onSavedChange?: (saved: boolean) => void }) {
-  return (
+export function InstitutionCard({ institution, saved, onSavedChange }: { institution: Institution; saved: boolean; onSavedChange?: (saved: boolean) => void }) {  return (
     <article className="university-card" style={{ "--card-accent": institution.accent } as CSSProperties}>
       <div className="university-card-top">
         <span className="university-emblem" aria-hidden="true"><span>{institution.initial}</span></span>
@@ -35,6 +36,7 @@ export function InstitutionCard({ institution, saved, onSavedChange }: { institu
             <span className="eng-chip is-unknown">English alternatives not confirmed</span>
           )}
       </div>
+      <div className="card-ompt">{omptChip(institution.slug)}</div>
       <div className="card-metrics">
         <div><span>APPLICATION FEE</span><strong>{institution.feeSummary}</strong></div>
         <div><span>BANGLADESH DEADLINE</span><strong>{institution.deadlineSummary}</strong></div>
@@ -47,6 +49,17 @@ export function InstitutionCard({ institution, saved, onSavedChange }: { institu
 const STORAGE_KEY = "go-abroad-bd-shortlist";
 const CHANGE_EVENT = "go-abroad-bd-shortlist-updated";
 
+/** OMPT chip for a card — derived from the shared OMPT table, never from prose. */
+function omptChip(slug: string) {
+  const ompt = getOmpt(slug);
+  const score = ompt.minimumPercent !== undefined ? ` · ${ompt.minimumPercent}%+` : "";
+  return (
+    <span className={`ompt-chip ompt-${ompt.status}`} title={ompt.note}>
+      {omptChipLabels[ompt.status]}{requiresOmpt(ompt) ? score : ""}
+    </span>
+  );
+}
+
 function readShortlist(): string[] {
   try {
     const value = JSON.parse(window.localStorage.getItem(STORAGE_KEY) ?? "[]");
@@ -57,6 +70,8 @@ function readShortlist(): string[] {
 }
 
 type Filter = "all" | "university" | "college" | "dates" | "ompt" | "saved";
+/** OMPT with/without filter. "with" = the institution publishes an obligation. */
+type OmptFilter = "all" | "with" | "without";
 export function UniversityDirectory({ initialSavedSlugs = [], shortlistOnly = false }: { initialSavedSlugs?: string[]; shortlistOnly?: boolean }) {
   const [savedSlugs, setSavedSlugs] = useState(initialSavedSlugs);
 
@@ -74,6 +89,7 @@ export function UniversityDirectory({ initialSavedSlugs = [], shortlistOnly = fa
   const [filter, setFilter] = useState<Filter>(shortlistOnly ? "saved" : "all");
   const [city, setCity] = useState("all");
   const [englishFilters, setEnglishFilters] = useState<EnglishAlternativeKey[]>([]);
+  const [omptFilter, setOmptFilter] = useState<OmptFilter>("all");
   const cities = ["Vilnius", "Kaunas", "Klaipėda", "Panevėžys", "Šiauliai", "Utena", "Alytus"];
 
   // Pre-compute how many institutions each English option matches, so the
@@ -88,6 +104,18 @@ export function UniversityDirectory({ initialSavedSlugs = [], shortlistOnly = fa
     return counts;
   }, []);
 
+  // OMPT counts come from the same shared table the filter uses, so the
+  // numbers on the buttons can never disagree with the result set.
+  const omptCounts = useMemo(() => {
+    let withOmpt = 0;
+    let without = 0;
+    for (const institution of institutions) {
+      if (requiresOmpt(getOmpt(institution.slug))) withOmpt += 1;
+      else without += 1;
+    }
+    return { with: withOmpt, without };
+  }, []);
+
   const filtered = useMemo(() => institutions.filter((institution) => {
     const term = query.trim().toLocaleLowerCase();
     const matchesSearch = !term || `${institution.name} ${institution.abbreviation} ${institution.city} ${institution.area}`.toLocaleLowerCase().includes(term);
@@ -97,20 +125,22 @@ export function UniversityDirectory({ initialSavedSlugs = [], shortlistOnly = fa
       : filter === "dates"
         ? institution.status === "dates"
         : filter === "ompt"
-          ? ["vilnius-university", "vilnius-tech", "vytautas-magnus-university"].includes(institution.slug)
+          ? requiresOmpt(getOmpt(institution.slug))
           : true;
     // OR within the English Test Alternatives group: selecting two options
     // widens the result set, and the option set is combined with every other filter (AND).
     const matchesEnglish =
       englishFilters.length === 0 || englishFilters.some((key) => hasEnglishAlternative(institution.english, key));
-    return matchesSearch && matchesCity && matchesFilter && matchesEnglish;
-  }), [query, filter, city, savedSlugs, shortlistOnly, englishFilters]);
+    const matchesOmpt =
+      omptFilter === "all" || (omptFilter === "with") === requiresOmpt(getOmpt(institution.slug));
+    return matchesSearch && matchesCity && matchesFilter && matchesEnglish && matchesOmpt;
+  }), [query, filter, city, savedSlugs, shortlistOnly, englishFilters, omptFilter]);
 
   function handleSaved(slug: string, saved: boolean) {
     setSavedSlugs((current) => saved ? [...new Set([...current, slug])] : current.filter((item) => item !== slug));
   }
 
-  function reset() { setQuery(""); setFilter(shortlistOnly ? "saved" : "all"); setCity("all"); setEnglishFilters([]); }
+  function reset() { setQuery(""); setFilter(shortlistOnly ? "saved" : "all"); setCity("all"); setEnglishFilters([]); setOmptFilter("all"); }
 
   function toggleEnglish(key: EnglishAlternativeKey) {
     setEnglishFilters((current) => (current.includes(key) ? current.filter((item) => item !== key) : [...current, key]));
@@ -170,7 +200,41 @@ export function UniversityDirectory({ initialSavedSlugs = [], shortlistOnly = fa
         </div>
       </fieldset>
 
-      <div className="directory-result-line"><span><strong>{filtered.length.toString().padStart(2, "0")}</strong> {shortlistOnly ? "saved institutions" : filter === "college" ? "colleges found" : "institutions found"}{englishFilters.length > 0 ? " · English alternatives" : ""}</span><span>Official-source research · {institutions.length} institutions</span></div>
+      <fieldset className="ompt-filter">
+        <legend className="ompt-filter-legend"><Calculator size={15} strokeWidth={1.9} /> OMPT requirement</legend>
+        <p className="ompt-filter-intro">
+          The Online Mathematics Placement Test. Counts come from the same verified OMPT table the eligibility report uses.
+          &ldquo;Not mentioned&rdquo; means the institution publishes nothing — it is never counted as an exemption.
+        </p>
+        <div className="ompt-filter-options" role="group" aria-label="Filter by OMPT requirement">
+          {([
+            { key: "all", label: "All institutions", count: institutions.length, hint: "No OMPT filter" },
+            { key: "with", label: "With OMPT", count: omptCounts.with, hint: "OMPT required or required per programme" },
+            { key: "without", label: "Without OMPT", count: omptCounts.without, hint: "No published OMPT obligation" },
+          ] as { key: OmptFilter; label: string; count: number; hint: string }[]).map((option) => (
+            <button
+              key={option.key}
+              type="button"
+              className={`ompt-option ${omptFilter === option.key ? "is-active" : ""}`}
+              aria-pressed={omptFilter === option.key}
+              onClick={() => setOmptFilter(option.key)}
+            >
+              <span className="ompt-option-copy"><strong>{option.label}</strong><small>{option.hint}</small></span>
+              <span className="ompt-option-count">{option.count.toString().padStart(2, "0")}</span>
+            </button>
+          ))}
+        </div>
+        <div className="ompt-filter-foot">
+          {omptFilter === "all"
+            ? <span className="ompt-hint">Select With OMPT to see only institutions that publish an OMPT obligation.</span>
+            : <>
+                <span className="ompt-active">{omptFilter === "with" ? "OMPT institutions only" : "Institutions with no published OMPT obligation"}</span>
+                <button type="button" className="ompt-clear" onClick={() => setOmptFilter("all")}><X size={13} /> Clear OMPT filter</button>
+              </>}
+        </div>
+      </fieldset>
+
+      <div className="directory-result-line"><span><strong>{filtered.length.toString().padStart(2, "0")}</strong> {shortlistOnly ? "saved institutions" : filter === "college" ? "colleges found" : "institutions found"}{englishFilters.length > 0 ? " · English alternatives" : ""}{omptFilter !== "all" ? ` · ${omptFilter === "with" ? "with" : "without"} OMPT` : ""}</span><span>Official-source research · {institutions.length} institutions</span></div>
       {filtered.length ? <div className="university-grid">{filtered.map((institution) => <InstitutionCard key={institution.slug} institution={institution} saved={savedSlugs.includes(institution.slug)} onSavedChange={(saved) => handleSaved(institution.slug, saved)} />)}</div> : <div className="directory-empty"><div className="empty-symbol">✦</div><h3>{shortlistOnly || filter === "saved" ? "Your shortlist is waiting." : "No institutions match those filters."}</h3><p>{shortlistOnly || filter === "saved" ? "Explore universities and colleges, then tap the heart to keep your research in one place." : "Try another search term or clear your filters to see all institutions."}</p>{shortlistOnly || filter === "saved" ? <Link href="/#universities" className="button button-navy">Browse all institutions <ArrowRight size={17} /></Link> : <button type="button" className="button button-navy" onClick={reset}>Clear filters <ArrowRight size={17} /></button>}</div>}
     </div>
   );

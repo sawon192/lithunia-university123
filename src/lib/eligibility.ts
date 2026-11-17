@@ -11,7 +11,18 @@
  * - Unknown answers downgrade a verdict; they never upgrade it.
  */
 import { institutions } from "./research";
-import type { DiplomaRoute, Fact, FactStatus, Institution, SourceKey } from "./research";
+import type { DiplomaRoute, FactStatus, Institution } from "./research";
+import { checkOmptResult, getOmpt, requiresOmpt } from "./ompt";
+import type { OmptProfile, OmptStatus } from "./ompt";
+import {
+  assessmentSummary,
+  effectiveGapYears,
+  hasType,
+  ofType,
+  qualificationLabels,
+  ratioCandidate,
+} from "./student-profile";
+import type { Qualification, StudentAssessment } from "./student-profile";
 
 export type StudyLevel = "Bachelor" | "Master";
 export type TestKey = "ielts" | "toefl" | "pte" | "duolingo" | "englishScore" | "other";
@@ -43,7 +54,6 @@ export type InstitutionRule = {
   levels: StudyLevel[];
   bachelor?: LevelRule;
   master?: LevelRule;
-  ompt: { rule: "none" | "required" | "programme" | "unconfirmed"; note: string };
   /** Extra published hurdles that apply to every level → CONDITIONALLY ELIGIBLE when present. */
   conditions: string[];
   /** Hurdles that apply only to Bachelor's or Master's applicants. */
@@ -53,10 +63,26 @@ export type InstitutionRule = {
   maxGapYears?: number;
 };
 
+/**
+ * The profile the engine assesses.
+ *
+ * `qualifications` and `assessments` are the OPEN model: any qualification type
+ * and any entrance assessment can be recorded, and the passing years drive the
+ * automatic study-gap. The legacy flat fields (sscGpa, hscGpa, hasDiploma…)
+ * are still accepted so an older caller — or a saved draft — keeps working;
+ * `normaliseProfile` folds them into the open list before assessment.
+ */
 export type StudentProfile = {
   level: StudyLevel;
   nationality: string;
   educationCountry: string;
+  /** Open qualification list — preferred over the legacy flat fields. */
+  qualifications?: Qualification[];
+  /** Any entrance assessments the student holds (OMPT, own tests, portfolios…). */
+  assessments?: StudentAssessment[];
+  /** Explicit study-gap override. When absent the engine derives it from passing years. */
+  gapOverride?: number;
+  /** Legacy flat fields — folded into `qualifications` when that list is absent. */
   sscGpa?: number;
   hscGpa?: number;
   hasDiploma: boolean;
@@ -75,6 +101,41 @@ export type StudentProfile = {
   institutionType: "any" | "university" | "college";
 };
 
+/**
+ * The legacy flat fields, resolved into the open qualification list. Callers
+ * that already build `qualifications` get them passed through untouched.
+ */
+export type ResolvedProfile = StudentProfile & {
+  qualifications: Qualification[];
+  assessments: StudentAssessment[];
+};
+
+export function normaliseProfile(profile: StudentProfile): ResolvedProfile {
+  const qualifications: Qualification[] = [...(profile.qualifications ?? [])];
+  const has = (type: Qualification["type"]) => qualifications.some((item) => item.type === type);
+  const add = (item: Qualification) => {
+    if (!has(item.type)) qualifications.push(item);
+  };
+
+  if (typeof profile.sscGpa === "number") {
+    add({ id: "legacy-ssc", type: "ssc", grade: profile.sscGpa, maxGrade: 5 });
+  }
+  if (typeof profile.hscGpa === "number") {
+    add({ id: "legacy-hsc", type: "hsc", grade: profile.hscGpa, maxGrade: 5 });
+  }
+  if (profile.hasDiploma) {
+    add({ id: "legacy-diploma", type: "diploma", grade: profile.diplomaGrade, maxGrade: profile.diplomaMax });
+  }
+  if (profile.hasBachelor) {
+    add({ id: "legacy-bachelor", type: "bachelor", grade: profile.bachelorGrade, maxGrade: profile.bachelorMax });
+  }
+  if (typeof profile.graduationYear === "number" && qualifications.every((item) => item.passingYear === undefined)) {
+    // An explicit graduation year is the student's own statement about the latest pass.
+    qualifications.push({ id: "legacy-year", type: "other", passingYear: profile.graduationYear });
+  }
+  return { ...profile, qualifications, assessments: profile.assessments ?? [] };
+}
+
 export type Verdict = "eligible" | "conditional" | "not-eligible" | "unverified";
 export type CheckState = "pass" | "fail" | "unknown" | "pending";
 
@@ -86,6 +147,12 @@ export type Assessment = {
   routeCheck: CheckState;
   academicCheck: CheckState;
   englishCheck: CheckState;
+  /** OMPT obligation for this institution, read from the single shared table. */
+  ompt: OmptProfile;
+  omptStatus: OmptStatus;
+  /** Whether the student's recorded OMPT result satisfies the published rule. */
+  omptCheck: CheckState;
+  omptDetail: string;
   academicDetail: string;
   englishDetail: string;
   missing: string[];
@@ -97,6 +164,11 @@ export type Assessment = {
   cityMatch: boolean;
   budgetFit?: boolean;
   tuitionEur?: number;
+  /** Study gap used for this run, and where it came from. */
+  gapYears?: number;
+  gapSource: "override" | "derived" | "none";
+  /** True when the derived gap exceeds this institution's published guidance. */
+  gapExceeded?: boolean;
   score: number;
 };
 
@@ -123,7 +195,6 @@ export const entryRules: Record<string, InstitutionRule> = {
       grade: { metric: "bachelorCgpa4", min: 3, note: "Honours Bachelor's degree with final CGPA at least 3.00 (4.00 scale). A Pass degree does not grant Master's access.", status: "published" },
       english: { tests: { ielts: 6.5, pte: 59, duolingo: 120 }, moi: "conditional", note: "Master: IELTS 6.5 / PTE 59 / Duolingo 120. Same waiver principle as Bachelor level.", status: "published" },
     },
-    ompt: { rule: "programme", note: "OMPT is required for Bangladesh applicants on the programmes that list it (versions and scores vary by programme)." },
     conditions: [],
     notes: ["Programme-specific subject requirements apply.", "Maximum five-year gap since the most recent qualification (programme guidance) — enforced via the gap check.", "Predicted HSC results are not accepted for Bangladesh — final results only."],
     maxGapYears: 5,
@@ -138,7 +209,6 @@ export const entryRules: Record<string, InstitutionRule> = {
       grade: { metric: "ratio", min: 0.6, note: "Relevant Bachelor's degree with at least 60% CGPA.", status: "published" },
       english: { tests: { ielts: 5.5, toefl: 70, pte: 48, duolingo: 100 }, moi: "conditional", note: "Same published test minimums as Bachelor level.", status: "published" },
     },
-    ompt: { rule: "required", note: "Bangladeshi secondary/vocational graduates need OMPT (≥60% university-level Bachelor's, ≥50% professional Bachelor's). The letter version is not published." },
     conditions: [],
     notes: ["Study-gap limit is three years for Master's; relevant work evidence can support an exception.", "Architecture has a separate entrance test."],
     maxGapYears: 3,
@@ -153,7 +223,6 @@ export const entryRules: Record<string, InstitutionRule> = {
       grade: { metric: "ratio", min: 0.7, note: "Same Bangladesh 70% minimum for Master's; four-year Bachelor's with final thesis and internship required.", status: "conflicting" },
       english: { tests: { ielts: 5.5, toefl: 75, pte: 59, duolingo: 110 }, moi: "not-accepted", note: "Same published thresholds as Bachelor level.", status: "published" },
     },
-    ompt: { rule: "unconfirmed", note: "KU's procedure does not mention OMPT — silence is not a formal exemption; confirm with admissions." },
     conditions: ["Only final (not provisional) diplomas are accepted"],
     bachelorConditions: ["Bangladesh Bachelor's: at least half a year of university transcript"],
     masterConditions: ["Master's: Bachelor's final thesis, prior internship and at least four years of previous study"],
@@ -169,7 +238,6 @@ export const entryRules: Record<string, InstitutionRule> = {
       grade: { metric: "ratio", min: 0.65, note: "Same 65% / no-subject-below-60% rule on the relevant degree.", status: "published" },
       english: { tests: { ielts: 5.5, toefl: 46, pte: 50, duolingo: 90 }, moi: "not-accepted", note: "Same published test minimums as Bachelor level.", status: "published" },
     },
-    ompt: { rule: "none", note: "LSU uses its own knowledge and ability assessment for Bangladesh Bachelor's — it is not identified as OMPT." },
     conditions: ["LSU-organised knowledge and ability assessment (Bangladesh Bachelor's)", "Certificates and transcripts attested by Bangladesh MoFA and MoE"],
     notes: [],
   },
@@ -183,7 +251,6 @@ export const entryRules: Record<string, InstitutionRule> = {
       grade: { metric: "none", min: undefined, note: "Relevant undergraduate degree with programme-specific background (e.g. 18 ECTS in related subjects for some programmes); no single published CGPA cut-off.", status: "unconfirmed" },
       english: { tests: { ielts: 6.5, toefl: 79, pte: 59, duolingo: 125 }, moi: "conditional", note: "IELTS 6.5 (each ≥6.0) / TOEFL 79 / PTE 59 / Duolingo 125 / ISM English test 70. Waiver at committee discretion only.", status: "published" },
     },
-    ompt: { rule: "none", note: "No OMPT rule published; ISM uses a state maths examination or its own maths test, with SAT / one-year tertiary study as corrective routes." },
     conditions: ["Motivation interview after document screening"],
     notes: [],
   },
@@ -197,7 +264,6 @@ export const entryRules: Record<string, InstitutionRule> = {
       grade: { metric: "ratio", min: 0.6, note: "Same 60% rule on the relevant Bachelor diploma/transcript.", status: "published" },
       english: { tests: { ielts: 5.5, toefl: 87, pte: 59, duolingo: 100 }, moi: "accepted", note: "Same B2 band as Bachelor level; official MOI certificate accepted.", status: "published" },
     },
-    ompt: { rule: "programme", note: "Bangladesh applicants need OMPT on relevant programmes (2027 chart: e.g. BA Business Administration OMPT-D ≥55%). Some programmes are exempt — resolve per programme row. Test deadline 15 April 2027." },
     conditions: [],
     notes: [],
   },
@@ -211,7 +277,6 @@ export const entryRules: Record<string, InstitutionRule> = {
       grade: { metric: "none", note: "Recognised Bachelor's degree required; MA TESOL-specific CGPA minimum not published.", status: "unconfirmed" },
       english: { tests: { ielts: 7, toefl: 100 }, moi: "not-accepted", note: "MA TESOL: IELTS 7.0 or TOEFL iBT 100.", status: "published" },
     },
-    ompt: { rule: "none", note: "No OMPT policy published; the Bangladesh HSC route adds an LCC Skills and Knowledge Test (not an OMPT certificate)." },
     conditions: ["Interview"],
     bachelorConditions: ["LCC Skills and Knowledge Test (Bangladesh HSC route)"],
     notes: ["MA TESOL includes online coursework plus a short Lithuania residency."],
@@ -226,7 +291,6 @@ export const entryRules: Record<string, InstitutionRule> = {
       grade: { metric: "none", note: "Relevant Bachelor diploma required; no published CGPA minimum.", status: "unconfirmed" },
       english: { tests: { ielts: 5.5, toefl: 75 }, cefr: "B2", provisionalMapping: true, moi: "unconfirmed", note: "CEFR B2 / IELTS 5.5 / TOEFL 75 for the 2026/27 MA instructions. Many MA subjects are mainly Lithuanian-taught with English support.", status: "published" },
     },
-    ompt: { rule: "none", note: "No OMPT requirement; selection is 50% portfolio + 50% online entrance exam/interview." },
     conditions: ["Portfolio (50% of the admission score)", "Online entrance exam/interview"],
     notes: ["A programme runs only if its minimum cohort of four is admitted."],
   },
@@ -240,7 +304,6 @@ export const entryRules: Record<string, InstitutionRule> = {
       grade: { metric: "ratio", min: 0.6, note: "Relevant Bachelor's qualification with weighted GPA at least 60%.", status: "published" },
       english: { tests: { ielts: 6, toefl: 85 }, cefr: "C1", moi: "accepted", note: "CEFR C1: IELTS 6.0 (each ≥5.5) / TOEFL 85 or equivalent (within two years). Same MOI principle as Bachelor level.", status: "published" },
     },
-    ompt: { rule: "unconfirmed", note: "OMPT applies per programme for Bangladesh applicants; the Bangladesh Alim/Diploma equivalence is assessed case by case by the International Studies Office." },
     conditions: [],
     masterConditions: ["Motivation assessment (letter or interview) — mandatory for Master's applicants"],
     notes: ["KTU performs free academic recognition (up to one month) — it does not guarantee admission."],
@@ -255,7 +318,6 @@ export const entryRules: Record<string, InstitutionRule> = {
       grade: { metric: "ratio", min: 0.6, note: "Bachelor's degree of at least three years; some programmes require a diploma in a specific field.", status: "published" },
       english: { tests: { ielts: 5.5, toefl: 72, pte: 59, duolingo: 100 }, cefr: "B2", moi: "unconfirmed", note: "Same B2 equivalences as Bachelor level; free MRU English test available.", status: "published" },
     },
-    ompt: { rule: "required", note: "The Bangladesh country table requires an OMPT result with the application." },
     conditions: ["Only humanities or science backgrounds are considered (Bangladesh table)"],
     notes: ["A gap of three or more years after high school may trigger additional knowledge tests.", "The motivational letter is screened with specialised software and must be written without AI assistance."],
     maxGapYears: 3,
@@ -268,7 +330,6 @@ export const entryRules: Record<string, InstitutionRule> = {
       grade: { metric: "ratio", min: 0.5, note: "Notarised secondary certificate and transcript with at least a 50% GPA (SKVC country rules apply). A competitive score ≥3.2 is needed for non-state-funded places.", status: "published" },
       english: { tests: { ielts: 5.5, toefl: 75, pte: 59, englishScore: 400 }, moi: "not-accepted", note: "IELTS 5.5 / TOEFL 75 / PTE 59 / EnglishScore 400 (CEFR B2). MOI letters are expressly not accepted; the college's own €45 test is an alternative.", status: "published" },
     },
-    ompt: { rule: "none", note: "No OMPT; assessment is the key competence test (score ≥3) and, on many programmes, a motivation interview." },
     conditions: ["Key competence test (score ≥3)", "Motivation interview on many programmes"],
     notes: [],
   },
@@ -278,7 +339,6 @@ export const entryRules: Record<string, InstitutionRule> = {
       grade: { metric: "none", note: "A secondary education diploma (or equivalent, apostilled) is required; no Bangladesh-specific GPA minimum is published.", status: "unconfirmed" },
       english: { tests: {}, moi: "unconfirmed", note: "An English proficiency certificate is required and English is verified at enrolment; no exact score band and no Bangladesh MOI rule are published.", status: "unconfirmed" },
     },
-    ompt: { rule: "none", note: "No OMPT or maths entrance test on the consulted pages." },
     conditions: [],
     notes: ["First-year tuition is paid before visa/TRP mediation; these payments are not refunded."],
   },
@@ -288,7 +348,6 @@ export const entryRules: Record<string, InstitutionRule> = {
       grade: { metric: "none", note: "A recognised secondary school graduation certificate is required; no Bangladesh-specific HSC GPA threshold is published.", status: "unconfirmed" },
       english: { tests: { ielts: 5.5, toefl: 72, pte: 59, duolingo: 105 }, cefr: "B2", provisionalMapping: true, moi: "unconfirmed", note: "Older admission rules mention B1/B2-level English evidence; a current accepted-test list and minimum score are not published. Numeric bands shown are an approximate CEFR mapping.", status: "earlier" },
     },
-    ompt: { rule: "none", note: "No OMPT or maths entrance test mentioned." },
     conditions: [],
     notes: ["Confirm full-time programme availability — part-time study is EU/EEA-only."],
   },
@@ -298,7 +357,6 @@ export const entryRules: Record<string, InstitutionRule> = {
       grade: { metric: "ratio", min: 0.5, note: "Secondary school diploma, school leaving certificate or college diploma with a minimum overall score of 50% (qualification evaluation through SKVC).", status: "published" },
       english: { tests: { ielts: 5.5, toefl: 69, pte: 59, duolingo: 110 }, moi: "unconfirmed", note: "IELTS 5.5 / TOEFL 69 / PTE 59 / Duolingo 110 / LanguageCert IESOL B2 / FCE. SMK's own online English test costs €50. No explicit Bangladesh MOI statement.", status: "published" },
     },
-    ompt: { rule: "none", note: "No OMPT or maths entrance test; assessment is documents plus a motivation interview." },
     conditions: ["Motivation interview"],
     notes: ["Non-EU students must cover a full year of tuition before arrival."],
   },
@@ -308,7 +366,6 @@ export const entryRules: Record<string, InstitutionRule> = {
       grade: { metric: "none", note: "Secondary education or high school diploma with transcripts; no Bangladesh-specific minimum grade is published.", status: "unconfirmed" },
       english: { tests: { ielts: 5.5, toefl: 72, pte: 59, duolingo: 105 }, cefr: "B2", provisionalMapping: true, moi: "unconfirmed", note: "CEFR B2 required on programme pages. A preparatory English programme is offered below B2. Bangladesh MOI acceptance is unconfirmed. Numeric bands shown are an approximate CEFR mapping.", status: "published" },
     },
-    ompt: { rule: "none", note: "No OMPT mentioned on official pages." },
     conditions: ["Admission interview with a VBC officer", "Affidavit of support and bank evidence (~€7,000/year)"],
     notes: [],
   },
@@ -318,7 +375,6 @@ export const entryRules: Record<string, InstitutionRule> = {
       grade: { metric: "none", note: "The college evaluates applications individually and generally recommends a minimum GPA of about 3.5 — a recommendation, not a fixed cut-off.", status: "unconfirmed" },
       english: { tests: { ielts: 5.5, toefl: 72, pte: 59, duolingo: 105 }, cefr: "B2", provisionalMapping: true, moi: "unconfirmed", note: "B2 English via IELTS/TOEFL/PTE/Duolingo or equivalent; no published minimum band and no Bangladesh MOI rule. Numeric bands shown are an approximate CEFR mapping.", status: "published" },
     },
-    ompt: { rule: "none", note: "No OMPT; selection is portfolio assessment plus motivational interview." },
     conditions: ["Portfolio (50% of the entrance examination)", "Motivational interview"],
     notes: ["Programmes run only if a sufficient student group forms."],
   },
@@ -328,7 +384,6 @@ export const entryRules: Record<string, InstitutionRule> = {
       grade: { metric: "none", note: "Qualification documents (certificate + supplement) are evaluated; no VIKO-published minimum grade or Bangladesh-specific rule.", status: "unconfirmed" },
       english: { tests: { ielts: 5.5, toefl: 72 }, cefr: "B2", moi: "unconfirmed", note: "CEFR B2 / IELTS 5.5–6.0 / TOEFL 72–94 (results valid two years). VIKO's free online English test is an alternative; a B1 result waives IELTS/TOEFL.", status: "published" },
     },
-    ompt: { rule: "none", note: "No OMPT or maths entrance test." },
     conditions: [],
     notes: ["One intake per year — a missed deadline means waiting a full academic year."],
   },
@@ -338,7 +393,6 @@ export const entryRules: Record<string, InstitutionRule> = {
       grade: { metric: "none", note: "Documents are submitted for academic verification; no Bangladesh-specific grade threshold is published.", status: "unconfirmed" },
       english: { tests: {}, moi: "unconfirmed", note: "No specific accepted-test list or minimum English score is published on the consulted pages.", status: "unconfirmed" },
     },
-    ompt: { rule: "none", note: "No OMPT; Physiotherapy uses a competitive-score weighting (biology, a science subject, English)." },
     conditions: ["Statement about any study gap of more than three years", "Apostilled/notarised translations presented on arrival"],
     notes: [],
   },
@@ -348,7 +402,6 @@ export const entryRules: Record<string, InstitutionRule> = {
       grade: { metric: "none", note: "Applicants need an education level appropriate to the chosen programme (academic recognition carried out by the college); no Bangladesh-specific GPA minimum.", status: "unconfirmed" },
       english: { tests: { ielts: 5.5, toefl: 72, pte: 59, duolingo: 105 }, cefr: "B2", provisionalMapping: true, moi: "unconfirmed", note: "One page requires a valid B2 certificate, another states B1 minimum for English-taught study — the pages conflict. Numeric bands shown are an approximate CEFR mapping; confirm with admissions.", status: "conflicting" },
     },
-    ompt: { rule: "none", note: "No OMPT or maths entrance test." },
     conditions: ["Email the admissions coordinator before paying anything"],
     notes: ["English groups may be combined or retimed if few students enrol."],
   },
@@ -358,7 +411,6 @@ export const entryRules: Record<string, InstitutionRule> = {
       grade: { metric: "ratio", min: 0.5, note: "Kauno kolegija rules apply through the Alytus Faculty: at least 50% GPA (SKVC country rules), competitive score ≥3.2 for non-state-funded places.", status: "published" },
       english: { tests: { ielts: 5.5, toefl: 75, pte: 59, englishScore: 400 }, moi: "not-accepted", note: "Kauno kolegija's English rules apply: IELTS 5.5 / TOEFL 75 / PTE 59 / EnglishScore 400; MOI letters expressly not accepted (own €45 test available).", status: "published" },
     },
-    ompt: { rule: "none", note: "No OMPT under the applicable Kauno kolegija procedure." },
     conditions: ["Key competence test (score ≥3)", "Motivation interview", "Apply through Kauno kolegija — no separate Alytus application"],
     notes: [],
   },
@@ -368,7 +420,6 @@ export const entryRules: Record<string, InstitutionRule> = {
       grade: { metric: "none", note: "Senior/higher secondary education with internal academic recognition; no Bangladesh-specific grade threshold is published.", status: "unconfirmed" },
       english: { tests: {}, moi: "unconfirmed", note: "No published English requirement, accepted tests or minimum scores on the consulted page.", status: "unconfirmed" },
     },
-    ompt: { rule: "none", note: "No OMPT or maths entrance test; recognition is internal." },
     conditions: ["Confirm the September 2027 timetable and fee by email before applying"],
     notes: [],
   },
@@ -378,7 +429,6 @@ export const entryRules: Record<string, InstitutionRule> = {
       grade: { metric: "ratio", min: 0.46, note: "Average score across high school graduation exams of at least 46%.", status: "published" },
       english: { tests: { ielts: 5.5, toefl: 72, pte: 59, duolingo: 105 }, cefr: "B2", provisionalMapping: true, moi: "unconfirmed", note: "B2 English with a certificate (valid within two years) or the college's free 90-minute EFSET test. Bangladesh MOI acceptance unconfirmed. Numeric bands shown are an approximate CEFR mapping.", status: "published" },
     },
-    ompt: { rule: "none", note: "No OMPT; assessment is documents, exam average and a motivational interview." },
     conditions: ["Motivational interview", "Legalised police clearance certificate", "Bank statement showing sufficient resources", "Only one programme is currently open to international students"],
     notes: ["Studies combine online and in-person teaching."],
   },
@@ -388,13 +438,11 @@ export const entryRules: Record<string, InstitutionRule> = {
       grade: { metric: "none", note: "Legalised certificate/diploma and transcript per country-specific requirements; no published grade threshold.", status: "unconfirmed" },
       english: { tests: { ielts: 5.5, toefl: 72, pte: 59, duolingo: 105 }, cefr: "B2", provisionalMapping: true, moi: "unconfirmed", note: "An official B2 English document is required (native speakers exempt); no accepted-test list is published. Numeric bands shown are an approximate CEFR mapping.", status: "published" },
     },
-    ompt: { rule: "none", note: "No OMPT or maths entrance test." },
     conditions: ["Legalised affidavit of support", "Legalised bank statement"],
     notes: ["No college accommodation — arrange housing independently."],
   },
   "lithuanian-centre-for-social-sciences": {
     slug: "lithuanian-centre-for-social-sciences", levels: [],
-    ompt: { rule: "none", note: "Not applicable — no degree intake." },
     conditions: [],
     notes: ["LCSS is a research centre with doctoral cooperation only (VILNIUS TECH, KTU, VMU) — apply to the partner university for Bachelor's or Master's study."],
   },
@@ -429,9 +477,15 @@ function subjectMatchFor(institution: Institution, subject: string): string | un
   return undefined;
 }
 
-export function assessProfile(profile: StudentProfile): Assessment[] {
+export function assessProfile(input: StudentProfile): Assessment[] {
+  const profile = normaliseProfile(input);
+  const gap = effectiveGapYears(profile.qualifications, profile.gapOverride ?? profile.gapYears);
+  const omptResults = profile.assessments.filter((item) => item.type === "ompt");
+  const otherAssessments = profile.assessments.filter((item) => item.type !== "ompt");
+
   return institutions.map((institution) => {
     const rule = entryRules[institution.slug];
+    const ompt = getOmpt(institution.slug);
     const missing: string[] = [];
     const actions: string[] = [];
     const reasons: string[] = [];
@@ -440,25 +494,36 @@ export function assessProfile(profile: StudentProfile): Assessment[] {
     let routeCheck: CheckState = "pass";
     let academicCheck: CheckState = "pass";
     let englishCheck: CheckState = "pass";
+    let omptCheck: CheckState = "pass";
+    let omptDetail = ompt.note;
     let academicDetail = "";
     let englishDetail = "";
+    let gapExceeded: boolean | undefined;
     let hardFail = false;
     let unknown = false;
 
     if (!rule || !rule.levels.includes(profile.level)) {
       const assessment: Assessment = {
-        institution, rule: rule ?? { slug: institution.slug, levels: [], ompt: { rule: "none", note: "" }, conditions: [], notes: [] },
+        institution, rule: rule ?? { slug: institution.slug, levels: [], conditions: [], notes: [] },
         verdict: "not-eligible", levelCheck: "fail", routeCheck: "pass", academicCheck: "unknown", englishCheck: "unknown",
+        ompt, omptStatus: ompt.status, omptCheck: "unknown", omptDetail,
         academicDetail: "", englishDetail: "", missing: [], actions: [], reasons: [], notes,
         subjectMatch: false, cityMatch: false, score: 0,
+        gapYears: gap.years, gapSource: gap.source,
       };
       assessment.reasons.push(rule ? `Does not offer ${profile.level} level programmes.` : "No verified entry rules in the research database.");
       if (!rule?.levels.length) assessment.actions.push("Redirect the application to a partner university (see the profile).");
       return assessment;
     }
 
-    // Diploma route (Bachelor level only)
-    const usesDiploma = profile.hasDiploma && profile.level === "Bachelor" && !profile.hscGpa;
+    // Diploma route (Bachelor level only). The open list decides whether the
+    // student is presenting a Diploma, and only when it is the best Bachelor
+    // qualification (no HSC/A-Level recorded).
+    const usesDiploma =
+      profile.level === "Bachelor" &&
+      hasType(profile.qualifications, "diploma") &&
+      !hasType(profile.qualifications, "hsc") &&
+      !hasType(profile.qualifications, "alevel");
     if (usesDiploma) {
       const route: DiplomaRoute = institution.diplomaCgpa.diploma;
       if (route === "excluded") {
@@ -499,17 +564,24 @@ export function assessProfile(profile: StudentProfile): Assessment[] {
         let value: number | undefined;
         let label = "";
         if (grade.metric === "hscGpa5") {
-          value = profile.hscGpa;
-          label = "HSC GPA (5.00 scale)";
-          if (value === undefined) {
+          // The institution publishes the HSC GPA on the 5.00 scale itself.
+          // A-Level/other 5.00-scale awards are the same scale; A-Level on a
+          // letter or UCAS scale is never converted, so it is left unknown.
+          const hsc = ofType(profile.qualifications, "hsc")[0];
+          const alevel = ofType(profile.qualifications, "alevel")[0];
+          const candidate = hsc ?? (alevel && (alevel.maxGrade ?? 5) === 5 ? alevel : undefined);
+          value = candidate?.grade;
+          label = hsc ? "HSC GPA (5.00 scale)" : "A-Level GPA (5.00 scale)";
+          if (candidate === undefined) {
             academicCheck = "pending";
             missing.push("HSC GPA result (5.00 scale)");
           }
         } else if (grade.metric === "bachelorCgpa4") {
-          if (profile.hasBachelor && profile.bachelorGrade !== undefined) {
-            const isFourScale = profile.bachelorMax !== undefined && profile.bachelorMax >= 3.5 && profile.bachelorMax <= 4.5;
+          const bachelor = ofType(profile.qualifications, "bachelor")[0];
+          if (bachelor && bachelor.grade !== undefined) {
+            const isFourScale = bachelor.maxGrade !== undefined && bachelor.maxGrade >= 3.5 && bachelor.maxGrade <= 4.5;
             if (isFourScale) {
-              value = profile.bachelorGrade;
+              value = bachelor.grade;
               label = "Bachelor CGPA (4.00 scale)";
             } else {
               academicCheck = "unknown";
@@ -521,38 +593,25 @@ export function assessProfile(profile: StudentProfile): Assessment[] {
             missing.push("Honours Bachelor's degree with CGPA (4.00 scale)");
           }
         } else {
-          // ratio — fraction of the maximum possible grade on the student's own scale
-          let gradeValue: number | undefined;
-          let gradeMax: number | undefined;
-          if (profile.level === "Master") {
-            gradeValue = profile.bachelorGrade;
-            gradeMax = profile.bachelorMax;
-            label = "Bachelor result";
-            if (gradeValue === undefined) {
-              academicCheck = "pending";
-              missing.push("Bachelor's degree result");
-            }
-          } else if (usesDiploma && profile.diplomaGrade !== undefined) {
-            gradeValue = profile.diplomaGrade;
-            gradeMax = profile.diplomaMax;
-            label = "Diploma result";
-          } else if (profile.hscGpa !== undefined) {
-            gradeValue = profile.hscGpa;
-            gradeMax = 5;
-            label = "HSC result";
-          } else if (profile.sscGpa !== undefined) {
-            gradeValue = profile.sscGpa;
-            gradeMax = 5;
-            label = "SSC result";
-          } else if (profile.diplomaGrade !== undefined) {
-            gradeValue = profile.diplomaGrade;
-            gradeMax = profile.diplomaMax;
-            label = "Diploma result";
-          } else {
+          // ratio — fraction of the maximum possible grade on the student's own scale.
+          // Any qualification type can supply this: the engine only ever divides
+          // the student's own result by the student's own scale maximum.
+          const candidate = ratioCandidate(profile.qualifications, profile.level, usesDiploma);
+          if (!candidate) {
             academicCheck = "pending";
-            missing.push("Secondary/Diploma qualification result");
+            missing.push(profile.level === "Master" ? "Bachelor's degree result" : "Secondary/Diploma qualification result");
+          } else if (candidate.grade === undefined) {
+            academicCheck = "pending";
+            missing.push(`${qualificationLabels[candidate.type]} result`);
+          } else {
+            value = ratio(candidate.grade, candidate.maxGrade);
+            label = `${qualificationLabels[candidate.type]} result`;
+            if (value === undefined) {
+              // Grade recorded without a scale maximum — needed for a % rule.
+              academicCheck = "pending";
+              missing.push(`Scale maximum for the ${qualificationLabels[candidate.type]} result`);
+            }
           }
-          value = ratio(gradeValue, gradeMax);
         }
         if (value !== undefined && grade.min !== undefined) {
           const passes = value + 1e-9 >= grade.min;
@@ -623,25 +682,69 @@ export function assessProfile(profile: StudentProfile): Assessment[] {
       }
     }
 
-    // OMPT + conditions + gap
-    if (rule.ompt.rule === "required") {
-      missing.push("OMPT result (or the institution's maths entrance requirement)");
-      actions.push(rule.ompt.note);
-    } else if (rule.ompt.rule === "programme") {
-      missing.push("OMPT check per chosen programme");
-      actions.push(rule.ompt.note);
-    } else if (rule.ompt.rule === "unconfirmed") {
-      notes.push(rule.ompt.note);
+    // OMPT — read from the single shared table (src/lib/ompt.ts), and checked
+    // against any OMPT result the student has actually recorded.
+    omptDetail = ompt.note;
+    if (requiresOmpt(ompt)) {
+      if (omptResults.length === 0) {
+        omptCheck = "pending";
+        missing.push(
+          ompt.status === "required"
+            ? "OMPT result (published requirement for this institution)"
+            : "OMPT check for the chosen programme (the version and score differ per programme)",
+        );
+        actions.push(ompt.note);
+      } else {
+        const best = omptResults.reduce((chosen, current) =>
+          (current.scorePercent ?? -1) > (chosen.scorePercent ?? -1) ? current : chosen,
+        );
+        const result = checkOmptResult(ompt, best);
+        if (result.ok) {
+          omptCheck = "pass";
+          notes.push(`OMPT evidence recorded: ${assessmentSummary(best)}.`);
+        } else {
+          omptCheck = "pending";
+          missing.push(`OMPT result does not yet meet the published rule (${result.reasons.join("; ")})`);
+          actions.push("Book another OMPT attempt (at most two attempts where the institution says so) or confirm the exact programme requirement.");
+        }
+      }
+    } else if (ompt.status === "unconfirmed") {
+      // Silence is not an exemption, so it never counts as a pass — it is
+      // recorded as unknown and the student is told the published alternative.
+      omptCheck = "unknown";
+      unknown = true;
+      notes.push(ompt.note);
+      if (ompt.alternative) {
+        actions.push(`This institution's published assessment is ${ompt.alternative} — not an OMPT certificate.`);
+      }
+    } else if (ompt.status === "not-applicable") {
+      omptCheck = "unknown";
+      notes.push(ompt.note);
     }
+
+    // Any other assessment the student holds is recorded, never substituted
+    // for an OMPT obligation the institution actually publishes.
+    for (const item of otherAssessments) {
+      notes.push(`Assessment on file: ${assessmentSummary(item)} — this is not an OMPT certificate unless the institution says it is.`);
+    }
+
     for (const condition of [
       ...rule.conditions,
       ...(profile.level === "Master" ? rule.masterConditions ?? [] : rule.bachelorConditions ?? []),
     ]) {
       missing.push(condition);
     }
-    if (rule.maxGapYears !== undefined && profile.gapYears !== undefined && profile.gapYears > rule.maxGapYears) {
-      missing.push(`Study gap of ${profile.gapYears} years exceeds the published guidance (${rule.maxGapYears})`);
-      actions.push("Prepare work/study evidence covering the gap.");
+
+    // Study gap — derived automatically from the latest passing year unless the
+    // student overrode it. An unknown gap never counts as a pass or a fail.
+    if (rule.maxGapYears !== undefined) {
+      if (gap.years === undefined) {
+        notes.push(`This institution publishes a study-gap limit of ${rule.maxGapYears} years — record your latest passing year so it can be checked.`);
+      } else if (gap.years > rule.maxGapYears) {
+        gapExceeded = true;
+        missing.push(`Study gap of ${gap.years} years exceeds the published guidance (${rule.maxGapYears})`);
+        actions.push("Prepare work/study evidence covering the gap.");
+      }
     }
 
     // Verdict
@@ -661,6 +764,7 @@ export function assessProfile(profile: StudentProfile): Assessment[] {
       (academicCheck === "pass" ? 12 : 0) +
       (englishCheck === "pass" ? 10 : 0) +
       (routeCheck === "pass" ? 5 : 0) +
+      (omptCheck === "pass" && requiresOmpt(ompt) ? 4 : 0) +
       (matchedProgramme ? 8 : 0) +
       (budgetFit ? 6 : budgetFit === false ? -4 : 0) +
       (cityMatch ? 3 : 0) +
@@ -668,8 +772,10 @@ export function assessProfile(profile: StudentProfile): Assessment[] {
 
     return {
       institution, rule, verdict, levelCheck, routeCheck, academicCheck, englishCheck,
+      ompt, omptStatus: ompt.status, omptCheck, omptDetail,
       academicDetail, englishDetail, missing, actions, reasons, notes,
-      matchedProgramme, subjectMatch: Boolean(matchedProgramme), cityMatch, budgetFit, tuitionEur, score,
+      matchedProgramme, subjectMatch: Boolean(matchedProgramme), cityMatch, budgetFit, tuitionEur,
+      gapYears: gap.years, gapSource: gap.source, gapExceeded, score,
     };
   });
 }

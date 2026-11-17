@@ -1,5 +1,6 @@
 import { colleges } from "./colleges";
 import { englishAlternativesBySlug } from "./english-alternatives";
+import { omptSummary } from "./ompt";
 import type { EnglishAlternatives } from "./english-alternatives";
 
 export const VERIFIED_ON = "5 November 2026";
@@ -285,7 +286,6 @@ export type University = {
   verifiedOn?: string;
   feeSummary: string;
   deadlineSummary: string;
-  omptSummary: string;
   /** Diploma-background treatment and published minimum CGPA, with sourced detail. */
   diplomaCgpa: DiplomaCgpa;
   facts: Record<SectionKey, Fact[]>;
@@ -300,7 +300,7 @@ export const universities: University[] = [
   {
     slug: "vilnius-university", name: "Vilnius University", abbreviation: "VU", city: "Vilnius", accent: "#24486f", initial: "VU", area: "Research · Humanities · Sciences", status: "dates",
     description: "Lithuania's historic research university, with a broad English-taught catalogue and a detailed country-specific policy for Bangladesh.",
-    feeSummary: "€100", deadlineSummary: "1 May 2027", omptSummary: "By programme",
+    feeSummary: "€100", deadlineSummary: "1 May 2027",
     facts: {
       fee: [
         fact("€100 per application, covering up to three programme choices. Pay the invoice through Flywire after adding programmes; non-refundable.", ["vuApply"]),
@@ -359,7 +359,7 @@ export const universities: University[] = [
   {
     slug: "vilnius-tech", name: "VILNIUS TECH", abbreviation: "VILNIUS TECH", city: "Vilnius", accent: "#4b7892", initial: "VT", area: "Engineering · Technology · Design", status: "partial",
     description: "A technical university with published 2027/28 non-EU fees and a specific OMPT rule for Bangladeshi Bachelor's applicants.",
-    feeSummary: "€100 + €200", deadlineSummary: "2027 date pending", omptSummary: "Required · Bachelor's",
+    feeSummary: "€100 + €200", deadlineSummary: "2027 date pending",
     facts: {
       fee: [
         fact("€100 application fee, non-refundable. Pay by bank transfer to VILNIUS TECH or credit card on its payment site. A further €200 registration fee is due with the first tuition payment after acceptance.", ["techFees"]),
@@ -417,7 +417,7 @@ export const universities: University[] = [
   {
     slug: "klaipeda-university", name: "Klaipėda University", abbreviation: "KU", city: "Klaipėda", accent: "#287c85", initial: "KU", area: "Marine · Health · Business", status: "partial",
     description: "A coastal university with English-taught degrees and unusually specific additional academic rules for applicants educated in Bangladesh.",
-    feeSummary: "€180", deadlineSummary: "1 June · year pending", omptSummary: "Not confirmed",
+    feeSummary: "€180", deadlineSummary: "1 June · year pending",
     facts: {
       fee: [
         fact("€180 for Bangladesh and other non-EU applicants; €75 for EU and Eastern Partnership citizens. Non-refundable. Bachelor and Master applications are separate and each requires its own fee.", ["kuApply"]),
@@ -474,7 +474,7 @@ export const universities: University[] = [
   {
     slug: "lithuanian-sports-university", name: "Lithuanian Sports University", abbreviation: "LSU", city: "Kaunas", accent: "#6b8b61", initial: "LS", area: "Sport · Physiotherapy · Health", status: "dates",
     description: "A specialist sport and health university with published 2027 application windows and a separate assessment for Bangladeshi Bachelor's applicants.",
-    feeSummary: "€200", deadlineSummary: "1 May 2027", omptSummary: "LSU test listed",
+    feeSummary: "€200", deadlineSummary: "1 May 2027",
     facts: {
       fee: [
         fact("The current general degree-admissions page states a €200 non-refundable application fee for all applicants. LSU's separate older fee page differs for EU citizens, so EU applicants should confirm their category directly; Bangladesh applicants should budget €200.", ["lsuApply"]),
@@ -533,7 +533,7 @@ export const universities: University[] = [
   {
     slug: "ism-university", name: "ISM University of Management and Economics", abbreviation: "ISM", city: "Vilnius", accent: "#aa7551", initial: "IS", area: "Business · Economics · Management", status: "dates",
     description: "An English-taught business university with an explicit HSC mathematics and GPA rule for Bangladesh and a 2027 visa-regime deadline.",
-    feeSummary: "€100", deadlineSummary: "31 May 2027", omptSummary: "ISM maths route",
+    feeSummary: "€100", deadlineSummary: "31 May 2027",
     facts: {
       fee: [
         fact("€100 application fee for international Bachelor's and Master's applications, submitted with the online application through apply.ism.lt.", ["ismApply"]),
@@ -593,7 +593,7 @@ export const universities: University[] = [
   {
     slug: "vytautas-magnus-university", name: "Vytautas Magnus University", abbreviation: "VMU", city: "Kaunas", accent: "#886e9c", initial: "VM", area: "Liberal Arts · Business · Sciences", status: "dates",
     description: "A broad multidisciplinary university with a published 2027/28 fee schedule and unusually precise OMPT versions and scores by programme.",
-    feeSummary: "€150", deadlineSummary: "1 May 2027", omptSummary: "Required · by course",
+    feeSummary: "€150", deadlineSummary: "1 May 2027",
     facts: {
       fee: [
         fact("€150 per application, covering up to two programme choices; non-refundable. The invoice is generated in DreamApply and the application can be submitted after payment is received.", ["vmuApply"]),
@@ -651,7 +651,7 @@ export const universities: University[] = [
   {
     slug: "lcc-international-university", name: "LCC International University", abbreviation: "LCC", city: "Klaipėda", accent: "#527b78", initial: "LC", area: "Liberal Arts · Business · Psychology", status: "partial",
     description: "An English-language liberal arts option in Klaipėda, with a published 2027/28 BA price but no clearly dated September 2027 BA deadline yet.",
-    feeSummary: "BA: pending", deadlineSummary: "Not confirmed", omptSummary: "LCC test listed",
+    feeSummary: "BA: pending", deadlineSummary: "Not confirmed",
     facts: {
       fee: [
         pending("the current BA programme page says an application fee may apply and directs applicants to their admissions dashboard; an exact September 2027 BA fee, payment method and refund policy are not stated there.", ["lccAdmission"]),
@@ -711,7 +711,7 @@ export const universities: University[] = [
   {
     slug: "vilnius-academy-of-arts", name: "Vilnius Academy of Arts", abbreviation: "VDA", city: "Vilnius · other campuses", accent: "#9c6671", initial: "VA", area: "Art · Design · Architecture", status: "waiting",
     description: "A portfolio-led arts institution. Its next fall degree round is anticipated from December 2026, but the exact 2027 call has not yet been posted.",
-    feeSummary: "€100", deadlineSummary: "Not confirmed", omptSummary: "Not confirmed",
+    feeSummary: "€100", deadlineSummary: "Not confirmed",
     facts: {
       fee: [
         earlier("VDA's 2026/27 full-degree fee page specifies a €100 non-refundable application fee by bank transfer, with the applicant's name in the payment reference.", ["vdaFees"]),
@@ -779,7 +779,6 @@ export const universities: University[] = [
       "Lithuania's largest technical university and its highest-ranked technological institution. KTU has published its own September 2027 international admission window and runs 50+ English-taught bachelor's and master's programmes.",
     feeSummary: "€100",
     deadlineSummary: "31 May 2027",
-    omptSummary: "Required for some qualifications · 75%",
     facts: {
       fee: [
         fact(
@@ -960,7 +959,6 @@ export const universities: University[] = [
       "A Vilnius social-sciences university and Lithuania's top-ranked law school. MRU has already published the full 2027–28 cycle, including an explicit OMPT requirement for Bangladesh, and runs one intake each September.",
     feeSummary: "€100 + €50",
     deadlineSummary: "1 June 2027",
-    omptSummary: "Required for Bangladesh · mandatory",
     facts: {
       fee: [
         fact(
@@ -1141,11 +1139,14 @@ export type Institution = University & {
   category: "university" | "college";
   /** Verified English Test Alternatives profile (MOI / internal test / alternative certificates). */
   english: EnglishAlternatives;
+  /** One-line OMPT summary, derived from the shared OMPT table (src/lib/ompt.ts). */
+  omptSummary: string;
 };
 
-function withEnglish<T extends University>(institution: T): T & { english: EnglishAlternatives } {
+function withEnglish<T extends University>(institution: T): T & { english: EnglishAlternatives; omptSummary: string } {
   return {
     ...institution,
+    omptSummary: omptSummary(institution.slug),
     english: englishAlternativesBySlug[institution.slug] ?? {
       moiAccepted: "unconfirmed",
       internalEnglishTest: { available: false },

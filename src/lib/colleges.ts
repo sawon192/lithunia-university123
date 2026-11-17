@@ -9,7 +9,7 @@ export const colleges: CollegeProfile[] = [
   {
     slug: "kauno-kolegija", name: "Kauno kolegija / Higher Education Institution", abbreviation: "KK", city: "Kaunas", accent: "#2f6f8f", initial: "KK", area: "Applied sciences · Business · Health · Arts", category: "college", status: "partial",
     description: "One of Lithuania's largest state colleges, with around 11 English-taught programmes and a published admission procedure for internationally educated applicants.",
-    feeSummary: "€120", deadlineSummary: "1 May · cycle pending", omptSummary: "Not mentioned",
+    feeSummary: "€120", deadlineSummary: "1 May · cycle pending",
     facts: {
       fee: [fact("€120 application (registration) fee, non-refundable once an application has been submitted. Pay only after Kauno kolegija issues the invoice following pre-approval of your uploaded documents.", ["kkApply", "kkRules"])],
       opening: [earlier("The published institutional admission period runs from 1 December to 1 June for EU/EEA applicants and until 1 May for non-EU/EEA applicants, with one annual autumn intake. The 2026 procedure states it stays in force until the 2027 procedure is approved.", ["kkApply", "kkRules"])],
@@ -43,7 +43,7 @@ export const colleges: CollegeProfile[] = [
   {
     slug: "lithuania-business-college", name: "Lithuania Business College (LTVK / LBC)", abbreviation: "LBC", city: "Klaipėda", accent: "#7a6f9b", initial: "LB", area: "Business · IT · Tourism", category: "college", status: "partial",
     description: "A private business college in Klaipėda with English-taught professional bachelor degrees and a published annual admission window.",
-    feeSummary: "€100", deadlineSummary: "31 May · cycle pending", omptSummary: "Not mentioned",
+    feeSummary: "€100", deadlineSummary: "31 May · cycle pending",
     facts: {
       fee: [fact("€100 application fee. The college's enrolment rules state that the €100 application fee and the first study-year tuition payment are not refunded.", ["ltvkEnrol", "ltvkRules"])],
       opening: [earlier("The published cycle opens applications on 1 March and closes on 31 May, with studies beginning 1 September. The application portal lists autumn 2026/27 as closed, so the next cycle's dates must be rechecked.", ["ltvkEnrol", "ltvkApply"])],
@@ -77,7 +77,7 @@ export const colleges: CollegeProfile[] = [
   {
     slug: "utenos-kolegija", name: "Utenos kolegija / Higher Education Institution", abbreviation: "UK", city: "Utena", accent: "#5d8a63", initial: "UK", area: "Business · Law · Health", category: "college", status: "partial",
     description: "A small regional state college with published 2027 tuition rates and English-taught business, law and health programmes.",
-    feeSummary: "€100", deadlineSummary: "Window closed for 2027 spring", omptSummary: "Not mentioned",
+    feeSummary: "€100", deadlineSummary: "Window closed for 2027 spring",
     facts: {
       fee: [fact("€100 non-refundable application (registration) fee, transferred to the college's account and confirmed with a payment receipt.", ["utenApply"])],
       opening: [fact("Foreign nationals submit admission documents from 3 September to 31 October for studies beginning in the spring semester; the current page is written for the 2026 cycle.", ["utenApply", "utenSteps"])],
@@ -111,7 +111,7 @@ export const colleges: CollegeProfile[] = [
   {
     slug: "smk-college", name: "SMK College of Applied Sciences", abbreviation: "SMK", city: "Vilnius · Kaunas · Klaipėda", accent: "#a06a4e", initial: "SM", area: "Business · IT · Media · Nursing", category: "college", status: "dates",
     description: "Lithuania's largest private higher education institution, with English-taught bachelor programmes across three campuses and recurring published admission dates.",
-    feeSummary: "€200 non-EU", deadlineSummary: "1 July · recurring", omptSummary: "Not mentioned",
+    feeSummary: "€200 non-EU", deadlineSummary: "1 July · recurring",
     facts: {
       fee: [fact("€200 application fee for non-EU/EEA applicants; €120 for EU/EEA nationals and for applicants from Eastern Partnership countries plus Argentina, Brazil, Kazakhstan, the Philippines, Türkiye and Uzbekistan. Bangladesh applicants should budget the non-EU/EEA rate.", ["smkFees"]), earlier("SMK's study-programmes page shows a different pair of figures (€180 for foreign nationals and €70 for EU/EEA). The two official pages conflict, so confirm the amount on your invoice before paying.", ["smkProgrammes"])],
       opening: [fact("Fall-semester admission opens on 2 December and the semester commences 1 September; spring-semester admission opens on 2 September for a 1 February start.", ["smkProgrammes"])],
@@ -144,7 +144,7 @@ export const colleges: CollegeProfile[] = [
   {
     slug: "vilnius-business-college", name: "Vilnius Business College", abbreviation: "VBC", city: "Vilnius", accent: "#8f5f6a", initial: "VB", area: "Business · IT · Hospitality", category: "college", status: "partial",
     description: "A private college in Vilnius with English-taught business and IT professional bachelor degrees and a €200 fee that includes document legalisation.",
-    feeSummary: "€200", deadlineSummary: "1 June · cycle pending", omptSummary: "Not mentioned",
+    feeSummary: "€200", deadlineSummary: "1 June · cycle pending",
     facts: {
       fee: [fact("€200 application fee, non-refundable. VBC states this fee includes all charges for document legalisation needed for the temporary residence permit.", ["vbcApply"])],
       opening: [earlier("The published fall-admission schedule lists non-EU/EEA applications until 1 June and EU applications until 1 July, and the application catalogue shows a 1 June 2026 deadline for autumn 2026/27. The 2027 cycle dates were not published at the time of checking.", ["vbcApply", "vbcPortal"])],
@@ -178,7 +178,7 @@ export const colleges: CollegeProfile[] = [
   {
     slug: "vilnius-college-of-design", name: "Vilnius College of Design", abbreviation: "VCD", city: "Vilnius", accent: "#9b6a45", initial: "VD", area: "Design · Media · Technology", category: "college", status: "dates",
     description: "A private design college that already lists February and September 2027 intakes for its English-taught degrees, with a portfolio-based entrance examination.",
-    feeSummary: "€120", deadlineSummary: "Feb & Sep 2027 intakes", omptSummary: "Not mentioned",
+    feeSummary: "€120", deadlineSummary: "Feb & Sep 2027 intakes",
     facts: {
       fee: [fact("€120 application fee; a copy of the payment receipt is part of the required document list.", ["vcdGraphic", "vcdAdmission"])],
       opening: [fact("VCD's Graphic Design programme page states admission is open for the February 2027 and September 2027 intakes, and other programmes list February 2027 and September 2027 starts.", ["vcdGraphic", "vcdSoftware", "vcdProgramming"])],
@@ -212,7 +212,7 @@ export const colleges: CollegeProfile[] = [
   {
     slug: "vilniaus-kolegija", name: "Vilniaus kolegija / Higher Education Institution (VIKO)", abbreviation: "VIKO", city: "Vilnius", accent: "#3f6f8a", initial: "VI", area: "IT · Business · Electronics", category: "college", status: "partial",
     description: "A large state college in Vilnius with a published single annual intake, a free internal English test and published tuition for its English-taught degrees.",
-    feeSummary: "€100", deadlineSummary: "31 March · cycle pending", omptSummary: "Not mentioned",
+    feeSummary: "€100", deadlineSummary: "31 March · cycle pending",
     facts: {
       fee: [fact("€100 non-refundable application fee, paid to the college's account with the applicant's name as the payment reference; applications are only considered through the VIKO admission information system.", ["vikoApply"])],
       opening: [fact("VIKO states it has one intake per year, for the autumn semester. The published key dates open applications on 1 January with studies beginning 1 September.", ["vikoApply"])],
@@ -245,7 +245,7 @@ export const colleges: CollegeProfile[] = [
   {
     slug: "klaipeda-state-college", name: "Klaipėdos valstybinė kolegija / Higher Education Institution (KVK)", abbreviation: "KVK", city: "Klaipėda", accent: "#2c7a80", initial: "KV", area: "Health · Business · Technology", category: "college", status: "dates",
     description: "A state college in Klaipėda that has already published its 2027/28 academic year dates, with English-taught health, business and technology degrees.",
-    feeSummary: "€120", deadlineSummary: "Opens Dec 2026 / Jan 2027", omptSummary: "Not mentioned",
+    feeSummary: "€120", deadlineSummary: "Opens Dec 2026 / Jan 2027",
     facts: {
       fee: [fact("€120 application fee, non-refundable, paid by bank transfer; the application portal does not offer direct payment links.", ["kvkAdmission", "kvkNursing"])],
       opening: [fact("For the 2027/2028 academic year, KVK states the academic year begins 1 September 2027 and the application period opens in December 2026 / January 2027.", ["kvkOnline"])],
@@ -279,7 +279,7 @@ export const colleges: CollegeProfile[] = [
   {
     slug: "panevezys-college", name: "Panevėžio kolegija / State Higher Education Institution", abbreviation: "PANKO", city: "Panevėžys", accent: "#4f7d5c", initial: "PA", area: "Business · Health · Engineering", category: "college", status: "partial",
     description: "A regional state college with published English-taught programme fees and a requirement to contact admissions before paying the application fee.",
-    feeSummary: "€100", deadlineSummary: "1 July · cycle pending", omptSummary: "Not mentioned",
+    feeSummary: "€100", deadlineSummary: "1 July · cycle pending",
     facts: {
       fee: [fact("€100 non-refundable application/registration fee, paid by bank transfer with the candidate's name, the college's name and the programme in the payment reference. The college requires international applicants to email the admissions coordinator before submitting documents or paying.", ["pankoApply", "pankoPayment"])],
       opening: [earlier("The published 2026/27 page sets preliminary studies from 1 September 2026 and lists 1 July 2026 for non-EU/EFTA and EU/EFTA applicants, with a second date given for January-degree programmes. The 2027/28 dates are not yet published.", ["pankoApply"])],
@@ -313,7 +313,7 @@ export const colleges: CollegeProfile[] = [
   {
     slug: "alytus-college", name: "Alytus College — now the Alytus Faculty of Kauno kolegija", abbreviation: "AF KK", city: "Alytus", accent: "#5f8f7a", initial: "AL", area: "Business · Management", category: "college", status: "partial",
     description: "The poster lists Alytus College separately, but Kauno kolegija confirms it was reorganised into Kauno kolegija's Alytus Faculty in 2024, so applications now run through Kauno kolegija.",
-    feeSummary: "Via KK €120", deadlineSummary: "Via KK · cycle pending", omptSummary: "Not mentioned",
+    feeSummary: "Via KK €120", deadlineSummary: "Via KK · cycle pending",
     facts: {
       fee: [fact("Admission now follows Kauno kolegija's procedure, so the applicable application fee is Kauno kolegija's €120 non-refundable registration fee, invoiced after pre-approval.", ["alytusMerger", "kkApply"])],
       opening: [earlier("Applications follow Kauno kolegija's institutional admission period (1 December to 1 June for EU/EEA, until 1 May for non-EU/EEA) with a single annual autumn intake.", ["kkApply", "kkRules"])],
@@ -344,7 +344,7 @@ export const colleges: CollegeProfile[] = [
   {
     slug: "siauliai-state-college", name: "Šiaulių valstybinė kolegija / Higher Education Institution", abbreviation: "ŠVK", city: "Šiauliai", accent: "#7a6a4f", initial: "ŠV", area: "Business · IT · Nursing", category: "college", status: "partial",
     description: "Šiauliai's state college, with English-taught programmes and an admission process where the application fee is paid only after the admission office approves the application.",
-    feeSummary: "Amount to confirm", deadlineSummary: "Spring round opens Oct 2026", omptSummary: "Not mentioned",
+    feeSummary: "Amount to confirm", deadlineSummary: "Spring round opens Oct 2026",
     facts: {
       fee: [fact("The application fee is paid only after the admission office approves the application, and it is non-refundable. The current international admission page does not state the amount, so confirm it before transferring money.", ["svakoAdmission"]), earlier("The college's Lithuanian admission page has previously quoted a €35 registration fee for domestic applicants; that figure must not be assumed to apply to international applicants.", ["svakoPriemimas"])],
       opening: [fact("The college states that admission for the autumn semester is closed and admission for the spring semester opens in October 2026, so this page was written for the 2026 cycle.", ["svakoAdmission"]), pending("a published autumn 2027 opening date for September 2027 entry.", ["svakoAdmission"])],
@@ -377,7 +377,7 @@ export const colleges: CollegeProfile[] = [
   {
     slug: "st-ignatius-of-loyola-college", name: "St. Ignatius of Loyola College", abbreviation: "ILK", city: "Kaunas", accent: "#8a5f52", initial: "IL", area: "Hospitality · Health · Social", category: "college", status: "partial",
     description: "A Catholic college in Kaunas whose international admission is currently limited to one English-taught programme, with a published application window and a free English test option.",
-    feeSummary: "€100", deadlineSummary: "20 May · cycle pending", omptSummary: "Not mentioned",
+    feeSummary: "€100", deadlineSummary: "20 May · cycle pending",
     facts: {
       fee: [fact("A one-time non-refundable €100 administration (admission) fee is required at registration, covering administrative paperwork. The college asks applicants to email admissions before paying so documents can be checked.", ["ilkFees", "ilkApply"]), fact("The college's domestic admission rules also describe a separate €50 registration fee for accepted students; this is distinct from the €100 international administration fee.", ["ilkRules"])],
       opening: [earlier("The published cycle runs applications from 2 March to 20 May, with motivational interviews 21–28 May and admission notifications 29 May to 5 June, for studies starting 1 October 2026. The 2027 window was not published at the time of checking.", ["ilkAdmission", "ilkDates"])],
@@ -409,7 +409,7 @@ export const colleges: CollegeProfile[] = [
   {
     slug: "kolpingo-kolegija", name: "Kolpingo kolegija / Kolping University of Applied Sciences", abbreviation: "KKUAS", city: "Kaunas", accent: "#6a6f8f", initial: "KO", area: "Social work · Business", category: "college", status: "partial",
     description: "A small private college in Kaunas offering bachelor-level programmes only, with a published €3,000 annual tuition and clear financial-evidence requirements.",
-    feeSummary: "€100", deadlineSummary: "Not confirmed", omptSummary: "Not mentioned",
+    feeSummary: "€100", deadlineSummary: "Not confirmed",
     facts: {
       fee: [fact("A non-refundable €100 registration fee is required from international applicants, with a bank confirmation showing the applicant's name and payment date. Applications are not reviewed without proof of payment.", ["kolpingAdmission"]), earlier("The college's domestic admission rules set a €50 registration fee for students admitted through the general admission round; that amount is separate from the international procedure.", ["kolpingRules"])],
       opening: [fact("The college's international admission page describes its process and document list but does not publish a dated opening for the next intake.", ["kolpingAdmission"]), pending("a confirmed application opening date for September 2027.", ["kolpingAdmission"])],
@@ -440,7 +440,7 @@ export const colleges: CollegeProfile[] = [
   {
     slug: "lithuanian-centre-for-social-sciences", name: "Lithuanian Centre for Social Sciences (LCSS)", abbreviation: "LCSS", city: "Vilnius", accent: "#6d7a86", initial: "LC", area: "Research · Economics · Sociology · Law", category: "college", status: "none",
     description: "The poster lists LCSS among colleges, but it is a national research institute, not a teaching college, and does not admit its own bachelor or master students.",
-    feeSummary: "Not applicable", deadlineSummary: "Not applicable", omptSummary: "Not applicable",
+    feeSummary: "Not applicable", deadlineSummary: "Not applicable",
     facts: {
       fee: [fact("Not applicable: LCSS is a research institution and its published information contains no application or tuition fee for degree applicants, because it does not run its own first- or second-cycle degree programmes.", ["lcssAbout"])],
       opening: [fact("Not applicable for degree admission. LCSS does state that applications for doctoral (PhD) studies are welcome, and doctoral admission is organised with partner universities rather than through a college intake.", ["lcssAbout", "lcssPhD"])],

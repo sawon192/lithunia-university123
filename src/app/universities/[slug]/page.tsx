@@ -1,5 +1,6 @@
 import { BookmarkButton } from "@/components/bookmark-button";
 import { EnglishAlternativesProfile } from "@/components/english-alternatives-profile";
+import { OmptPanel } from "@/components/ompt-panel";
 import { SiteHeader } from "@/components/site-shell";
 import { getInstitution, researchSections, sources, institutions, statusLabels, VERIFIED_ON, factStatusLabels, verificationRank, getResearchFreshness, sectionsNeedingUpdate, diplomaRouteLabels } from "@/lib/research";
 import type { Fact, Institution, SourceKey } from "@/lib/research";
@@ -70,6 +71,7 @@ export default async function UniversityPage({ params }: { params: Promise<{ slu
 
         <section id="programmes" className="detail-section"><div className="detail-section-heading"><div><div className="section-kicker"><span>EXPLORE</span> PROGRAMMES</div><h2>Programme <em>spotlight.</em></h2><p>Selected, source-linked examples — not a claim that these are the complete university catalogue. Use the official catalogue links below for every available programme.</p></div><span className="detail-section-symbol"><GraduationCap size={27} /></span></div><div className="programme-table-wrap"><table className="programme-table"><thead><tr><th>Programme / level</th><th>Duration · language</th><th>Intake</th><th>Published tuition</th><th>Source</th></tr></thead><tbody>{university.featuredProgrammes.map((programme) => <tr key={programme.name}><td><strong>{programme.name}</strong><span className="programme-level">{programme.level}</span></td><td>{programme.duration}<small>{programme.language}</small></td><td>{programme.intake}</td><td className="programme-fee">{programme.tuition}</td><td><a href={sources[programme.source].url} target="_blank" rel="noopener noreferrer" aria-label={`Official source for ${programme.name}`}><ArrowUpRight size={18} /></a></td></tr>)}</tbody></table></div></section>
 
+        <OmptPanel slug={university.slug} />
         <EnglishAlternativesProfile institution={university} />
 
         <section id="bangladesh" className="detail-section bangladesh-section"><div className="section-kicker"><span>FOR YOU</span> BANGLADESH APPLICANT LENS</div><h2>What this means <em>for you.</em></h2><div className="bangladesh-box"><div className="bd-box-head"><span className="bd-flag"><i /><i /></span><div><span>ELIGIBILITY SNAPSHOT</span><h3>Bangladesh student eligibility</h3></div></div><p>{university.eligibility}</p><div className="bd-box-note"><FileCheck2 size={16} /> Eligibility is conditional, not an admission guarantee. Check qualification recognition and your chosen programme.</div></div>

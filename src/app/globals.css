@@ -739,6 +739,34 @@ h2{font-size:clamp(36px,4.1vw,55px);line-height:1.12}
 @media(max-width:900px){.english-filter-options{grid-template-columns:1fr 1fr}}
 @media(max-width:650px){.english-filter-options{grid-template-columns:1fr}.english-filter{padding:13px 13px 11px}.english-option{padding:10px}}
 
+/* ── OMPT requirement: directory filter + chips ─────────────────────── */
+.ompt-filter{border:1px solid #dfe7eb;border-top:3px solid #0d2d50;border-radius:5px;background:#fff;padding:15px 17px 13px;margin:0 0 14px}
+.ompt-filter-legend{display:flex;align-items:center;gap:7px;font-size:10px;letter-spacing:.13em;text-transform:uppercase;font-weight:800;color:#0d2d50;padding:0 5px}
+.ompt-filter-legend svg{color:#bc8940}
+.ompt-filter-intro{font-size:10.5px;line-height:1.6;color:#8798a4;margin:0 0 12px;max-width:680px}
+.ompt-filter-options{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.ompt-option{display:flex;align-items:center;justify-content:space-between;gap:9px;border:1px solid #e4eaec;border-radius:4px;padding:11px 12px;background:#fbfcfc;cursor:pointer;text-align:left;font-family:inherit;transition:border .15s,background .15s,box-shadow .15s}
+.ompt-option:hover{border-color:#c3d4dc;background:#f7fafb}
+.ompt-option.is-active{border-color:#b9cfe0;background:#f2f7fb;box-shadow:inset 0 0 0 1px #b9cfe0}
+.ompt-option-copy{flex:1;min-width:0}
+.ompt-option-copy strong{display:block;font-size:11px;color:#22415a;margin-bottom:2px;line-height:1.35}
+.ompt-option-copy small{display:block;font-size:9.5px;color:#93a2ad;line-height:1.5}
+.ompt-option-count{font-size:10px;font-weight:800;color:#a1743c;background:#fbf6ec;border-radius:20px;padding:2px 7px;flex:none}
+.ompt-option.is-active .ompt-option-count{background:#0d2d50;color:#f0d9ac}
+.ompt-filter-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:11px;padding-top:10px;border-top:1px solid #eef2f3;min-height:20px}
+.ompt-active{font-size:10px;font-weight:800;color:#3b6e97;background:#e9f1f8;border-radius:20px;padding:3px 9px}
+.ompt-clear{display:inline-flex;align-items:center;gap:5px;background:none;border:1px solid #dfc9a5;border-radius:3px;padding:5px 9px;font-size:10px;font-weight:800;color:#8d6a33;font-family:inherit}
+.ompt-clear:hover{background:#fbf6ec;border-color:#d3a454}
+.ompt-hint{font-size:9.5px;color:#a2afb7}
+.card-ompt{display:flex;flex-wrap:wrap;gap:4px;margin:0 0 12px}
+.ompt-chip{font-size:8px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;border-radius:2px;padding:3px 6px;line-height:1.3;white-space:nowrap}
+.ompt-required{background:#f6e7e3;color:#9c4b39}
+.ompt-programme{background:#fbf2e2;color:#9c7430}
+.ompt-unconfirmed{background:#f1f3f4;color:#96a3ab;font-style:italic;text-transform:none;letter-spacing:0;font-weight:700}
+.ompt-not-applicable{background:#f3f1ee;color:#8b8375;text-transform:none;letter-spacing:0}
+@media(max-width:900px){.ompt-filter-options{grid-template-columns:1fr}}
+@media(max-width:650px){.ompt-filter{padding:13px 13px 11px}}
+
 /* ── English Test Alternatives: profile section ────────────────────── */
 .english-profile{margin-top:26px;border:1px solid #dfe7eb;border-radius:5px;overflow:hidden;background:#fff}
 .english-profile-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;background:#0d2d50;color:#fff;padding:16px 20px}
@@ -856,6 +884,32 @@ h2{font-size:clamp(36px,4.1vw,55px);line-height:1.12}
 .el-inline-fields{display:inline-flex;gap:8px}
 .el-inline-fields input{width:120px}
 .el-error{color:#a75a4d;font-size:12px;font-weight:600;margin:4px 0 10px}
+.el-section-head{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin:22px 0 10px;padding-top:16px;border-top:1px solid #efeade}
+.el-section-head .mini-heading{font-size:10px;letter-spacing:.11em;text-transform:uppercase;font-weight:800;color:#0d2d50;display:inline-flex;align-items:center;gap:7px}
+.el-section-head .mini-heading em{font-style:normal;color:#a1743c}
+.el-add-row{display:flex;flex-wrap:wrap;gap:6px}
+.el-add{display:inline-flex;align-items:center;gap:4px;border:1px dashed #d6cbb6;background:#fdfbf7;border-radius:999px;padding:5px 10px;font-size:10px;font-weight:700;color:#6b6152;cursor:pointer;font-family:inherit;transition:border .15s,color .15s,background .15s}
+.el-add:hover{border-color:#bc8940;color:#8d6a33;background:#fbf6ec}
+.el-rows{display:flex;flex-direction:column;gap:10px}
+.el-row{border:1px solid #eae5d9;border-radius:10px;background:#fdfcfa;padding:13px 14px}
+.el-row-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.el-row-head strong{font-size:11.5px;color:#0d2d50;letter-spacing:.01em}
+.el-remove{display:inline-flex;align-items:center;gap:4px;background:none;border:none;padding:2px;font-size:10px;font-weight:700;color:#a8877f;cursor:pointer;font-family:inherit}
+.el-remove:hover{color:#a75a4d}
+.el-row-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px 14px}
+.el-row-grid .el-field input,.el-row-grid .el-field select{padding:9px 10px;font-size:12px}
+.el-gap-card{border:1px solid #e3d9c3;border-left:3px solid #bc8940;border-radius:10px;background:#fdfbf6;padding:14px 16px;margin:4px 0 16px}
+.el-gap-head{display:flex;align-items:center;gap:8px;color:#0d2d50;font-size:12px;margin-bottom:6px}
+.el-gap-head svg{color:#bc8940}
+.el-gap-card p{margin:0 0 10px;font-size:11.5px;color:#566d7c;line-height:1.6}
+.el-gap-card p strong{color:#22303f}
+.el-gap-card .el-field{margin-bottom:8px}
+.el-gap-card .el-field input{max-width:200px}
+.el-gap-source{display:block;font-size:10px;color:#8a94a1;font-style:italic}
+.el-tally{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:16px 0 4px}
+.el-tally div{background:#0d2d50;border-radius:8px;padding:12px 14px;color:#fff}
+.el-tally span{display:block;font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;color:#a8bdd4;font-weight:800;margin-bottom:4px}
+.el-tally strong{font-size:20px;font-weight:800;color:#f0d9ac;line-height:1}
 .el-generate{margin-top:10px;cursor:pointer;font-family:inherit;border:0}
 .el-report{margin-top:34px}
 .el-report-head h2{font-family:Georgia,"Times New Roman",serif;font-weight:500;color:#0d2d50;font-size:clamp(30px,4vw,42px);margin:10px 0 8px}
@@ -902,5 +956,25 @@ h2{font-size:clamp(36px,4.1vw,55px);line-height:1.12}
 .el-doc-list li{font-size:12px;color:#22303f;line-height:1.8}
 .el-final-note{display:flex;align-items:center;gap:9px;background:#faf8f4;border:1px solid #eee8dc;border-radius:8px;padding:12px 14px;color:#8a6b34;font-size:11px;line-height:1.6}
 .el-report-foot{display:flex;align-items:center;gap:22px;flex-wrap:wrap;margin:34px 0 44px}
-@media(max-width:850px){.el-intro-grid{grid-template-columns:1fr}.el-grid{grid-template-columns:1fr}.el-profile-grid{grid-template-columns:1fr 1fr}.el-best-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:850px){.el-intro-grid{grid-template-columns:1fr}.el-grid{grid-template-columns:1fr}.el-profile-grid{grid-template-columns:1fr 1fr}.el-best-grid{grid-template-columns:1fr 1fr}.el-tally{grid-template-columns:1fr 1fr}.el-section-head{align-items:flex-start}}
 @media print{.el-form,.el-report-foot{display:none!important}}
+
+/* ── OMPT requirement: institution profile panel ───────────────────── */
+.ompt-panel{margin:26px 0;border:1px solid #e3dccd;border-radius:12px;background:#fff;padding:22px 24px}
+.ompt-panel-head{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:16px}
+.ompt-panel-head h3{display:flex;align-items:center;gap:9px;margin:0;font-size:15px;color:#0d2d50}
+.ompt-panel-head h3 svg{color:#bc8940}
+.ompt-panel-badge{font-size:9px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;border-radius:3px;padding:4px 9px}
+.ompt-panel-badge.ompt-required{background:#f6e7e3;color:#9c4b39}
+.ompt-panel-badge.ompt-programme{background:#fbf2e2;color:#9c7430}
+.ompt-panel-badge.ompt-unconfirmed{background:#f1f3f4;color:#8b949c}
+.ompt-panel-badge.ompt-not-applicable{background:#f3f1ee;color:#8b8375}
+.ompt-panel-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.ompt-cell{border:1px solid #eef1f2;border-radius:8px;background:#fbfcfc;padding:11px 13px}
+.ompt-cell span{display:block;font-size:8.5px;letter-spacing:.09em;text-transform:uppercase;color:#96a3ab;font-weight:800;margin-bottom:5px}
+.ompt-cell strong{font-size:11.5px;color:#22303f;line-height:1.45;font-weight:700}
+.ompt-panel-note{margin:14px 0 0;font-size:11.5px;line-height:1.65;color:#566d7c}
+.ompt-panel-foot{display:flex;gap:9px;align-items:flex-start;margin-top:14px;padding-top:12px;border-top:1px solid #eff1f0;font-size:10.5px;line-height:1.6;color:#7d8b96}
+.ompt-panel-foot svg{flex:none;color:#bc8940;margin-top:1px}
+@media(max-width:850px){.ompt-panel-grid{grid-template-columns:1fr 1fr}.ompt-panel{padding:18px}}
+@media(max-width:520px){.ompt-panel-grid{grid-template-columns:1fr}}
