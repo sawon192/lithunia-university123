@@ -152,7 +152,7 @@ schemas, and asserts the consent constraint and audit trigger behave correctly.
 | `/universities/[slug]` | dynamic | Research profile: 8-point table, programmes, Bangladesh lens, sources |
 | `/shortlist` | static | Saved institutions + shareable link generator |
 | `/s/[slug]` | dynamic | Public read-only shared shortlist |
-| `/apply` | static | 8-step student application (no account) |
+| `/apply` | static | Admission enquiry QR panel — scans/links to the Go Abroad BD enquiry form |
 | `/methodology` | static | Verification standard |
 | `/privacy` | static | Student data notice |
 | `/admin/login` | dynamic | Staff sign-in |
@@ -364,25 +364,36 @@ silently fills an OMPT obligation.
 
 ---
 
-## 7. Student application form
+## 7. Admission enquiry (`/apply`)
 
-`/apply` — eight steps, no account, mobile-first:
+`/apply` is deliberately **one thing**: a QR panel that puts a student in front of a real
+counsellor. It contains no form of its own.
 
-1. Personal · 2. Contact · 3. Academics (unlimited qualifications) · 4. English tests ·
-5. Study preferences (multiple universities) · 6. Documents · 7. Background · 8. Consent.
+- Large, high-contrast QR at a fixed 240 px (200 px on small screens) as the scan target, generated
+  from the same URL the printed artwork encodes:
+  `https://app.leadsnimble.com/go-abroad-bd/f/admission-inquiry`
+- The Go Abroad BD poster beside it as the visual anchor (WebP 141 KB + JPG fallback, served from
+  `public/qr/`; the 5 MB PNG is kept as the print master and is not loaded by the page).
+- A visible text fallback link for desktop visitors, who cannot scan their own screen.
+- Plain `<img>` rather than `next/image` for the QR: the optimiser can alter the module pattern.
 
-On submit the server returns a reference (`GBD-2027-001001`), the student sees a printable summary
-(`window.print()` → save as PDF), and any chosen files are uploaded afterwards.
+All existing "Apply" links (header, footer, homepage, `/diploma`, `/eligibility`, the report
+footnote, `/s/[slug]`) keep their labels and land on this panel.
 
-Guards:
+**The in-house application form is retired from the page.** `src/components/apply-form.tsx` and the
+`/api/applications*` routes remain in the codebase but are no longer reachable from the UI, so
+nothing new reaches the `/admin` pipeline. Existing applications, notes, status workflow, audit
+history and CSV export all keep working from the `/admin` desk. Re-enabling the form is a matter of
+rendering `ApplyForm` on a page again — the validation, store and database layers are untouched.
 
-- every field is re-validated server-side in `src/lib/validation.ts`,
-- consent is required at the database level (`student_applications_consent` check),
-- duplicates are blocked for 24 h on the same email + name + first choice,
-- 5 submissions per IP per hour, 40 uploads per IP per hour,
-- uploads restricted to PDF/JPG/PNG/WEBP, ≤10 MB.
+Because submissions are now collected by the enquiry system, `/privacy` carries a short note saying
+where the form lives and that this site no longer stores application forms or uploaded documents.
 
----
+**Assets:** `public/qr/admission-inquiry-qr.png` (generated, error-correction level H, verified by
+decoding), `public/qr/admission-poster.webp`, `public/qr/admission-poster.jpg`,
+`public/qr/admission-poster.png` (source, not referenced by the page).
+
+> Regenerate the QR with the same URL only. Changing it silently breaks every printed poster.
 
 ## 8. Admin workflow
 
@@ -466,7 +477,7 @@ in local mode, plus real PostgreSQL DDL for the migrations.
 | 3 | KTU profile (dates, fees, OMPT, sources, status panel) | Pass |
 | 4 | MRU profile (Bangladesh table, OMPT, exclusions) | Pass |
 | 5–9 | Programme spotlight, methodology, shortlist, privacy, eligibility notes | Pass |
-| 10 | Apply form renders all 8 steps | Pass |
+| 10 | `/apply` renders the QR panel: QR + poster + fallback URL, no form markup | Pass (structure checked in the rendered HTML) |
 | 11 | Server validation rejects bad name/email/phone/consent → 422 | Pass |
 | 12 | Document upload accepts PDF, rejects .exe → 415 | Pass |
 | 13 | Application persisted with education/English/preferences rows | Pass |

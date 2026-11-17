@@ -429,6 +429,27 @@ h2{font-size:clamp(36px,4.1vw,55px);line-height:1.12}
 .apply-hero-badges svg{color:#dfba6b}
 .apply-hero-mark{display:grid;place-items:center;width:100%;height:100%;color:#efcf92}
 .apply-content{padding-top:44px;padding-bottom:80px}
+
+/* ── /apply: QR inquiry panel ───────────────────────────────────────── */
+.qr-panel{display:grid;grid-template-columns:1.05fr .95fr;gap:34px;align-items:start}
+.qr-panel-copy{background:#fff;border:1px solid #e7e2d7;border-radius:14px;padding:30px 32px}
+.qr-eyebrow{display:inline-flex;align-items:center;gap:7px;font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;font-weight:800;color:#8d6a33;background:#fbf6ec;border-radius:3px;padding:5px 9px;margin-bottom:14px}
+.qr-eyebrow svg{color:#bc8940}
+.qr-panel-copy h2{margin:0 0 10px;font-size:26px;line-height:1.2;color:#0d2d50}
+.qr-panel-copy > p{margin:0 0 22px;font-size:13px;line-height:1.7;color:#566d7c;max-width:46ch}
+.qr-code-card{margin:0;display:flex;flex-direction:column;align-items:center;gap:12px;background:#fdfcfa;border:1px solid #eae5d9;border-radius:12px;padding:18px}
+.qr-code{width:240px;height:240px;display:block;image-rendering:pixelated;background:#fff;border-radius:6px;padding:8px;box-shadow:0 1px 0 #eae5d9}
+.qr-code-card figcaption{text-align:center;font-size:11px;color:#7d8b96;line-height:1.6}
+.qr-code-card figcaption strong{display:block;color:#22303f;font-size:11px;margin-bottom:4px}
+.qr-fallback{display:inline-flex;align-items:center;gap:4px;color:#3b6e97;font-weight:700;word-break:break-all}
+.qr-fallback:hover{text-decoration:underline}
+.qr-steps{list-style:none;margin:22px 0 0;padding:0;display:flex;flex-direction:column;gap:9px}
+.qr-steps li{display:flex;align-items:center;gap:11px;font-size:12px;color:#566d7c}
+.qr-steps li span{flex:none;display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:#0d2d50;color:#f0d9ac;font-size:9px;font-weight:800;letter-spacing:.04em}
+.qr-panel-art{border-radius:14px;overflow:hidden;border:1px solid #e7e2d7;background:#0d2d50;box-shadow:0 18px 40px -28px rgba(13,45,80,.55)}
+.qr-panel-art img{display:block;width:100%;height:auto}
+@media(max-width:900px){.qr-panel{grid-template-columns:1fr;gap:22px}.qr-panel-art{order:-1;max-width:420px;margin:0 auto}.qr-panel-copy{padding:24px 20px}}
+@media(max-width:480px){.qr-code{width:200px;height:200px}}
 .apply-card{background:#fff;border:1px solid #e1e8ea;border-radius:6px;box-shadow:0 20px 50px rgba(13,45,80,.06);overflow:hidden;max-width:940px;margin:0 auto}
 .apply-steps{display:flex;list-style:none;margin:0;padding:0;background:#f7f9f9;border-bottom:1px solid #e5ebec;overflow-x:auto;scrollbar-width:none}
 .apply-steps::-webkit-scrollbar{display:none}
@@ -978,3 +999,9 @@ h2{font-size:clamp(36px,4.1vw,55px);line-height:1.12}
 .ompt-panel-foot svg{flex:none;color:#bc8940;margin-top:1px}
 @media(max-width:850px){.ompt-panel-grid{grid-template-columns:1fr 1fr}.ompt-panel{padding:18px}}
 @media(max-width:520px){.ompt-panel-grid{grid-template-columns:1fr}}
+
+/* ── Privacy: enquiry-system note ───────────────────────────────────── */
+.privacy-enquiry-note{display:flex;gap:13px;background:#fdfbf6;border:1px solid #e3d9c3;border-left:3px solid #bc8940;border-radius:10px;padding:16px 18px;margin:22px 0 26px}
+.privacy-enquiry-note > svg{flex:none;color:#bc8940;margin-top:2px}
+.privacy-enquiry-note strong{display:block;font-size:12px;color:#0d2d50;margin-bottom:5px}
+.privacy-enquiry-note p{margin:0;font-size:12px;line-height:1.7;color:#566d7c}
