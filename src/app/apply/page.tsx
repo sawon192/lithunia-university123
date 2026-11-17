@@ -5,9 +5,9 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 /**
- * The inquiry URL encoded in both QR images supplied by Go Abroad BD
- * (verified by decoding the artwork). Kept in one place so the printed code,
- * the on-page code and the plain-text fallback can never drift apart.
+ * The inquiry URL encoded in the Go Abroad BD poster (verified by decoding the
+ * artwork). Kept in one place so the printed code and the text fallback can
+ * never drift apart.
  */
 const INQUIRY_URL = "https://app.leadsnimble.com/go-abroad-bd/f/admission-inquiry";
 const INQUIRY_LABEL = "app.leadsnimble.com/go-abroad-bd/f/admission-inquiry";
@@ -44,7 +44,21 @@ export default function ApplyPage() {
         </section>
 
         <section className="container apply-content">
+          {/* One QR only: the poster carries it. A second standalone code next
+              to the poster read as two different codes, so there is exactly one. */}
           <div className="qr-panel">
+            <div className="qr-panel-art">
+              <picture>
+                <source srcSet="/qr/admission-poster.webp" type="image/webp" />
+                <img
+                  src="/qr/admission-poster.jpg"
+                  alt="Go Abroad BD admission poster — scan the QR code to open the enquiry form"
+                  width={900}
+                  height={1273}
+                />
+              </picture>
+            </div>
+
             <div className="qr-panel-copy">
               <span className="qr-eyebrow"><QrCode size={15} /> ADMISSION INQUIRY</span>
               <h2>Point your camera at the code.</h2>
@@ -53,42 +67,18 @@ export default function ApplyPage() {
                 your qualification, English evidence and the universities you are considering.
               </p>
 
-              <figure className="qr-code-card">
-                {/* Plain <img>, not next/image: the optimiser can recompress the
-                    module pattern and break scanning. */}
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src="/qr/admission-inquiry-qr.png"
-                  alt="QR code linking to the Go Abroad BD admission inquiry form"
-                  width={240}
-                  height={240}
-                  className="qr-code"
-                />
-                <figcaption>
-                  <strong>Can&apos;t scan with this device?</strong>
-                  <a className="qr-fallback" href={INQUIRY_URL} target="_blank" rel="noopener noreferrer">
-                    {INQUIRY_LABEL} <ArrowUpRight size={14} />
-                  </a>
-                </figcaption>
-              </figure>
-
               <ol className="qr-steps">
                 <li><span>01</span> Open the camera app on your phone.</li>
-                <li><span>02</span> Hold it over the code until the link appears.</li>
+                <li><span>02</span> Hold it over the code on the poster until the link appears.</li>
                 <li><span>03</span> Tap the link and submit your enquiry.</li>
               </ol>
-            </div>
 
-            <div className="qr-panel-art">
-              <picture>
-                <source srcSet="/qr/admission-poster.webp" type="image/webp" />
-                <img
-                  src="/qr/admission-poster.jpg"
-                  alt="Go Abroad BD admission poster with a QR code for the enquiry form"
-                  width={900}
-                  height={1273}
-                />
-              </picture>
+              <div className="qr-fallback-card">
+                <strong>On a computer? Can&apos;t scan?</strong>
+                <a className="qr-fallback" href={INQUIRY_URL} target="_blank" rel="noopener noreferrer">
+                  {INQUIRY_LABEL} <ArrowUpRight size={14} />
+                </a>
+              </div>
             </div>
           </div>
         </section>
