@@ -192,6 +192,28 @@ export type Fact = {
   verifiedOn?: string;
 };
 
+/** How a Bangladesh Diploma-in-Engineering / college-diploma background is treated at entry. */
+export type DiplomaRoute = "accepted" | "conditional" | "excluded" | "unconfirmed" | "na";
+
+export type DiplomaCgpa = {
+  /** Route verdict derived from the sourced facts below — never guessed. */
+  diploma: DiplomaRoute;
+  /** Short wording for the comparison table's diploma column. */
+  diplomaSummary: string;
+  /** Short wording for the comparison table's minimum CGPA / grade column. */
+  cgpaSummary: string;
+  /** Sourced details — every claim traces to an official page like any other fact. */
+  facts: Fact[];
+};
+
+export const diplomaRouteLabels: Record<DiplomaRoute, string> = {
+  accepted: "Accepted",
+  conditional: "Conditional route",
+  excluded: "Not accepted",
+  unconfirmed: "Awaiting confirmation",
+  na: "Not applicable",
+};
+
 const fact = (text: string, sourceKeys: SourceKey[] = [], status: FactStatus = "published"): Fact => ({ text, sources: sourceKeys, status });
 const pending = (text: string, sourceKeys: SourceKey[] = []): Fact => fact(`Not officially confirmed — ${text}`, sourceKeys, "unconfirmed");
 const earlier = (text: string, sourceKeys: SourceKey[]): Fact => fact(text, sourceKeys, "earlier");
@@ -264,6 +286,8 @@ export type University = {
   feeSummary: string;
   deadlineSummary: string;
   omptSummary: string;
+  /** Diploma-background treatment and published minimum CGPA, with sourced detail. */
+  diplomaCgpa: DiplomaCgpa;
   facts: Record<SectionKey, Fact[]>;
   featuredProgrammes: Programme[];
   eligibility: string;
@@ -321,6 +345,15 @@ export const universities: University[] = [
     eligibility: "Yes, subject to VU's specific HSC/SSC or Honours-degree thresholds, document recognition, language evidence and the selected programme's OMPT rule.",
     bestFor: ["Quantitative Economics · strong maths profile", "Language & AI Management · language and technology", "International Communication · eligible Honours graduates"],
     importantNotes: [fact("Bangladeshi applicants should not assume they can apply on predicted HSC results: the general provisional-graduation exception explicitly excludes Bangladesh, Nepal and Pakistan.", ["vuDocuments"]), fact("Bring original educational documents and certified translations if requested; programme interviews and additional criteria may apply.", ["vuApply", "vuDocuments"])],
+    diplomaCgpa: {
+      diploma: "unconfirmed",
+      diplomaSummary: "No published diploma route",
+      cgpaSummary: "HSC GPA 4.50 \u00b7 CGPA 3.50 (technical) \u00b7 MA CGPA 3.00",
+      facts: [
+        fact("Bangladesh Bachelor's entry is published as an HSC-plus-SSC document route: final HSC GPA at least 4.50 for academic programmes and final CGPA at least 3.50 for technical programmes. Master's entry requires an Honours Bachelor's degree with final CGPA at least 3.00.", ["vuDocuments"]),
+        pending("a Bangladesh Diploma-in-Engineering (or other vocational college diploma) equivalence is not stated on the consulted VU pages; confirm with the International Admissions Office before applying without HSC.", ["vuDocuments"]),
+      ],
+    },
     officialLinks: ["vuAdmissions", "vuApply", "vuDocuments", "vuLanguage", "vuBachelors", "vuMasters"],
   },
   {
@@ -370,6 +403,15 @@ export const universities: University[] = [
     eligibility: "Yes. HSC/SSC holders are explicitly covered; Bachelor's applicants from Bangladesh need the specified OMPT result and must meet grades, English and document rules.",
     bestFor: ["Software Engineering · maths-ready science applicants", "Business Management · business applicants", "International Business · relevant Bachelor's graduates"],
     importantNotes: [fact("Architecture has a separate entrance test. Non-EU first-year students receive a tuition invoice before the residence-permit process.", ["techRequirements", "techFees"]), earlier("The scholarship page located in this check describes 2026/27 awards; do not treat it as a confirmed Bangladesh scholarship for 2027/28.", ["techScholarships"])],
+    diplomaCgpa: {
+      diploma: "conditional",
+      diplomaSummary: "Vocational graduates \u00b7 OMPT route",
+      cgpaSummary: "60% CGPA (Bachelor & Master)",
+      facts: [
+        fact("Bangladesh Bachelor's entry needs HSC and SSC certificates plus transcripts with a minimum 60% CGPA. The published country requirements explicitly contemplate secondary/vocational graduates: they must take OMPT for the maths component of the entrance score.", ["techCountry", "techRequirements"]),
+        fact("Master's entry needs a relevant Bachelor's degree and at least 60% CGPA; the stated study-gap limit is three years.", ["techRequirements"]),
+      ],
+    },
     officialLinks: ["techApply", "techRequirements", "techCountry", "techFees", "techProgrammes"],
   },
   {
@@ -418,6 +460,15 @@ export const universities: University[] = [
     eligibility: "Potentially yes, but the extra half-year university transcript for Bachelor's and four-year degree/thesis/internship conditions for Master's are major eligibility filters.",
     bestFor: ["Informatics · after meeting KU's extra transcript rule", "Management · suitable business background", "Health Care Management · relevant four-year graduates"],
     importantNotes: [fact("KU says it sends official acceptance only from @ku.lt or DreamApply, not via WhatsApp or Viber. Autumn TRP biometric submission has a published 18 July deadline.", ["kuApply"]), fact("The older web.ku.lt mirror and current www.ku.lt page differ on the Bangladesh GPA formulation; use the current www.ku.lt instructions and reconfirm the evaluation of 70% with KU.", ["kuApply"])],
+    diplomaCgpa: {
+      diploma: "unconfirmed",
+      diplomaSummary: "No published diploma route",
+      cgpaSummary: "70% Bangladesh \u00b7 60% general",
+      facts: [
+        fact("The current KU procedure states a general CGPA above 60% and a Bangladesh-specific minimum of 70% for Bachelor's and Master's applicants under the university's recognition process. Only final diplomas, not provisional diplomas, are accepted as documents.", ["kuApply"]),
+        pending("a Diploma-in-Engineering equivalence for Bangladesh applicants is not published. KU additionally asks Bachelor's applicants for at least half a year of university transcript, which diploma holders should discuss with KU directly.", ["kuApply"]),
+      ],
+    },
     officialLinks: ["kuApply", "kuProgrammes", "kuInformatics", "kuHealth", "kuScholarships"],
   },
   {
@@ -468,6 +519,15 @@ export const universities: University[] = [
     eligibility: "Yes, subject to qualification recognition, the 65%/subject minimum, attested Bangladesh documents and the LSU assessment for Bachelor's applicants.",
     bestFor: ["Physiotherapy · health-science applicants", "Sport Coaching · relevant sports background", "Adapted Physical Activity · relevant Bachelor's graduates"],
     importantNotes: [fact("The university requires legalised/attested education documents and proof of English; its own recognition decision does not guarantee admission.", ["lsuApply", "lsuCountry"]), fact("Apply early enough for double legalisation and the temporary residence permit; the full first-year payment is an important cash-flow condition.", ["lsuApply"])],
+    diplomaCgpa: {
+      diploma: "unconfirmed",
+      diplomaSummary: "No published diploma route",
+      cgpaSummary: "65% CGPA \u00b7 no subject below 60%",
+      facts: [
+        fact("General minimum: CGPA at least 65% and no subject below 60% on the official transcript scale. Bangladesh Bachelor's entry uses attested SSC/HSC certificates and transcripts plus an LSU-organised assessment test.", ["lsuApply", "lsuCountry"]),
+        pending("a Diploma-in-Engineering or college-diploma equivalence is not stated on the consulted LSU pages.", ["lsuCountry"]),
+      ],
+    },
     officialLinks: ["lsuApply", "lsuCountry", "lsuFees", "lsuProgrammes"],
   },
   {
@@ -519,6 +579,15 @@ export const universities: University[] = [
     eligibility: "Yes, for HSC applicants who meet the 4.50 GPA and maths condition (or an expressly permitted corrective route); Master's eligibility depends on the degree and chosen programme.",
     bestFor: ["International Business and Communication · HSC maths applicants", "Economics and Data Analytics · strong maths applicants", "Innovation and Technology Management · eligible graduates"],
     importantNotes: [fact("ISM conducts a motivation interview. The scholarship test in early May is for selected early-round candidates, not every applicant.", ["ismApply"]), fact("Do not confuse the €100 application fee with the separate post-offer reservation/tuition advance. For visa-regime main admission, the €500 reservation component is not refundable under any circumstances stated by ISM.", ["ismApply"])],
+    diplomaCgpa: {
+      diploma: "unconfirmed",
+      diplomaSummary: "No published diploma route",
+      cgpaSummary: "HSC GPA 4.50 + maths elective",
+      facts: [
+        fact("Bangladesh Bachelor's entry requires HSC with GPA at least 4.50 and Mathematics or Higher Mathematics as an elective, plus SSC/HSC certificates and supplements. If the maths subject is missing, an SAT College Readiness result or at least one year of tertiary study can correct it.", ["ismBangladesh"]),
+        pending("ISM does not publish a Bangladesh Diploma-in-Engineering route on the consulted admission pages.", ["ismBangladesh", "ismApply"]),
+      ],
+    },
     officialLinks: ["ismApply", "ismBangladesh", "ismMasterEntry", "ismBachelors", "ismMasters", "ismScholarship"],
   },
   {
@@ -568,6 +637,15 @@ export const universities: University[] = [
     eligibility: "Yes. VMU names SSC/HSC as the Bachelor document route and Bangladeshi education as an OMPT trigger; admission remains subject to recognition and programme-specific assessment.",
     bestFor: ["Business Administration · OMPT-D 55% route", "Informatics Systems · stronger maths background", "Applied English Linguistics · eligible graduates, OMPT-A 55%"],
     importantNotes: [fact("The PDF contains exemptions even though VMU's general page describes a broad Bangladesh OMPT rule. Resolve any apparent contradiction using the exact programme row and admissions office before purchasing a test.", ["vmuApply", "vmuOMPT"]), fact("Dated early OMPT testing matters: VMU says results may take up to eight business days and recommends scheduling a test at least three days ahead.", ["vmuOMPT"])],
+    diplomaCgpa: {
+      diploma: "unconfirmed",
+      diplomaSummary: "Relevant-diploma wording \u00b7 confirm recognition",
+      cgpaSummary: "60% CGPA (previous diploma)",
+      facts: [
+        fact("VMU publishes a minimum of at least 60% CGPA in the previous relevant diploma/transcript; the Bangladesh Bachelor route names HSC, HSC transcript, SSC and SSC transcript. Qualifications undergo academic recognition and programmes may add requirements.", ["vmuApply", "vmuCountry"]),
+        pending("whether a Bangladesh Diploma-in-Engineering counts as the previous relevant diploma for Bachelor entry is not stated on the consulted pages; obtain individual recognition from VMU before applying.", ["vmuCountry"]),
+      ],
+    },
     officialLinks: ["vmuApply", "vmuCountry", "vmuFees", "vmuOMPT", "vmuProgrammes"],
   },
   {
@@ -619,6 +697,15 @@ export const universities: University[] = [
     eligibility: "Potentially yes: LCC's recognition guide explicitly names HSC/SSC, but adds its own Skills and Knowledge Test; admission and 2027 deadlines require direct confirmation.",
     bestFor: ["International Business Administration · liberal arts business", "Psychology · human sciences", "TESOL · qualified English-teaching graduates"],
     importantNotes: [fact("The extra LCC Bangladesh assessment is different from an OMPT certificate; confirm its format, cost and date before submitting the application.", ["lccCountry"]), fact("LCC's MA TESOL includes online coursework and a short Lithuania residency, so it is not identical to a full-time campus-based degree for migration planning.", ["lccTESOL"])],
+    diplomaCgpa: {
+      diploma: "unconfirmed",
+      diplomaSummary: "No published diploma route",
+      cgpaSummary: "Not published for Bangladesh",
+      facts: [
+        fact("BA applications use high-school results from the last three years, a final school-leaving diploma, passport and an interview. The LCC Bangladesh recognition guide lists HSC, HSC transcript, SSC and SSC transcript, plus an LCC Skills and Knowledge Test.", ["lccAdmission", "lccCountry"]),
+        pending("a Bangladesh-specific minimum HSC GPA and a Diploma-in-Engineering equivalence are not given on the consulted LCC pages.", ["lccAdmission", "lccCountry"]),
+      ],
+    },
     officialLinks: ["lccProgrammes", "lccAdmission", "lccCountry", "lccTuition", "lccTESOL"],
   },
   {
@@ -667,6 +754,15 @@ export const universities: University[] = [
     eligibility: "Possible, subject to foreign-qualification recognition, a relevant portfolio and entrance assessment. Bangladesh-specific academic equivalence is not officially confirmed on the consulted pages.",
     bestFor: ["Animation · strong English-language portfolio", "Design · creative applicants open to Telšiai", "Painting · graduates comfortable with mixed-language study"],
     importantNotes: [fact("Many Master's courses are principally taught in Lithuanian despite English support. VDA says a programme runs only if its minimum cohort of four is admitted.", ["vdaMasters"]), fact("VDA's published entrance assessment is 50% portfolio and 50% online exam/interview; keep high-quality portfolio links accessible to the committee.", ["vdaHow", "vdaMasters"])],
+    diplomaCgpa: {
+      diploma: "unconfirmed",
+      diplomaSummary: "No published diploma route",
+      cgpaSummary: "Not published \u00b7 portfolio-led",
+      facts: [
+        fact("Degree applicants need a relevant secondary qualification (BA) or a Bachelor diploma (MA), official translations where needed, and a portfolio. The online entrance exam and portfolio each account for 50% of the admission score.", ["vdaMasters", "vdaPortal"]),
+        pending("Bangladesh-specific equivalencies, GPA cut-offs and the treatment of a Diploma-in-Engineering background are not stated on the consulted VDA international pages.", ["vdaRecognition"]),
+      ],
+    },
     officialLinks: ["vdaPortal", "vdaMasters", "vdaFees", "vdaHow", "vdaRecognition"],
   },
   {
@@ -839,6 +935,15 @@ export const universities: University[] = [
         ["ktuBachelor", "ktuMaster"]
       ),
     ],
+    diplomaCgpa: {
+      diploma: "unconfirmed",
+      diplomaSummary: "Case-by-case recognition",
+      cgpaSummary: "60% \u00b7 above 60% per entry subject (BA)",
+      facts: [
+        fact("Bachelor's entry: completed secondary education with a minimum average grade (CGPA) above 60% in each entry subject, plus a passed state or equivalent examination in any subject \u2014 or KTU's entrance examination. Master's entry: a relevant Bachelor's qualification and a weighted GPA of at least 60%.", ["ktuRules2026", "ktuBachelor", "ktuMaster"]),
+        pending("KTU publishes no explicit Alim or Diploma equivalence statement for Bangladesh; the International Studies Office assesses such cases individually, so a Diploma-in-Engineering applicant should request a written recognition decision before applying.", ["ktuRecognition", "ktuRules2026"]),
+      ],
+    },
     officialLinks: ["ktuAdmissions", "ktuNews2027", "ktuBachelor", "ktuMaster", "ktuRecognition", "ktuApply"],
   },
   {
@@ -1019,6 +1124,15 @@ export const universities: University[] = [
         ["mruCountry"]
       ),
     ],
+    diplomaCgpa: {
+      diploma: "excluded",
+      diplomaSummary: "Diploma in Engineering excluded",
+      cgpaSummary: "60% of maximum GPA (BA)",
+      facts: [
+        fact("Bachelor's entry requires a secondary education diploma or equivalent with final grades and a minimum of 60% of the maximum possible GPA to enter the competitive ranking; Master's entry needs a first university degree of at least three years.", ["mruAdmission", "mruApply"]),
+        fact("MRU's Bangladesh country table lists HSC, SSC and an OMPT result and states categorically that a Diploma in Engineering does not grant access to study at MRU (the Alim examination is excluded too).", ["mruCountry"]),
+      ],
+    },
     officialLinks: ["mruAdmission", "mruCountry", "mruApply", "mruPsych", "mruOMPT"],
   },
 ];
