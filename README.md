@@ -284,6 +284,84 @@ row above the alternatives grid so they can never be mistaken for an alternative
 (profile section), `src/components/university-directory.tsx` (filter + card chips),
 `src/app/globals.css` (`.english-*` blocks), `src/app/universities/[slug]/page.tsx` (section + anchor).
 
+### OMPT requirement table — with / without
+
+A third single-source layer sits beside the English profiles: `src/lib/ompt.ts` holds one verified
+OMPT record per institution, keyed by the same slug. The directory filter, the card chip, the
+`omptSummary` line in the card footer and sidebar, the profile panel, and the eligibility engine all
+read from it — so a count in the UI can never disagree with a verdict in a report.
+
+```ts
+{
+  status: "required" | "programme" | "unconfirmed" | "not-applicable",
+  minimumPercent?: 75,                 // only when the institution publishes a score
+  versions?: ["A", "D"],               // only when it names the versions
+  alternative?: "…",                   // a published assessment that is NOT OMPT
+  verifiedOn: "2026-11-17",
+  note: "…",                           // the sourced rule, in full
+}
+```
+
+**Classification (recomputed from the data, 17 November 2026):**
+
+| Filter | Institutions | Which ones |
+|---|---|---|
+| **With OMPT** | **5** | VU (by programme, from 55%), VILNIUS TECH (≥60% / ≥50%), VMU (by programme, from 55%), KTU (A/D, 75%), MRU (A/D, 75%) |
+| **Without OMPT** | **19** | 5 universities + 14 colleges |
+
+Two rules were applied rather than assumed:
+
+- **Silence is not an exemption.** 18 institutions publish no OMPT rule at all; they are recorded as
+  `unconfirmed`, counted under *Without OMPT* (no published obligation) and never rendered as
+  "OMPT not required". The profile panel says so in writing.
+- **A published alternative is never called an exemption.** LSU and ISM run their own maths
+  assessment, LCC adds a Skills and Knowledge Test, VDA/VCD use a portfolio, VBC/SMK an interview,
+  KVK a competitive-score weighting. Those are recorded in `alternative` and the engine keeps any
+  real OMPT obligation open.
+
+`npm run test:eligibility` asserts the 5 / 19 split, that no record is silently `"none"`, and that a
+minimum score exists only where one was published.
+
+### Eligibility engine: any-type qualifications, any-type assessments, automatic gap
+
+`src/lib/student-profile.ts` replaces the engine's fixed SSC → HSC → Diploma → Bachelor slots with
+two open lists, so a student can record **any qualification type** and **any entrance assessment**:
+
+- `qualificationLabels` — SSC/O-Level, HSC/A-Level, Alim/Fazil, separate O-Level, separate A-Level,
+  Diploma, Bachelor, Master, or a free-text "other".
+- `assessmentLabels` — OMPT (with version), an institution's own entrance test, a state/board
+  examination, SAT, ACT, portfolio, interview, or "other".
+
+The research rules are unchanged and still enforced by tests:
+
+1. **No cross-scale conversion.** A percentage rule is only ever measured as the student's own
+   result ÷ the student's own scale maximum. An HSC GPA of 4.50/5.00 matches a 60% rule; an
+   O-Level grade of 7/9 does not become an HSC GPA, so VU's HSC-4.50 rule stays unmet.
+2. **A published HSC rule only reads an HSC-scale award.** `hscGpa5` looks at the HSC row (or an
+   A-Level row explicitly on a 5.00 scale) and nothing else.
+3. **Unknowns never upgrade.** The existing downgrade rule applies to the new fields too.
+
+**Passing-year auto gap.** Each qualification carries a `passingYear`. The engine takes the latest
+one and derives the gap to September 2027 (`derivedGapYears`); the form shows the working
+("Latest passing year 2024 → September 2027, so the study gap is 3 years"). An explicit override is
+available, and how it was decided is shown in the form and the report (`auto` / `override`).
+A gap that cannot be derived is **not** treated as zero: institutions that publish a limit are
+noted, never passed or failed on a figure the desk does not have.
+
+**Any-type assessments.** A recorded OMPT result is checked against the institution's own published
+rule — version and score (`checkOmptResult`). OMPT-D 80% satisfies KTU; OMPT-D 60% stays open;
+OMT-C is rejected because KTU names only A and D. Any other assessment is recorded as evidence and
+the report says in as many words that it is *not* an OMPT certificate, so an own test never
+silently fills an OMPT obligation.
+
+**Files:** `src/lib/ompt.ts` (OMPT table + checks), `src/lib/student-profile.ts` (open model + gap),
+`src/lib/eligibility.ts` (engine), `src/components/eligibility-tool.tsx` (form + report),
+`src/components/ompt-panel.tsx` (profile panel), `src/components/university-directory.tsx`
+(with/without filter + chips), `src/app/globals.css` (`.ompt-*`, `.el-row*`, `.el-gap-*`, `.el-tally`),
+`scripts/eligibility-features.check.ts` (28 acceptance checks).
+
+---
+
 ---
 
 ## 7. Student application form
@@ -370,6 +448,7 @@ npm run start       # serve the production build
 npm run lint        # eslint
 npm run typecheck   # tsc --noEmit
 npm run check:db    # run migrations against embedded Postgres
+npm run test:eligibility  # 28 checks over the OMPT table, open profiles and the auto gap
 npm run verify      # typecheck + lint + build
 ```
 
@@ -422,6 +501,25 @@ requires `npm run start` on port 3100 and `playwright` installed locally). **11/
 | E10 | Profile section renders with anchor nav, IELTS/PTE/TOEFL bands, alternatives, "Last verified" | Pass |
 | E11 | A conditional policy is labelled "Conditionally accepted", never as a general acceptance | Pass — MRU |
 
+### Queued eligibility features — acceptance checks
+
+`npm run test:eligibility` (bundles `scripts/eligibility-features.check.ts` with the project's own
+esbuild, then runs it in Node). **28/28 pass.**
+
+| # | Test | Result |
+|---|---|---|
+| O1–O3 | Every institution has an OMPT record; 5 with / 19 without; silence is `unconfirmed`, never `"none"` | Pass |
+| O4–O7 | A minimum score exists only where published; KTU 75% A/D, MRU mandatory, VMU programme floor 55% | Pass |
+| O8–O11 | OMPT-D 80% passes KTU, 60% fails, OMPT-C rejected, KU silence never passes | Pass |
+| Q1–Q5 | Alim-only, A-Level-only, O-Level-only and custom "other" profiles all assess; no cross-scale conversion | Pass |
+| A1–A3 | Recorded OMPT satisfies KTU; missing OMPT keeps it conditional; an own test is never substituted | Pass |
+| G1–G7 | Latest passing year wins, 2024 → 3 years, override wins, unknown gap is not zero, 9-year gap flags MRU | Pass |
+| D1–D2 | Legacy flat fields still work and agree with the open list | Pass |
+
+DOM-level checks (needs a headless Chromium, as with E1–E11): the with/without filter, its live
+counts, the card chips, the profile OMPT panel, adding/removing qualification and assessment rows,
+and the gap card recalculating on a passing-year change.
+
 Not testable in this environment (needs your credentials):
 
 - live Supabase reads/writes and storage signed URLs,
@@ -441,6 +539,9 @@ Not testable in this environment (needs your credentials):
   to the overlay only.
 - **PTE for KTU**: KTU does not name PTE Academic in its published English list. This is flagged as
   "not officially confirmed" rather than assumed.
+- **OMPT versions**: VILNIUS TECH and KTU's Bangladesh/Alim route do not publish which letter
+  version applies to a given applicant. The table records the versions each institution names
+  overall and the engine treats an unnamed version as unverified rather than a pass.
 - **Rate limiting** is in-memory; on multi-region serverless scale, swap in Upstash Redis.
 - **Audit history** is written by both trigger and API; if you later remove the API write, the
   trigger still covers it.
