@@ -29,6 +29,15 @@ export const colleges: CollegeProfile[] = [
     eligibility: "Yes in principle: Kauno kolegija lists Bangladesh among applicant nationalities and applies a 50% GPA minimum with SKVC country requirements, plus its key competence test and B2 English evidence.",
     bestFor: ["International Business · business applicants", "Software Systems · IT and maths background", "Tourism and Hotel Management · service-sector interest"],
     importantNotes: [fact("MOI letters are expressly not accepted, so plan for IELTS/TOEFL/PTE or the college's €45 test.", ["kkApply"]), fact("Fashion Design requires a portfolio, creative assignment and motivation interview — check Annex 3 of the admission procedure before applying.", ["kkFashion", "kkRules"])],
+    diplomaCgpa: {
+      diploma: "unconfirmed",
+      diplomaSummary: "No published diploma route",
+      cgpaSummary: "50% GPA \u00b7 3.2 competitive score",
+      facts: [
+        fact("Notarised secondary school certificate and transcript showing at least a 50% GPA are required, with SKVC country rules for recognition. A competitive score of at least 3.2 is needed for non-state-funded places and the key competence test requires at least 3.", ["kkApply", "kkRules"]),
+        pending("a Bangladesh Diploma-in-Engineering equivalence and a country-specific HSC GPA threshold beyond the 50% minimum are not published.", ["kkApply"]),
+      ],
+    },
     officialLinks: ["kkApply", "kkRules", "kkCountry", "kkFees", "kkProgrammes"],
   },
   {
@@ -54,6 +63,15 @@ export const colleges: CollegeProfile[] = [
     eligibility: "Probably, for holders of an apostilled secondary school certificate who meet the English verification step; Bangladesh-specific grade thresholds are not published on the consulted pages.",
     bestFor: ["Applied Informatics and Programming · IT applicants", "Sales and Logistics Management · business applicants", "Tourism and Entertainment Business Industry · hospitality interest"],
     importantNotes: [fact("Tuition for the first year is paid before the college issues its visa/TRP mediation letter, and the enrolment rules state these payments are not refunded.", ["ltvkRules"]), fact("The poster lists Lithuania Business College twice; this profile covers that single institution.", ["ltvkEnrol"])],
+    diplomaCgpa: {
+      diploma: "unconfirmed",
+      diplomaSummary: "No published diploma route",
+      cgpaSummary: "Not published for Bangladesh",
+      facts: [
+        fact("A secondary education diploma (or equivalent) is required, apostilled or legalised; the college handles recognition of education and qualifications acquired abroad.", ["ltvkRules", "ltvkEnrol"]),
+        pending("a Bangladesh-specific HSC GPA minimum and a Diploma-in-Engineering equivalence are not published on the consulted pages.", ["ltvkRules"]),
+      ],
+    },
     officialLinks: ["ltvkEnrol", "ltvkRules", "ltvkApply", "ltvkInformatics"],
   },
   {
@@ -79,6 +97,15 @@ export const colleges: CollegeProfile[] = [
     eligibility: "Possibly, with a recognised secondary certificate and English evidence. Because the only part-time programme is EU/EEA-only, a Bangladeshi applicant should confirm full-time availability of the chosen programme before applying.",
     bestFor: ["Business Management and Innovation · business applicants", "Law · applicants seeking a legal career", "Cosmetology · health and beauty interest"],
     importantNotes: [fact("Non-EU students may start only after receiving a national visa D or temporary residence permit, and the college's rules describe a 90% tuition refund on visa refusal.", ["utenRules"]), fact("Utenos kolegija is the poster's 'Utenos Kolegija'; Vilniaus kolegija (VIKO) is a separate institution.", ["utenAdmission"])],
+    diplomaCgpa: {
+      diploma: "unconfirmed",
+      diplomaSummary: "No published diploma route",
+      cgpaSummary: "Not published",
+      facts: [
+        fact("Applicants need a secondary school graduation certificate recognised in Lithuania; foreign applicants follow the college's admission procedure for international students.", ["utenAdmission", "utenApply"]),
+        pending("a Bangladesh-specific HSC GPA threshold and the treatment of a Diploma-in-Engineering background are not stated on the consulted pages.", ["utenAdmission"]),
+      ],
+    },
     officialLinks: ["utenApply", "utenSteps", "utenAdmission", "utenFees", "utenRules"],
   },
   {
@@ -104,6 +131,14 @@ export const colleges: CollegeProfile[] = [
     eligibility: "Yes on the published rules: a 50% overall secondary score, recognised qualification, English test at the listed levels and a motivation interview. Bangladesh is not in SMK's reduced-fee country list.",
     bestFor: ["International Business · business applicants", "Information and Cyber Security · IT applicants", "English Foundation · applicants below B2"],
     importantNotes: [fact("The two official SMK pages disagree on the application fee (€200/€120 versus €180/€70). Verify the invoice amount before transferring money.", ["smkFees", "smkProgrammes"]), fact("Non-EU students must cover a full year of tuition before arrival, so plan funds and the residence-permit timeline together.", ["smkFoundation"])],
+    diplomaCgpa: {
+      diploma: "accepted",
+      diplomaSummary: "College diploma listed as entry document",
+      cgpaSummary: "50% overall score",
+      facts: [
+        fact("SMK accepts a secondary school diploma, school leaving certificate or college diploma with a minimum overall score of 50%, translated into English or Lithuanian, with qualification evaluation through the Centre for Quality Assessment in Higher Education. An online motivation interview follows document submission.", ["smkProgrammes", "smkStudyHere"]),
+      ],
+    },
     officialLinks: ["smkProgrammes", "smkStudyHere", "smkFees", "smkFoundation"],
   },
   {
@@ -129,6 +164,15 @@ export const colleges: CollegeProfile[] = [
     eligibility: "Likely, for applicants with an apostilled secondary certificate, CEFR B2 English (or completion of VBC's preparatory programme) and a successful interview; Bangladesh-specific grades are not published.",
     bestFor: ["International E-Business and Commerce · digital business", "Programming and Internet Technologies · IT applicants", "Academic English Preparatory Programme · applicants below B2"],
     importantNotes: [fact("The €200 fee already covers document legalisation for the residence permit, but VBC still asks for an affidavit of support and bank evidence of roughly €7,000 per year for tuition and living costs.", ["vbcApply"]), fact("Some third-party sites quote different VBC fees and rules; use the official kolegija.lt pages and application portal as the deciding source.", ["vbcApply", "vbcPortal"])],
+    diplomaCgpa: {
+      diploma: "unconfirmed",
+      diplomaSummary: "No published diploma route",
+      cgpaSummary: "Not published for Bangladesh",
+      facts: [
+        fact("Applicants submit a secondary education or high school diploma with transcripts translated into English; a conditional acceptance letter is issued within ten working days of a complete application and an admission interview is mandatory.", ["vbcApply", "vbcEbusiness"]),
+        pending("a Bangladesh-specific minimum grade and the treatment of a Diploma-in-Engineering background are not published on VBC's official pages.", ["vbcApply"]),
+      ],
+    },
     officialLinks: ["vbcApply", "vbcPortal", "vbcEbusiness", "vbcWellness"],
   },
   {
@@ -154,6 +198,15 @@ export const colleges: CollegeProfile[] = [
     eligibility: "Yes on the published route: portfolio plus interview, B2 English and a secondary certificate. The ~3.5 GPA figure is described as a general recommendation, not a fixed cut-off.",
     bestFor: ["Graphic Design · strong visual portfolio", "Fashion and Accessories Design · fashion portfolio", "Software Systems Development · creative technology"],
     importantNotes: [fact("Prepare a strong portfolio: it is half of the entrance examination, together with the online interview.", ["vcdGraphic"]), fact("Programmes run only if a sufficient group forms, so keep a second-choice programme and a fallback plan.", ["vcdGraphic"])],
+    diplomaCgpa: {
+      diploma: "unconfirmed",
+      diplomaSummary: "No published diploma route",
+      cgpaSummary: "~3.5 GPA recommended (not fixed)",
+      facts: [
+        fact("Required documents include a secondary school diploma or previous education certificate, transcripts, proof of English and a portfolio. The remote entrance exam has two parts (portfolio and motivational interview) and the college generally recommends a minimum GPA of about 3.5, with each application evaluated individually.", ["vcdAdmission"]),
+        pending("a fixed GPA cut-off and a Bangladesh Diploma-in-Engineering equivalence are not published.", ["vcdAdmission"]),
+      ],
+    },
     officialLinks: ["vcdAdmission", "vcdGraphic", "vcdFashion", "vcdAgents"],
   },
   {
@@ -178,6 +231,15 @@ export const colleges: CollegeProfile[] = [
     eligibility: "Yes in principle for recognised secondary school graduates with B2 English or a successful free VIKO English test; no Bangladesh-specific grade rule is published on the consulted pages.",
     bestFor: ["Software Engineering · IT applicants", "Information Systems and Cybersecurity · IT and security interest", "International Business · business applicants"],
     importantNotes: [fact("VIKO takes only one intake per year, so a missed deadline means waiting a full academic year.", ["vikoApply"]), fact("Tuition is due within ten working days of the acceptance letter, and refund rules depend on the residence-permit outcome and registration timing.", ["vikoFees"])],
+    diplomaCgpa: {
+      diploma: "unconfirmed",
+      diplomaSummary: "No published diploma route",
+      cgpaSummary: "Not published",
+      facts: [
+        fact("Applicants upload a passport copy and qualification documents (certificate and supplement), legalised or apostilled outside the listed exemptions; VIKO accepts B2 English evidence or its own free English test.", ["vikoAdmission", "vikoApply"]),
+        pending("a VIKO-published minimum grade and a Bangladesh Diploma-in-Engineering rule are not stated on the consulted pages.", ["vikoAdmission"]),
+      ],
+    },
     officialLinks: ["vikoApply", "vikoFees", "vikoAdmission"],
   },
   {
@@ -203,6 +265,15 @@ export const colleges: CollegeProfile[] = [
     eligibility: "Yes in principle: KVK accepts internationally educated applicants with a study-gap statement if the gap exceeds three years. No Bangladesh-specific grade threshold is published on the consulted pages.",
     bestFor: ["Informatics · IT applicants", "Finance · business and maths applicants", "General Practice Nursing · health-science applicants"],
     importantNotes: [fact("Because non-EU admission closed earlier in the last cycle, prepare apostilled documents before the December 2026 / January 2027 opening.", ["kvkOnline", "kvkAdmission"]), fact("First-year tuition is paid in advance, and the residence-permit application had to reach VFS centres by 1 July in the previous cycle.", ["kvkAdmission"])],
+    diplomaCgpa: {
+      diploma: "unconfirmed",
+      diplomaSummary: "No published diploma route",
+      cgpaSummary: "Not published",
+      facts: [
+        fact("Applicants submit documents online for academic verification with apostilled or notarised translations presented on arrival; KVK asks for a statement about any study gap of more than three years.", ["kvkAdmission", "kvkOnline"]),
+        pending("no Bangladesh-specific grade threshold or Diploma-in-Engineering rule is published on the consulted pages.", ["kvkAdmission"]),
+      ],
+    },
     officialLinks: ["kvkOnline", "kvkAdmission", "kvkPortal", "kvkNursing"],
   },
   {
@@ -228,6 +299,15 @@ export const colleges: CollegeProfile[] = [
     eligibility: "Yes in principle, subject to academic recognition, B2 English and group formation for English-language studies; Bangladesh-specific thresholds are not published.",
     bestFor: ["International Business · business applicants", "Development and Maintenance of Information Systems · IT applicants", "Physiotherapy · health-science applicants"],
     importantNotes: [fact("Email the admissions coordinator before paying anything — the college states international applicants must make contact first.", ["pankoApply"]), fact("If an English group does not form, the college may combine groups or change the timetable, which can affect study planning.", ["pankoRules"])],
+    diplomaCgpa: {
+      diploma: "unconfirmed",
+      diplomaSummary: "No published diploma route",
+      cgpaSummary: "Not published",
+      facts: [
+        fact("Applicants must have an education level appropriate to the chosen programme; the college carries out academic recognition before issuing the study agreement and acceptance letter.", ["pankoApply", "pankoRules"]),
+        pending("a Bangladesh-specific HSC GPA minimum and the treatment of a Diploma-in-Engineering background are not published.", ["pankoApply"]),
+      ],
+    },
     officialLinks: ["pankoApply", "pankoFees", "pankoRules", "pankoWelcome"],
   },
   {
@@ -250,6 +330,15 @@ export const colleges: CollegeProfile[] = [
     eligibility: "Treat this as a Kauno kolegija application: the same 50% GPA, key competence test, B2 English and document rules apply.",
     bestFor: ["Organizational Management · applicants wanting a smaller regional campus"],
     importantNotes: [fact("Do not submit a separate 'Alytus College' application — Kauno kolegija is the legal institution and its admission office handles Alytus faculty applicants.", ["alytusMerger"]), fact("Fees published in Lithuanian and in the English annex differ, so confirm the exact annual amount for the intake you apply to.", ["kkFees", "kkRules"])],
+    diplomaCgpa: {
+      diploma: "unconfirmed",
+      diplomaSummary: "No published diploma route",
+      cgpaSummary: "50% GPA \u00b7 3.2 competitive (Kauno kolegija)",
+      facts: [
+        fact("Kauno kolegija's published rules apply through the Alytus Faculty: at least 50% GPA in secondary education with SKVC country requirements, a key competence test score of at least 3, a motivation interview and a competitive score of at least 3.2.", ["kkRules", "kkApply"]),
+        pending("a Bangladesh-specific HSC requirement additional to Kauno kolegija's published rules is not stated.", ["kkCountry"]),
+      ],
+    },
     officialLinks: ["alytusMerger", "kkApply", "kkRules", "kkAlytusProgramme"],
   },
   {
@@ -274,6 +363,15 @@ export const colleges: CollegeProfile[] = [
     eligibility: "Possibly, subject to the college's internal academic recognition and any English requirement it sets during admission; the consulted page does not publish Bangladesh-specific rules.",
     bestFor: ["Information Systems Technology · IT applicants", "International Business / Business Analytics · business applicants", "General Practice Nursing · health-science applicants"],
     importantNotes: [fact("Wait for the admission office's approval before paying the application fee, and confirm the fee amount in writing.", ["svakoAdmission"]), fact("Because the published page predates the 2027 cycle, email the admission office for the September 2027 timetable before planning documents.", ["svakoAdmission"])],
+    diplomaCgpa: {
+      diploma: "unconfirmed",
+      diplomaSummary: "No published diploma route",
+      cgpaSummary: "Not published",
+      facts: [
+        fact("Applicants need senior/higher secondary education; the college carries out academic recognition as part of admission through its online application channel.", ["svakoAdmission", "svakoPriemimas"]),
+        pending("a Bangladesh-specific grade threshold, study-gap rule and Diploma-in-Engineering treatment are not published on the consulted pages.", ["svakoAdmission"]),
+      ],
+    },
     officialLinks: ["svakoAdmission", "svakoPriemimas", "svakoErasmus"],
   },
   {
@@ -297,6 +395,15 @@ export const colleges: CollegeProfile[] = [
     eligibility: "Yes for the currently open programme, subject to a 46% average in high school graduation exams, B2 English, police clearance, financial evidence and a successful motivational interview.",
     bestFor: ["Hospitality Management · applicants seeking hotel, tourism and service management"],
     importantNotes: [fact("Only one programme is currently open to international students, so confirm programme availability for the intake before paying the fee.", ["ilkFees"]), fact("A legalised police clearance certificate and bank statement are mandatory, and studies combine online and in-person teaching.", ["ilkAdmission", "ilkDates"])],
+    diplomaCgpa: {
+      diploma: "unconfirmed",
+      diplomaSummary: "No published diploma route",
+      cgpaSummary: "46% graduation-exam average",
+      facts: [
+        fact("Applicants need a legalised diploma and supplement, a certificate that foreign education is recognised as equivalent in Lithuania, and an average score across high school graduation exams of at least 46%, plus CV, police clearance and a bank statement.", ["ilkAdmission", "ilkRules"]),
+        pending("a Bangladesh Diploma-in-Engineering equivalence is not stated on the consulted pages.", ["ilkAdmission"]),
+      ],
+    },
     officialLinks: ["ilkAdmission", "ilkDates", "ilkFees", "ilkHospitality", "ilkRules"],
   },
   {
@@ -319,6 +426,15 @@ export const colleges: CollegeProfile[] = [
     eligibility: "Possibly, for applicants with legalised secondary documents, B2 English evidence and the required financial affidavit and bank statement; the English-taught offer for later intakes must be confirmed.",
     bestFor: ["Social Work Management · applicants aiming at social and community work"],
     importantNotes: [fact("Financial evidence is central to this admission: a legalised affidavit plus a bank statement are required documents, not optional extras.", ["kolpingAdmission"]), fact("The college provides no accommodation, so arrange and declare housing independently before arrival.", ["kolpingAdmission"])],
+    diplomaCgpa: {
+      diploma: "unconfirmed",
+      diplomaSummary: "No published diploma route",
+      cgpaSummary: "Not published",
+      facts: [
+        fact("Applicants need a legalised certificate/diploma and academic transcript following country-specific requirements, plus a financial affidavit and bank statement; the college runs undergraduate programmes only.", ["kolpingAdmission", "kolpingRules"]),
+        pending("grade thresholds and a Bangladesh Diploma-in-Engineering rule are not published on the consulted pages.", ["kolpingAdmission"]),
+      ],
+    },
     officialLinks: ["kolpingAdmission", "kolpingStudies", "kolpingRules"],
   },
   {
@@ -342,6 +458,14 @@ export const colleges: CollegeProfile[] = [
     eligibility: "Not applicable for bachelor or master study at LCSS itself. A Bangladeshi applicant interested in its research fields should apply to the partner university (VILNIUS TECH, KTU or VMU) and check that university's rules.",
     bestFor: ["Research careers in economics, sociology or law · via a partner university rather than LCSS"],
     importantNotes: [fact("This is the main correction to the poster: LCSS describes itself as a research centre and lists doctoral cooperation with universities, not college-level teaching.", ["lcssAbout", "lcssPhD"]), fact("If a counsellor intends to place a student here, redirect the application to the partner university and follow that institution's deadlines and fees.", ["lcssPhD"])],
+    diplomaCgpa: {
+      diploma: "na",
+      diplomaSummary: "No bachelor/master intake",
+      cgpaSummary: "N/A \u00b7 apply via partner university",
+      facts: [
+        fact("LCSS runs doctoral studies jointly with universities (Economics with VILNIUS TECH; Sociology with KTU and VMU). It has no bachelor or master intake of its own, so diploma and CGPA questions for taught degrees are decided by the partner university's admission procedure.", ["lcssAbout", "lcssPhD"]),
+      ],
+    },
     officialLinks: ["lcssAbout", "lcssPhD"],
   },
 ];

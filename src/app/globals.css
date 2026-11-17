@@ -785,3 +785,50 @@ h2{font-size:clamp(36px,4.1vw,55px);line-height:1.12}
 .footer-brand-logo .brand-logo{border-radius:50%;display:block}
 .admin-login-card .brand-mark-logo{margin:0 auto}
 .admin-header .brand-mark-logo{background:transparent;border:0;box-shadow:none}
+
+/* ── Diploma & CGPA guide ───────────────────────────────────────────── */
+.diploma-page{background:#faf8f4}
+.diploma-hero{background:#fff;border-bottom:1px solid #e7e2d7;padding-bottom:38px}
+.diploma-hero .section-kicker{margin-top:26px}
+.diploma-hero h1{font-family:Georgia,"Times New Roman",serif;font-weight:500;color:#0d2d50;font-size:clamp(38px,6vw,58px);line-height:1.06;margin:14px 0 16px}
+.diploma-hero h1 em{color:#d4a54f;font-style:italic}
+.diploma-lead{max-width:720px;color:#566d7c;font-size:14px;line-height:1.7;margin-bottom:22px}
+.diploma-legend{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.diploma-legend span{display:inline-flex;align-items:center;gap:6px;color:#778a97;font-size:9px;font-weight:700}
+.diploma-legend i{width:7px;height:7px;border-radius:50%}
+.diploma-routes{padding:34px 0 6px}
+.route-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.route-card{background:#fff;border:1px solid #e7e2d7;border-radius:10px;padding:16px 16px 14px}
+.route-card p{margin:9px 0 0;color:#566d7c;font-size:11px;line-height:1.6}
+.route-badge{display:inline-block;border-radius:999px;padding:4px 11px;font-size:9px;font-weight:800;letter-spacing:.06em;color:#fff;white-space:nowrap}
+.route-accepted{background:#5c9d71}
+.route-conditional{background:#b7791f}
+.route-excluded{background:#a75a4d}
+.route-unconfirmed{background:#8b9aa5}
+.route-na{background:#b3aa96}
+.diploma-list{padding-top:34px}
+.diploma-table-wrap{overflow-x:auto;border:1px solid #e7e2d7;border-radius:10px;background:#fff}
+.diploma-table{width:100%;min-width:820px;border-collapse:collapse}
+.diploma-table thead th{background:#0d2d50;color:#fff;text-align:left;padding:11px 14px;font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+.diploma-table tbody td{border-top:1px solid #eee8dc;padding:13px 14px;vertical-align:top;font-size:12px;color:#22303f}
+.diploma-table tbody tr:hover{background:#fbf7ef}
+.diploma-name a{display:inline-flex;align-items:center;gap:4px;color:#0d2d50;font-weight:700;font-size:13px;text-decoration:none}
+.diploma-name a:hover{color:#ab7734}
+.diploma-name small{display:block;margin-top:3px;color:#8a94a1;font-size:10px}
+.diploma-cell-note{display:block;margin-top:6px;color:#566d7c;font-size:10.5px;line-height:1.5}
+.diploma-cgpa{font-weight:600;color:#0d2d50}
+.diploma-sources .fact-sources{margin-top:0}
+.diploma-notes{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding-top:38px;padding-bottom:44px}
+.diploma-note{display:flex;gap:13px;background:#fff;border:1px solid #e7e2d7;border-radius:10px;padding:20px}
+.diploma-note strong{color:#0d2d50;font-size:13px}
+.diploma-note p{margin:7px 0 0;color:#566d7c;font-size:11.5px;line-height:1.65}
+.diploma-note a{display:inline-flex;align-items:center;gap:5px;margin-top:9px;color:#ab7734;font-size:11px;font-weight:700;text-decoration:none}
+.diploma-note a:hover{text-decoration:underline}
+
+/* ── Diploma & CGPA callout on profile pages ───────────────────────── */
+.diploma-box{background:#fff;border:1px solid #e7e2d7;border-top:3px solid #d4a54f;border-radius:10px;padding:22px 24px;margin:18px 0 6px}
+.diploma-mark{display:grid;place-items:center;flex:none;height:39px;width:39px;color:#fff;background:#0d2d50;border-radius:50%}
+.diploma-rows{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0 4px}
+.diploma-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;background:#faf8f4;border:1px solid #eee8dc;border-radius:8px;padding:13px 15px}
+.diploma-row p{margin:5px 0 0;color:#22303f;font-size:12.5px;font-weight:600;line-height:1.55}
+@media(max-width:850px){.route-cards{grid-template-columns:1fr 1fr}.diploma-notes{grid-template-columns:1fr}.diploma-rows{grid-template-columns:1fr}}

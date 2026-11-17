@@ -1,7 +1,7 @@
 import { BookmarkButton } from "@/components/bookmark-button";
 import { EnglishAlternativesProfile } from "@/components/english-alternatives-profile";
 import { SiteHeader } from "@/components/site-shell";
-import { getInstitution, researchSections, sources, institutions, statusLabels, VERIFIED_ON, factStatusLabels, verificationRank, getResearchFreshness, sectionsNeedingUpdate } from "@/lib/research";
+import { getInstitution, researchSections, sources, institutions, statusLabels, VERIFIED_ON, factStatusLabels, verificationRank, getResearchFreshness, sectionsNeedingUpdate, diplomaRouteLabels } from "@/lib/research";
 import type { Fact, Institution, SourceKey } from "@/lib/research";
 import { ArrowLeft, ArrowRight, ArrowUpRight, BadgeCheck, BookOpen, Check, Clock3, ExternalLink, FileCheck2, GraduationCap, Heart, MapPin, ShieldCheck } from "lucide-react";
 import Link from "next/link";
@@ -72,7 +72,17 @@ export default async function UniversityPage({ params }: { params: Promise<{ slu
 
         <EnglishAlternativesProfile institution={university} />
 
-        <section id="bangladesh" className="detail-section bangladesh-section"><div className="section-kicker"><span>FOR YOU</span> BANGLADESH APPLICANT LENS</div><h2>What this means <em>for you.</em></h2><div className="bangladesh-box"><div className="bd-box-head"><span className="bd-flag"><i /><i /></span><div><span>ELIGIBILITY SNAPSHOT</span><h3>Bangladesh student eligibility</h3></div></div><p>{university.eligibility}</p><div className="bd-box-note"><FileCheck2 size={16} /> Eligibility is conditional, not an admission guarantee. Check qualification recognition and your chosen programme.</div></div><div className="detail-two-col"><div className="detail-list-card"><span className="mini-heading"><Check size={17} /> BEST AVAILABLE PROGRAMMES</span><p>Research-based suggestions for matching backgrounds; not official recommendations or guaranteed offers.</p><ul>{university.bestFor.map((item) => <li key={item}>{item}</li>)}</ul></div><div className="detail-list-card"><span className="mini-heading"><Heart size={17} /> IMPORTANT ADMISSION NOTES</span><div className="notes-list">{university.importantNotes.map((item, noteIndex) => <FactItem key={noteIndex} item={item} />)}</div></div></div></section>
+        <section id="bangladesh" className="detail-section bangladesh-section"><div className="section-kicker"><span>FOR YOU</span> BANGLADESH APPLICANT LENS</div><h2>What this means <em>for you.</em></h2><div className="bangladesh-box"><div className="bd-box-head"><span className="bd-flag"><i /><i /></span><div><span>ELIGIBILITY SNAPSHOT</span><h3>Bangladesh student eligibility</h3></div></div><p>{university.eligibility}</p><div className="bd-box-note"><FileCheck2 size={16} /> Eligibility is conditional, not an admission guarantee. Check qualification recognition and your chosen programme.</div></div>
+        <div className="diploma-box">
+          <div className="bd-box-head"><span className="diploma-mark"><GraduationCap size={19} /></span><div><span>DIPLOMA &amp; CGPA CHECK</span><h3>Diploma background and minimum CGPA</h3></div></div>
+          <div className="diploma-rows">
+            <div className="diploma-row"><div><span className="mini-heading">DIPLOMA BACKGROUND</span><p>{university.diplomaCgpa.diplomaSummary}</p></div><span className={`route-badge route-${university.diplomaCgpa.diploma}`}>{diplomaRouteLabels[university.diplomaCgpa.diploma]}</span></div>
+            <div className="diploma-row"><div><span className="mini-heading">MINIMUM CGPA / GRADE</span><p>{university.diplomaCgpa.cgpaSummary}</p></div></div>
+          </div>
+          <div className="notes-list">{university.diplomaCgpa.facts.map((item, diplomaIndex) => <FactItem key={diplomaIndex} item={item} />)}</div>
+          <div className="bd-box-note"><FileCheck2 size={16} /> Compare all {institutions.length} institutions on the <Link href="/diploma">Diploma &amp; CGPA guide</Link>.</div>
+        </div>
+        <div className="detail-two-col"><div className="detail-list-card"><span className="mini-heading"><Check size={17} /> BEST AVAILABLE PROGRAMMES</span><p>Research-based suggestions for matching backgrounds; not official recommendations or guaranteed offers.</p><ul>{university.bestFor.map((item) => <li key={item}>{item}</li>)}</ul></div><div className="detail-list-card"><span className="mini-heading"><Heart size={17} /> IMPORTANT ADMISSION NOTES</span><div className="notes-list">{university.importantNotes.map((item, noteIndex) => <FactItem key={noteIndex} item={item} />)}</div></div></div></section>
 
         <section id="official-sources" className="detail-section official-section"><div className="section-kicker"><span>PROOF</span> THE ORIGINAL DOCUMENTS</div><h2>Official <em>sources.</em></h2><p>Open the university&apos;s own pages to verify your exact programme, citizenship category and intake before submitting or paying.</p><div className="official-links">{university.officialLinks.map((key) => <a key={key} href={sources[key].url} target="_blank" rel="noopener noreferrer"><span><ExternalLink size={17} />{sources[key].label}</span><ArrowUpRight size={19} /></a>)}</div></section>
         </div>
