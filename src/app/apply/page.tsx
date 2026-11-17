@@ -48,15 +48,17 @@ export default function ApplyPage() {
               to the poster read as two different codes, so there is exactly one. */}
           <div className="qr-panel">
             <div className="qr-panel-art">
-              <picture>
-                <source srcSet="/qr/admission-poster.webp" type="image/webp" />
-                <img
-                  src="/qr/admission-poster.jpg"
-                  alt="Go Abroad BD admission poster — scan the QR code to open the enquiry form"
-                  width={900}
-                  height={1273}
-                />
-              </picture>
+              {/* One optimised PNG at full resolution: downscaling or heavy
+                  WebP compression blurred the QR modules enough to break
+                  scanning, so the palette-optimised PNG (188 KB) is shipped
+                  as-is and the code stays sharp. */}
+              {/* eslint-disable-next-line @next/next/no-img-element -- next/image would re-encode the QR modules and break scanning */}
+              <img
+                src="/qr/admission-poster-web.png"
+                alt="Go Abroad BD admission poster — scan the QR code to open the enquiry form"
+                width={1414}
+                height={2000}
+              />
             </div>
 
             <div className="qr-panel-copy">
