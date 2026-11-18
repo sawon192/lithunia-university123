@@ -315,6 +315,23 @@ the €3,400 previously recorded) for applicants below B2. Two corrections follo
 on VBC's list**, so its invented Duolingo 105 and a guessed TOEFL 72 were removed, and VBC now shows
 as having its own English test.
 
+**Diploma routes, audited college by college (17 November 2026).** Every college's diploma
+status was re-checked against its own pages, so no college is left at "awaiting confirmation":
+
+| College | Route | What the college publishes |
+|---|---|---|
+| SMK | Accepted | diploma listed as an entry document |
+| Vilnius Business College | Accepted | "certificate of secondary education or diploma"; 60% overall, 70% English + 70% one subject |
+| Kauno kolegija (incl. Alytus Faculty) | Accepted | "If you have a 4-year Diploma in Engineering qualification, you are eligible for admission to higher education in engineering" — Bangladesh HSC GPA ≥ 3.50 otherwise |
+| LTVK, Utenos, VCD, VIKO, KVK, Panevėžys, Šiauliai, ILK, Kolpingo | Conditional | the document class is a diploma/qualification and admission turns on academic recognition, not on a named school-leaving certificate |
+| LCSS | Not applicable | no bachelor's intake |
+
+The important distinction this audit produced: a *conditional* route is not a hidden "yes". It means
+the college accepts a qualification document in principle but the decision is a recognition
+decision, so the profile names the threshold where one exists (Kolpingo 55% CGPA, Šiauliai
+competitive score 2.0/10, ILK 46% exam average, KVK 50% in the required subject) and says what to
+ask the admissions office where one does not.
+
 Two results worth calling out because they contradict the usual agent advice:
 
 - **KVK accepts an MOI certificate** and states the Duolingo test is *not* accepted
@@ -404,7 +421,7 @@ silently fills an OMPT obligation.
 `src/lib/eligibility.ts` (engine), `src/components/eligibility-tool.tsx` (form + report),
 `src/components/ompt-panel.tsx` (profile panel), `src/components/university-directory.tsx`
 (with/without filter + chips), `src/app/globals.css` (`.ompt-*`, `.el-row*`, `.el-gap-*`, `.el-tally`),
-`scripts/eligibility-features.check.ts` (28 acceptance checks).
+`scripts/eligibility-features.check.ts` (33 acceptance checks).
 
 ---
 
@@ -505,7 +522,7 @@ npm run start       # serve the production build
 npm run lint        # eslint
 npm run typecheck   # tsc --noEmit
 npm run check:db    # run migrations against embedded Postgres
-npm run test:eligibility  # 28 checks over the OMPT table, open profiles and the auto gap
+npm run test:eligibility  # 33 checks over the OMPT table, open profiles and the auto gap
 npm run verify      # typecheck + lint + build
 ```
 

@@ -160,6 +160,19 @@ const vbcLow = assessProfile({ ...base, qualifications: [{ id: "1", type: "diplo
 rec("D4. A diploma below VBC's published 60% is failed, not waved through",
   vbcLow.academicCheck === "fail" && vbcLow.verdict === "not-eligible",
   "2.2/4.00 = 55% < 60%");
+rec("D5. Kauno kolegija's published 4-year Diploma in Engineering route passes",
+  diploma.find((r) => r.institution.slug === "kauno-kolegija").routeCheck === "pass" &&
+  getInstitution("kauno-kolegija")!.diplomaCgpa.diploma === "accepted",
+  "country-specific page names the qualification explicitly");
+
+const undecided = institutions.filter(
+  (i) => i.category === "college" && i.diplomaCgpa.diploma === "unconfirmed",
+);
+rec("D6. Every college has a resolved diploma route",
+  undecided.length === 0,
+  undecided.length
+    ? `still unconfirmed: ${undecided.map((i) => i.slug).join(", ")}`
+    : `${institutions.filter((i) => i.category === "college" && i.diplomaCgpa.diploma === "accepted").length} accepted, ${institutions.filter((i) => i.category === "college" && i.diplomaCgpa.diploma === "conditional").length} conditional, 1 not applicable`);
 
 const failed = results.filter((r) => !r.pass);
 console.log(`\n${results.length - failed.length}/${results.length} pass`);

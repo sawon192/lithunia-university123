@@ -862,6 +862,7 @@ h2{font-size:clamp(36px,4.1vw,55px);line-height:1.12}
 .diploma-name a:hover{color:#ab7734}
 .diploma-name small{display:block;margin-top:3px;color:#8a94a1;font-size:10px}
 .diploma-cell-note{display:block;margin-top:6px;color:#566d7c;font-size:10.5px;line-height:1.5}
+.diploma-section-note{margin:12px 0 0;color:#566d7c;font-size:11.5px;line-height:1.65;max-width:70ch}
 .diploma-cgpa{font-weight:600;color:#0d2d50}
 .diploma-sources .fact-sources{margin-top:0}
 .diploma-notes{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding-top:38px;padding-bottom:44px}

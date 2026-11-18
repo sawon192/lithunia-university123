@@ -341,10 +341,10 @@ export const entryRules: Record<string, InstitutionRule> = {
   "kauno-kolegija": {
     slug: "kauno-kolegija", levels: ["Bachelor"],
     bachelor: {
-      grade: { metric: "ratio", min: 0.5, note: "Notarised secondary certificate and transcript with at least a 50% GPA (SKVC country rules apply). A competitive score ≥3.2 is needed for non-state-funded places.", status: "published" },
+      grade: { metric: "ratio", min: 0.5, note: "Notarised secondary certificate and transcript with at least a 50% GPA (SKVC country rules apply). For Bangladesh the country page sets the HSC bar at a GPA of at least 3.50 and states that a 4-year Diploma in Engineering qualifies the holder for admission to engineering programmes. A competitive score ≥3.2 is needed for non-state-funded places.", status: "published" },
       english: { tests: { ielts: 5.5, toefl: 75, pte: 59, englishScore: 400 }, moi: "not-accepted", note: "IELTS 5.5 / TOEFL 75 / PTE 59 / EnglishScore 400 (CEFR B2). MOI letters are expressly not accepted; the college's own €45 test is an alternative.", status: "published" },
     },
-    conditions: ["Key competence test (score ≥3)", "Motivation interview on many programmes"],
+    conditions: ["Key competence test (score ≥3)", "Motivation interview on many programmes", "Bangladesh: HSC GPA ≥3.50, or a 4-year Diploma in Engineering for engineering programmes"],
     notes: [],
   },
   "lithuania-business-college": {
@@ -422,7 +422,7 @@ export const entryRules: Record<string, InstitutionRule> = {
   "alytus-college": {
     slug: "alytus-college", levels: ["Bachelor"],
     bachelor: {
-      grade: { metric: "ratio", min: 0.5, note: "Kauno kolegija rules apply through the Alytus Faculty: at least 50% GPA (SKVC country rules), competitive score ≥3.2 for non-state-funded places.", status: "published" },
+      grade: { metric: "ratio", min: 0.5, note: "Kauno kolegija rules apply through the Alytus Faculty: at least 50% GPA (SKVC country rules), HSC GPA ≥3.50 for Bangladesh, 4-year Diploma in Engineering accepted for engineering programmes, competitive score ≥3.2 for non-state-funded places.", status: "published" },
       english: { tests: { ielts: 5.5, toefl: 75, pte: 59, englishScore: 400 }, moi: "not-accepted", note: "Kauno kolegija's English rules apply: IELTS 5.5 / TOEFL 75 / PTE 59 / EnglishScore 400; MOI letters expressly not accepted (own €45 test available).", status: "published" },
     },
     conditions: ["Key competence test (score ≥3)", "Motivation interview", "Apply through Kauno kolegija — no separate Alytus application"],
