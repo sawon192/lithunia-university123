@@ -258,11 +258,11 @@ export const entryRules: Record<string, InstitutionRule> = {
     slug: "vytautas-magnus-university", levels: ["Bachelor", "Master"],
     bachelor: {
       grade: { metric: "ratio", min: 0.6, note: "At least 60% CGPA in the previous relevant diploma/transcript. Bangladesh document route: HSC + SSC with transcripts.", status: "published" },
-      english: { tests: { ielts: 5.5, toefl: 87, pte: 59, duolingo: 100 }, moi: "accepted", note: "B2 evidence when previous studies were not in English: IELTS 5.5–6.5 / TOEFL iBT 87–109 / PTE 59 / Duolingo 100–125 (programme sets the point in range). Official MOI certificate accepted for English-medium studies.", status: "published" },
+      english: { tests: { ielts: 5.5, toefl: 87, pte: 59, duolingo: 100, englishScore: 400 }, moi: "accepted", note: "B2 evidence when previous studies were not in English: IELTS 5.5–6.5 / TOEFL iBT 87–109 / PTE Academic 59 / Duolingo 100–125 / EnglishScore 400–499 (CoreSkills) / Cambridge FCE or BEC Vantage 161–180 / TOEIC 785. Programme sets the point in range. Official MOI certificate accepted for English-medium studies.", status: "published" },
     },
     master: {
       grade: { metric: "ratio", min: 0.6, note: "Same 60% rule on the relevant Bachelor diploma/transcript.", status: "published" },
-      english: { tests: { ielts: 5.5, toefl: 87, pte: 59, duolingo: 100 }, moi: "accepted", note: "Same B2 band as Bachelor level; official MOI certificate accepted.", status: "published" },
+      english: { tests: { ielts: 5.5, toefl: 87, pte: 59, duolingo: 100, englishScore: 400 }, moi: "accepted", note: "Same B2 band as Bachelor level, including EnglishScore 400–499 (CoreSkills); official MOI certificate accepted.", status: "published" },
     },
     conditions: [],
     notes: [],

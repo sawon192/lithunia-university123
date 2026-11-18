@@ -315,6 +315,17 @@ the €3,400 previously recorded) for applicants below B2. Two corrections follo
 on VBC's list**, so its invented Duolingo 105 and a guessed TOEFL 72 were removed, and VBC now shows
 as having its own English test.
 
+**VMU also accepts the EnglishScore (18 November 2026).** Vytautas Magnus University's own
+admission FAQ publishes *"EnglishScore 400–499 (CoreSkills)"* in the B2 list — the same band it
+applies to Duolingo 100–125 and IELTS 5.5–6.5, at both Bachelor's and Master's level. It is now
+recorded in the facts, in `entryRules` (`englishScore: 400`) and in the alternative-certificate grid.
+
+Reading that FAQ also exposed certificates our VMU row was silently missing, all now recorded:
+Cambridge FCE and BEC Vantage 161–180, Michigan ECCE 650+, PTE General Level 3, TOEIC 785 (L&R) /
+310 (S&W), Cambridge IGCSE English First or Second Language at grade B, and TOEFL PBT 534–633. The
+FAQ also states plainly that VMU offers **no preparatory programme and no English admissions test**,
+so a B2 certificate or an MOI is required with the application.
+
 **LIK and the British Council EnglishScore (17 November 2026).** Lietuvos inžinerijos kolegija
 (`lik.tech`) was not in the dataset at all — note that it is a *different* institution from ILK,
 St. Ignatius of Loyola College, which already listed EnglishScore. It is now a full profile, and its
@@ -445,7 +456,7 @@ silently fills an OMPT obligation.
 `src/lib/eligibility.ts` (engine), `src/components/eligibility-tool.tsx` (form + report),
 `src/components/ompt-panel.tsx` (profile panel), `src/components/university-directory.tsx`
 (with/without filter + chips), `src/app/globals.css` (`.ompt-*`, `.el-row*`, `.el-gap-*`, `.el-tally`),
-`scripts/eligibility-features.check.ts` (33 acceptance checks).
+`scripts/eligibility-features.check.ts` (37 acceptance checks).
 
 ---
 
@@ -546,7 +557,7 @@ npm run start       # serve the production build
 npm run lint        # eslint
 npm run typecheck   # tsc --noEmit
 npm run check:db    # run migrations against embedded Postgres
-npm run test:eligibility  # 33 checks over the OMPT table, open profiles and the auto gap
+npm run test:eligibility  # 37 checks over the OMPT table, open profiles and the auto gap
 npm run verify      # typecheck + lint + build
 ```
 

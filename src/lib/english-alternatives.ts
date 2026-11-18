@@ -145,10 +145,10 @@ export const englishAlternativesBySlug: Record<string, EnglishAlternatives> = {
       available: false,
       notes: "VMU states it does not organise an English admissions test.",
     },
-    alternativeEnglishCertificates: ["Duolingo English Test"],
+    alternativeEnglishCertificates: ["Duolingo English Test", "EnglishScore (British Council)", "Cambridge English", "IGCSE / GCSE English"],
     englishRequirementNotes:
-      "When previous studies were not in English, recent valid B2 evidence is required: IELTS 5.5–6.5, TOEFL iBT 87–109, PTE 59, Duolingo 100–125. The programme sets its point within the range.",
-    englishRequirementSource: "vmuApply",
+      "When previous studies were not in English, recent valid B2 evidence is required: IELTS 5.5–6.5, TOEFL iBT 87–109, PTE Academic 59, Duolingo 100–125, EnglishScore 400–499 (CoreSkills), Cambridge FCE or BEC Vantage 161–180, Michigan ECCE 650+, PTE General Level 3, TOEIC 785 (L&R) / 310 (S&W), or Cambridge IGCSE English First or Second Language grade B. The programme sets its point within the range.",
+    englishRequirementSource: "vmuFaq",
     englishRequirementVerifiedAt: ON,
     englishRequirementStatus: "officially_confirmed",
   },

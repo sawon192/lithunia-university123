@@ -166,6 +166,19 @@ rec("E1. LIK accepts the British Council EnglishScore at 400",
   likRule.bachelor.english.tests.englishScore === 400 &&
   getEnglishAlternatives("lithuanian-engineering-college").alternativeEnglishCertificates.includes("EnglishScore (British Council)"),
   `EnglishScore ${likRule.bachelor.english.tests.englishScore}, level ${likRule.bachelor.english.cefr}`);
+const vmuRule = entryRules["vytautas-magnus-university"]!;
+rec("E3. VMU accepts EnglishScore 400-499 (CoreSkills) at both levels",
+  vmuRule.bachelor.english.tests.englishScore === 400 && vmuRule.master.english.tests.englishScore === 400 &&
+  getEnglishAlternatives("vytautas-magnus-university").alternativeEnglishCertificates.includes("EnglishScore (British Council)"),
+  `BA ${vmuRule.bachelor.english.tests.englishScore}, MA ${vmuRule.master.english.tests.englishScore}`);
+const vmuPass = assessProfile({ ...base, englishTest: "englishScore" as const, englishScore: 430 })
+  .find((r) => r.institution.slug === "vytautas-magnus-university");
+const vmuFail = assessProfile({ ...base, englishTest: "englishScore" as const, englishScore: 350 })
+  .find((r) => r.institution.slug === "vytautas-magnus-university");
+rec("E4. VMU EnglishScore is judged against the published 400 floor, both directions",
+  vmuPass.englishCheck === "pass" && vmuFail.englishCheck === "pending",
+  `430 → ${vmuPass.englishCheck}, 350 → ${vmuFail.englishCheck}`);
+
 const likPass = assessProfile({ ...base, englishTest: "englishScore" as const, englishScore: 420 })
   .find((r) => r.institution.slug === "lithuanian-engineering-college");
 const likFail = assessProfile({ ...base, englishTest: "englishScore" as const, englishScore: 380 })

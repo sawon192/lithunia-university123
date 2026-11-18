@@ -56,6 +56,7 @@ export const sources = {
   vmuFees: { label: "VMU tuition 2027/28", url: "https://www.vdu.lt/en/studies/degree-studies/tuition-fees/" },
   vmuOMPT: { label: "VMU OMPT programme chart 2027", url: "https://www.vdu.lt/wp-content/uploads/2026/10/OMPT-Test_2027.pdf" },
   vmuProgrammes: { label: "VMU official programme catalogue", url: "https://vytautasmagnus.dreamapply.com/courses/search" },
+  vmuFaq: { label: "VMU admission FAQ — accepted English certificates", url: "https://www.vdu.lt/en/studies/degree-studies/faq/" },
   lccProgrammes: { label: "LCC current BA programmes", url: "https://lcc.lt/apply-now/" },
   lccAdmission: { label: "LCC BA admission requirements", url: "https://lcc.lt/ba-international-business-administration" },
   lccTuition: { label: "LCC tuition and financial aid", url: "https://lcc.lt/tuition-and-fees" },
@@ -639,8 +640,9 @@ export const universities: University[] = [
         fact("Qualifications undergo academic recognition and individual programmes can impose extra requirements or an interview. A Bachelor's applicant whose secondary studies finished five or more years ago is among those required to take OMPT; the page does not describe this as an outright study-gap ban.", ["vmuApply"]),
       ],
       english: [
-        fact("Recent valid B2 evidence is required when previous studies were not in English: the published list includes IELTS 5.5–6.5, TOEFL iBT 87–109, PTE Academic 59 and Duolingo 100–125. The relevant programme may set its point within a listed range.", ["vmuApply"]),
-        fact("Previous studies fully taught in English can be documented by an official school/university certificate (MOI). VMU does not organise an English admissions test.", ["vmuApply"]),
+        fact("Recent valid B2 evidence is required when previous studies were not in English. The FAQ publishes the full accepted list: TOEFL 87–109 iBT (534–633 PBT), IELTS 5.5–6.5, Cambridge English First (FCE) 161–180, BEC Vantage 161–180, Michigan ECCE 650+, PTE General Level 3, PTE Academic 59, TOEIC Listening and Reading 785, TOEIC Speaking and Writing 310, Duolingo 100–125, EnglishScore 400–499 (CoreSkills), and Cambridge IGCSE English First or Second Language at grade B. The relevant programme sets its point within a listed range.", ["vmuFaq", "vmuApply"]),
+        fact("The British Council EnglishScore certificate is accepted at 400–499 (CoreSkills) for B2 — the same band VMU applies to Duolingo and IELTS, not a separate or conditional route.", ["vmuFaq"]),
+        fact("Previous studies fully taught in English can be documented by an official school/university certificate (MOI). VMU states it offers no preparatory programme and no English admissions test, so a valid B2 certificate or an MOI is required with the application.", ["vmuFaq", "vmuApply"]),
       ],
       tuition: [
         fact("VMU's 2027/28 non-EU annual tuition table includes BA Business Administration €3,400, BA Informatics Systems €4,400, BA Sports Studies €6,000, MA Applied English Linguistics €5,000 and MA Applied Informatics €6,000. Use the full tuition table for every other programme.", ["vmuFees"]),
