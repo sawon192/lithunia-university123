@@ -10,7 +10,7 @@
 import { assessProfile } from "../src/lib/eligibility.ts";
 import { checkOmptResult, getOmpt, omptBySlug, requiresOmpt } from "../src/lib/ompt.ts";
 import { derivedGapYears, effectiveGapYears, latestPassingYear, ratioCandidate } from "../src/lib/student-profile.ts";
-import { institutions } from "../src/lib/research.ts";
+import { getInstitution, institutions } from "../src/lib/research.ts";
 
 const results: { name: string; pass: boolean; detail: string }[] = [];
 const rec = (name: string, pass: boolean, detail: string) => {
@@ -149,6 +149,17 @@ rec("D2. Legacy path & the open list agree for the same student",
   assessProfile({ ...base, qualifications: [{ id: "1", type: "diploma", grade: 3.2, maxGrade: 4 }] })
     .find((r) => r.institution.slug === "kauno-kolegija").routeCheck,
   "identical route verdict via both call styles");
+const vbcRule = getInstitution("vilnius-business-college")!;
+rec("D3. VBC accepts a diploma background and applies its published 60% floor",
+  vbcRule.diplomaCgpa.diploma === "accepted" &&
+  diploma.find((r) => r.institution.slug === "vilnius-business-college").routeCheck === "pass" &&
+  diploma.find((r) => r.institution.slug === "vilnius-business-college").academicCheck === "pass",
+  `route ${vbcRule.diplomaCgpa.diploma}, 3.2/4.00 = 80% passes the 60% floor`);
+const vbcLow = assessProfile({ ...base, qualifications: [{ id: "1", type: "diploma", grade: 2.2, maxGrade: 4 }] })
+  .find((r) => r.institution.slug === "vilnius-business-college");
+rec("D4. A diploma below VBC's published 60% is failed, not waved through",
+  vbcLow.academicCheck === "fail" && vbcLow.verdict === "not-eligible",
+  "2.2/4.00 = 55% < 60%");
 
 const failed = results.filter((r) => !r.pass);
 console.log(`\n${results.length - failed.length}/${results.length} pass`);

@@ -289,16 +289,21 @@ export const englishAlternativesBySlug: Record<string, EnglishAlternatives> = {
   "vilnius-business-college": {
     moiAccepted: "unconfirmed",
     internalEnglishTest: {
-      available: false,
+      available: true,
+      name: "Oxford Online Placement Test (sat online at VBC)",
+      fee: "€50",
+      format:
+        "Online written test, pre-registered at least two working days ahead, followed by an oral check",
+      minimumLevel: "CEFR B2",
       notes:
-        "VBC runs an online Academic English Preparatory Programme (one semester, €3,400/year) for applicants below the required level, completed before arrival. This is a preparatory course, not an admission test.",
+        "VBC's published route for applicants holding none of its listed international certificates. Separately, applicants below B2 can still be admitted on condition of completing one semester of the Academic English Preparatory Programme (€1,700, online, 28 ECTS) before the degree.",
     },
-    alternativeEnglishCertificates: [],
+    alternativeEnglishCertificates: ["Cambridge English", "Oxford English Test"],
     englishRequirementNotes:
-      "Programme pages require at least CEFR B2. The preparatory programme is the published route for applicants who fall short; no MOI rule is stated.",
-    englishRequirementSource: "vbcEbusiness",
+      "CEFR B2 or higher. VBC's published list: Cambridge B2 First/First for Schools, Cambridge B2 Business Vantage, IELTS Academic 5.5–6.5, Pearson PTE Level 3 (B2), TOEFL iBT 60, TOEIC 785, LCCI English for Business Level 2 Credit/Level 2 Distinction/Level 3 Pass, or the €50 Oxford Online Placement Test at the College. Duolingo is not on the list.",
+    englishRequirementSource: "vbcAdmission2026",
     englishRequirementVerifiedAt: ON,
-    englishRequirementStatus: "not_officially_confirmed",
+    englishRequirementStatus: "officially_confirmed",
   },
   "vilnius-college-of-design": {
     moiAccepted: "unconfirmed",
@@ -456,7 +461,7 @@ export const standardScoresBySlug: Record<string, StandardScores> = {
   "lithuania-business-college": { ielts: NP, pte: NP, toefl: NP },
   "utenos-kolegija": { ielts: NP, pte: NP, toefl: NP },
   "smk-college": { ielts: "5.5+", pte: "59+", toefl: "69+" },
-  "vilnius-business-college": { ielts: NP, pte: NP, toefl: NP },
+  "vilnius-business-college": { ielts: "5.5–6.5 Academic (B2)", pte: "Level 3 (B2), no numeric score published", toefl: "60 iBT" },
   "vilnius-college-of-design": { ielts: NP25, pte: NP25, toefl: NP25 },
   "vilniaus-kolegija": { ielts: "5.5–6.0 (2-year validity)", pte: NP, toefl: "72–94 (2-year validity)" },
   "klaipeda-state-college": { ielts: "4.5–5.0", pte: "40.8", toefl: "42–71 iBT" },

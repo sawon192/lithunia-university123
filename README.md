@@ -301,8 +301,19 @@ Published IELTS / PTE / TOEFL bands live next to it in `standardScoresBySlug` an
 
 **Explicitly *not* accepted:** LSU, LCC, Kauno kolegija and its Alytus faculty refuse an MOI
 certificate as proof of English — they are shown as "Not accepted", never as unknown.
-**Not officially confirmed:** VDA, LBC, Utenos, SMK, VBC, VCD, VIKO, Panevėžio, Šiaulių, ILK,
-Kolpingo, LCSS. LCSS is a research institute without its own degree intake.
+**Not officially confirmed:** VDA, LBC, Utenos, SMK, VCD, VIKO, Panevėžio, Šiaulių, ILK,
+Kolpingo, LCSS. LCSS is a research institute without its own degree intake. VBC is no longer in this
+list: its admission page publishes the exact accepted-certificate table, the €50 Oxford Online
+Placement Test it runs itself, and the B2 preparatory-course route (see below).
+
+**VBC (re-verified 17 November 2026).** The English profile was previously an approximate
+CEFR-to-score mapping because only "B2" had been read from a programme page. VBC's Admission page and
+FAQ actually publish the whole table: Cambridge B2 First / B2 Business Vantage, IELTS Academic
+5.5–6.5, Pearson PTE **Level 3 (B2)**, TOEFL iBT **60**, TOEIC 785, LCCI Level 2/3 — plus the
+**€50 Oxford Online Placement Test** VBC runs online, and one semester of the AEPP (**€1,700**, not
+the €3,400 previously recorded) for applicants below B2. Two corrections followed: **Duolingo is not
+on VBC's list**, so its invented Duolingo 105 and a guessed TOEFL 72 were removed, and VBC now shows
+as having its own English test.
 
 Two results worth calling out because they contradict the usual agent advice:
 

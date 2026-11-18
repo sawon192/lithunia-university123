@@ -377,11 +377,11 @@ export const entryRules: Record<string, InstitutionRule> = {
   "vilnius-business-college": {
     slug: "vilnius-business-college", levels: ["Bachelor"],
     bachelor: {
-      grade: { metric: "none", note: "Secondary education or high school diploma with transcripts; no Bangladesh-specific minimum grade is published.", status: "unconfirmed" },
-      english: { tests: { ielts: 5.5, toefl: 72, pte: 59, duolingo: 105 }, cefr: "B2", provisionalMapping: true, moi: "unconfirmed", note: "CEFR B2 required on programme pages. A preparatory English programme is offered below B2. Bangladesh MOI acceptance is unconfirmed. Numeric bands shown are an approximate CEFR mapping.", status: "published" },
+      grade: { metric: "ratio", min: 0.6, note: "Published floors: cumulative secondary average including final exams at least 60%. On top of that, Business Studies needs at least 70% in English and 70% in one additional subject (Mathematics, Geography, Biology or Economics); IT Studies needs at least 70% in both Mathematics and English. The 60% overall figure is the one checked automatically — the 70% subject floors are listed as conditions.", status: "published" },
+      english: { tests: { ielts: 5.5, toefl: 60 }, cefr: "B2", moi: "unconfirmed", note: "CEFR B2. Published accepted proof: IELTS Academic 5.5–6.5, TOEFL iBT 60, Cambridge B2 First/B2 Business Vantage, Pearson PTE Level 3 (B2), TOEIC 785, LCCI Level 2/3. Duolingo is NOT on VBC's list, so no Duolingo minimum is recorded. No certificate? The €50 Oxford Online Placement Test can be sat at the College. Below B2, one semester of the €1,700 preparatory programme is required before the degree.", status: "published" },
     },
-    conditions: ["Admission interview with a VBC officer", "Affidavit of support and bank evidence (~€7,000/year)"],
-    notes: [],
+    conditions: ["Average grade of at least 70% in English (and 70% in one more subject for Business, or in Mathematics for IT)", "Admission interview with a VBC officer (identity verified)", "SKVC recognition of the certificate/diploma — SKVC makes the final eligibility decision", "Affidavit of support and bank evidence (~€7,000/year)"],
+    notes: ["VBC states it has no separate entrance examinations.", "Duolingo English Test is not on VBC's published accepted list — do not quote it as an option.", "Pearson PTE is accepted only as Level 3 (B2), which VBC does not express as a numeric score."],
   },
   "vilnius-college-of-design": {
     slug: "vilnius-college-of-design", levels: ["Bachelor"],
