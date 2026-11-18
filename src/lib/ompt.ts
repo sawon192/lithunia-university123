@@ -121,6 +121,10 @@ export const omptBySlug: Record<string, OmptProfile> = {
   },
 
   /* ── Colleges ─────────────────────────────────────────────────────── */
+  "lithuanian-engineering-college": {
+    ...silence("LIK's Degree Studies page and its 2026 admission procedure"),
+    alternative: "The college's own mathematics test (70% pass mark) plus a motivational interview in English",
+  },
   "kauno-kolegija": {
     ...silence("Kauno kolegija's admission procedure and programme pages"),
     alternative: "Key competence test (score ≥3) and, on many programmes, a motivation interview",

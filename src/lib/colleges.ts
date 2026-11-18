@@ -388,6 +388,64 @@ export const colleges: CollegeProfile[] = [
     officialLinks: ["svakoAdmission", "svakoPriemimas", "svakoErasmus"],
   },
   {
+    slug: "lithuanian-engineering-college", name: "Lietuvos inžinerijos kolegija / Lithuanian Engineering College (LIK)", abbreviation: "LIK", city: "Vilnius", accent: "#3d6b7a", initial: "LI", area: "Engineering · Technology · Environment", category: "college", status: "dates",
+    description: "Lithuania's engineering-focused state college: fourteen professional bachelor programmes across aeronautical, civil, electrical, mechanical, transport and environmental engineering, with a published 7.5/10 entry score and the British Council EnglishScore accepted at 400.",
+    feeSummary: "€100", deadlineSummary: "15 April 2027",
+    facts: {
+      fee: [
+        fact("€100 non-refundable registration fee, paid to the college's SEB account with the reference ID number_Name_Surname_Application-fee. It is not refunded if the application is withdrawn or the residence permit is refused.", ["likDegreeStudies", "likAdmission2026"]),
+      ],
+      opening: [
+        fact("There is only one intake a year, in September — the college states plainly that there is no spring intake. The admissions portal opens 12 January and closes 15 April.", ["likDegreeStudies"]),
+      ],
+      deadline: [
+        fact("15 April 2026 for the 2026 intake, with studies starting 1 October and the offer issued within 15 working days. The applicant then has a further 15 working days to accept and pay.", ["likDegreeStudies", "likAdmission2026"]),
+        pending("the 2027 intake dates; the college publishes the 2026 cycle, so the April 2027 date is an assumption based on the same annual pattern.", ["likDegreeStudies"]),
+      ],
+      academic: [
+        fact("Entry requirements are identical for every programme in both faculties: an entry score of at least 7.5/10 (the admission procedure states this as 7.5/10 or 65%). The score is the average of final-year grades or final-examination results — whichever the transcript provides, and the higher of the two where both appear — in Mathematics, English, Physics and Chemistry/IT. For the Faculty of Environmental Engineering, Biology and Geography are also counted.", ["likDegreeStudies", "likAdmission2026"]),
+        fact("Every candidate must additionally pass the college's own mathematics test at 70% or above, and take a motivational interview in English. The interview is required even when English proficiency has already been proven by a certificate.", ["likDegreeStudies", "likAdmission2026"]),
+        fact("Documents required include a legalised copy of the higher secondary education certificate or equivalent plus the transcript of marks, a notarised passport copy, a photograph, and a bank certificate showing at least €6,228 — enough for one year of living costs — for the residence permit.", ["likDegreeStudies", "likAdmission2026"]),
+      ],
+      english: [
+        fact("CEFR B2. The Degree Studies page publishes the accepted scores outright: Academic IELTS 5.5 overall, Pearson PTE Academic 59, TOEFL 72, CAE 160, and English Score 400 — the British Council EnglishScore certificate.", ["likDegreeStudies"]),
+        fact("The formal 2026 admission procedure PDF lists only IELTS 5.5, PTE 59, TOEFL iBT 72 and CAE 160, and does not name EnglishScore. The web page is the more specific and more recent statement, so EnglishScore 400 is recorded as accepted, with this discrepancy noted rather than hidden.", ["likAdmission2026", "likDegreeStudies"]),
+        pending("whether a Medium of Instruction letter is accepted in place of a certificate — the college requires proof of English proficiency from every applicant and states no MOI exemption.", ["likAdmission2026"]),
+      ],
+      tuition: [
+        fact("€4,000 per year for all undergraduate programmes in 2026/27, paid one year in advance after the offer letter. Before the residence permit stage the college requires two years of tuition to be paid.", ["likDegreeStudies"]),
+        fact("Refunds are possible if a residence permit is refused or the student does not arrive with a justified reason, minus 20% of the annual tuition retained in bank fees, provided the claim is made by 15 September.", ["likDegreeStudies"]),
+      ],
+      programmes: [
+        fact("Fourteen professional bachelor programmes across two faculties — Industrial Engineering and Technology, and Environmental Engineering — covering aeronautical, civil, electrical and electronic, mechanical, transport and environmental engineering, plus Landscape Design, Forestry and Horticulture.", ["likProgrammes", "likAdmission2026"]),
+        pending("a complete per-programme tuition and duration table; the college states a single €4,000 annual figure for all undergraduate programmes rather than a per-programme price list.", ["likDegreeStudies"]),
+      ],
+      ompt: [
+        fact("Instead of OMPT the college sets its own mathematics test at a 70% pass mark, administered remotely by the Admissions Committee, and a motivational interview in English.", ["likDegreeStudies", "likAdmission2026"]),
+      ],
+    },
+    featuredProgrammes: [
+      { name: "Aircraft Systems Engineering", level: "Bachelor", duration: "3 years", language: "English", intake: "September", tuition: "€4,000 / year · 2026", source: "likAdmission2026" },
+      { name: "Automotive Engineering", level: "Bachelor", duration: "3 years", language: "English", intake: "September", tuition: "€4,000 / year · 2026", source: "likAdmission2026" },
+      { name: "Sustainable Construction Engineering", level: "Bachelor", duration: "3 years", language: "English", intake: "September", tuition: "€4,000 / year · 2026", source: "likAdmission2026" },
+      { name: "Landscape Design", level: "Bachelor", duration: "3 years", language: "English", intake: "September", tuition: "€4,000 / year · 2026", source: "likAdmission2026" },
+    ],
+    eligibility: "Yes for a strong maths-and-physics HSC profile: a 7.5/10 average across Mathematics, English, Physics and Chemistry/IT, plus a 70% pass on the college's own maths test and an English interview. EnglishScore 400 is accepted, so a British Council certificate can replace IELTS or TOEFL.",
+    bestFor: ["Engineering and technology degrees", "EnglishScore holders without IELTS/TOEFL", "Applicants with strong maths and physics grades"],
+    importantNotes: [fact("There is no spring intake, and the single September round closes on 15 April — a missed April means waiting a full year.", ["likDegreeStudies"]), fact("Two years of tuition must be paid before the residence-permit stage, which is a larger upfront commitment than most colleges in this guide.", ["likDegreeStudies"]), fact("The EnglishScore 400 acceptance appears on the Degree Studies page; the admission-procedure PDF does not name it, so carry the certificate and be ready to point at the page.", ["likDegreeStudies", "likAdmission2026"])],
+    diplomaCgpa: {
+      diploma: "conditional",
+      diplomaSummary: "\"Higher secondary certificate or its equivalent\"",
+      cgpaSummary: "Entry score \u2265 7.5/10 (65%) in 4 subjects",
+      facts: [
+        fact("The document requirement is a \"higher secondary education certificate or its equivalent\" with the transcript of marks, so an equivalent qualification is contemplated rather than one fixed certificate name — but no diploma equivalence table is published.", ["likDegreeStudies", "likAdmission2026"]),
+        fact("The 7.5/10 or 65% entry score is computed from four named subjects in the transcript — Mathematics, English, Physics and Chemistry/IT, with Biology and Geography replacing Chemistry/IT for Environmental Engineering — so the applicant's diploma transcript must contain those subjects to be scored at all.", ["likAdmission2026"]),
+        pending("whether a Bangladesh Diploma-in-Engineering transcript is scored on the same four-subject basis or assessed separately. Confirm with admission@lik.tech before applying.", ["likDegreeStudies"]),
+      ],
+    },
+    officialLinks: ["likDegreeStudies", "likAdmission2026", "likApply", "likProgrammes"],
+  },
+  {
     slug: "st-ignatius-of-loyola-college", name: "St. Ignatius of Loyola College", abbreviation: "ILK", city: "Kaunas", accent: "#8a5f52", initial: "IL", area: "Hospitality · Health · Social", category: "college", status: "partial",
     description: "A Catholic college in Kaunas whose international admission is currently limited to one English-taught programme, with a published application window and a free English test option.",
     feeSummary: "€100", deadlineSummary: "20 May · cycle pending",

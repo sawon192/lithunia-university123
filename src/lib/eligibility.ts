@@ -428,6 +428,15 @@ export const entryRules: Record<string, InstitutionRule> = {
     conditions: ["Key competence test (score ≥3)", "Motivation interview", "Apply through Kauno kolegija — no separate Alytus application"],
     notes: [],
   },
+  "lithuanian-engineering-college": {
+    slug: "lithuanian-engineering-college", levels: ["Bachelor"],
+    bachelor: {
+      grade: { metric: "ratio", min: 0.65, note: "Published entry score of 7.5/10, which the admission procedure states as 7.5/10 or 65%. The score averages Mathematics, English, Physics and Chemistry/IT (Biology and Geography replace Chemistry/IT for Environmental Engineering programmes), using final-year grades or final-examination results — the higher of the two where both are shown.", status: "published" },
+      english: { tests: { ielts: 5.5, toefl: 72, pte: 59, englishScore: 400 }, cefr: "B2", moi: "unconfirmed", note: "CEFR B2. Published: Academic IELTS 5.5, PTE Academic 59, TOEFL 72, CAE 160 and British Council EnglishScore 400. The 2026 admission-procedure PDF lists only IELTS/PTE/TOEFL/CAE and omits EnglishScore, so the web page is the specific source for that band. An English interview is required regardless of any certificate.", status: "published" },
+    },
+    conditions: ["Mathematics test set by the college — pass mark 70%", "Motivational interview in English (required even with a certificate)", "Two years of tuition paid before the residence-permit stage", "Bank certificate of at least €6,228 for one year of living costs"],
+    notes: ["EnglishScore 400 (British Council) is accepted per the Degree Studies page; carry the certificate and be ready to point at that page.", "Entry requirements are identical across both faculties, with Biology and Geography added for Environmental Engineering.", "Applications close 15 April and there is no spring intake."],
+  },
   "siauliai-state-college": {
     slug: "siauliai-state-college", levels: ["Bachelor"],
     bachelor: {

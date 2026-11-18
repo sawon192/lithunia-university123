@@ -374,6 +374,16 @@ export const englishAlternativesBySlug: Record<string, EnglishAlternatives> = {
     englishRequirementVerifiedAt: ON,
     englishRequirementStatus: "officially_confirmed",
   },
+  "lithuanian-engineering-college": {
+    moiAccepted: "unconfirmed",
+    internalEnglishTest: { available: false },
+    alternativeEnglishCertificates: ["EnglishScore (British Council)"],
+    englishRequirementNotes:
+      "CEFR B2. Published scores: Academic IELTS 5.5, Pearson PTE Academic 59, TOEFL 72, CAE 160 and English Score 400 — the British Council EnglishScore certificate is named on the Degree Studies page. A motivational interview in English is required even when a certificate is supplied. The formal 2026 admission-procedure PDF omits EnglishScore, so that acceptance rests on the Degree Studies page.",
+    englishRequirementSource: "likDegreeStudies",
+    englishRequirementVerifiedAt: ON,
+    englishRequirementStatus: "officially_confirmed",
+  },
   "siauliai-state-college": {
     moiAccepted: "unconfirmed",
     internalEnglishTest: { available: false },

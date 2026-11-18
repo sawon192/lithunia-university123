@@ -8,7 +8,7 @@ A source-linked Lithuania university admissions guide **and** a student applicat
 Bangladeshi applicants, built with Next.js 16 (App Router, Turbopack), React 19, TypeScript and
 Tailwind CSS 4.
 
-- **Public site** — 25 researched institution profiles (14 universities + 11 colleges), the
+- **Public site** — 26 researched institution profiles (14 universities + 12 colleges), the
   eight-point admission research table per institution, programme spotlight, shortlist, and a
   multi-step September 2027 application form.
 - **Admin desk** — protected `/admin` area with dashboard counters, student table, filters,
@@ -148,7 +148,7 @@ schemas, and asserts the consent constraint and audit trigger behave correctly.
 
 | Route | Type | Description |
 |---|---|---|
-| `/` | static | Home, directory of 25 institutions |
+| `/` | static | Home, directory of 26 institutions |
 | `/universities/[slug]` | dynamic | Research profile: 8-point table, programmes, Bangladesh lens, sources |
 | `/shortlist` | static | Saved institutions + shareable link generator |
 | `/s/[slug]` | dynamic | Public read-only shared shortlist |
@@ -290,14 +290,14 @@ counts and labels can never disagree.
 
 Published IELTS / PTE / TOEFL bands live next to it in `standardScoresBySlug` and are shown verbatim.
 
-**Classification counts (recomputed from the data, 16 November 2026):**
+**Classification counts (recomputed from the data, 18 November 2026):**
 
 | Filter option | Institutions | Which ones |
 |---|---|---|
-| MOI Accepted | **8** | Accepted: VMU, KVK. Conditional: VU, VILNIUS TECH, ISM, KTU, MRU, **KSU** |
-| University Internal English Test | **8** | KTU (free), MRU (free), VIKO (free), ISM, **KSU (recorded interview)**, Kauno kolegija (€45), Alytus (€45), SMK (€50) |
-| Alternative English Certificate | **14** | Duolingo, LanguageCert IESOL, Cambridge, EF SET, EnglishScore, IGCSE |
-| Any of the three | **17** | the union of the above |
+| MOI Accepted | **8** | Accepted: VMU, KVK. Conditional: VU, VILNIUS TECH, ISM, KTU, MRU, **KSU** (LIK publishes no MOI rule) |
+| University Internal English Test | **9** | KTU (free), MRU (free), VIKO (free), ISM, **KSU (recorded interview)**, **VBC (€50 Oxford placement test)**, Kauno kolegija (€45), Alytus (€45), SMK (€50) |
+| Alternative English Certificate | **16** | Duolingo, LanguageCert IESOL, Cambridge, EF SET, EnglishScore, IGCSE |
+| Any of the three | **19** | the union of the above |
 
 **Explicitly *not* accepted:** LSU, LCC, Kauno kolegija and its Alytus faculty refuse an MOI
 certificate as proof of English — they are shown as "Not accepted", never as unknown.
@@ -315,6 +315,30 @@ the €3,400 previously recorded) for applicants below B2. Two corrections follo
 on VBC's list**, so its invented Duolingo 105 and a guessed TOEFL 72 were removed, and VBC now shows
 as having its own English test.
 
+**LIK and the British Council EnglishScore (17 November 2026).** Lietuvos inžinerijos kolegija
+(`lik.tech`) was not in the dataset at all — note that it is a *different* institution from ILK,
+St. Ignatius of Loyola College, which already listed EnglishScore. It is now a full profile, and its
+Degree Studies page publishes the EnglishScore acceptance directly:
+
+| Test | LIK minimum |
+|---|---|
+| Academic IELTS | 5.5 overall |
+| Pearson PTE Academic | 59 |
+| TOEFL | 72 |
+| CAE | 160 |
+| **British Council EnglishScore** | **400** |
+
+Everything else the profile now records, from the same page and the 2026 admission-procedure PDF:
+a 7.5/10 (65%) entry score averaged over Mathematics, English, Physics and Chemistry/IT — with
+Biology and Geography added for Environmental Engineering — the college's own **mathematics test at
+70%**, a mandatory English interview, **€4,000/year** tuition, a **15 April** deadline with **no
+spring intake**, and two years of tuition payable before the residence-permit stage.
+
+One discrepancy is recorded rather than smoothed over: the formal admission-procedure PDF lists only
+IELTS, PTE, TOEFL and CAE, and does **not** name EnglishScore. The Degree Studies page does, and it is
+the more specific and more recent statement, so EnglishScore 400 is marked accepted with the
+discrepancy documented in the fact itself.
+
 **Diploma routes, audited college by college (17 November 2026).** Every college's diploma
 status was re-checked against its own pages, so no college is left at "awaiting confirmation":
 
@@ -323,7 +347,7 @@ status was re-checked against its own pages, so no college is left at "awaiting 
 | SMK | Accepted | diploma listed as an entry document |
 | Vilnius Business College | Accepted | "certificate of secondary education or diploma"; 60% overall, 70% English + 70% one subject |
 | Kauno kolegija (incl. Alytus Faculty) | Accepted | "If you have a 4-year Diploma in Engineering qualification, you are eligible for admission to higher education in engineering" — Bangladesh HSC GPA ≥ 3.50 otherwise |
-| LTVK, Utenos, VCD, VIKO, KVK, Panevėžys, Šiauliai, ILK, Kolpingo | Conditional | the document class is a diploma/qualification and admission turns on academic recognition, not on a named school-leaving certificate |
+| LTVK, Utenos, VCD, VIKO, KVK, Panevėžys, Šiauliai, ILK, Kolpingo, LIK | Conditional | the document class is a diploma/qualification and admission turns on academic recognition, not on a named school-leaving certificate |
 | LCSS | Not applicable | no bachelor's intake |
 
 The important distinction this audit produced: a *conditional* route is not a hidden "yes". It means
@@ -365,18 +389,18 @@ read from it — so a count in the UI can never disagree with a verdict in a rep
 }
 ```
 
-**Classification (recomputed from the data, 17 November 2026):**
+**Classification (recomputed from the data, 18 November 2026):**
 
 | Filter | Institutions | Which ones |
 |---|---|---|
 | **With OMPT** | **5** | VU (by programme, from 55%), VILNIUS TECH (≥60% / ≥50%), VMU (by programme, from 55%), KTU (A/D, 75%), MRU (A/D, 75%) |
-| **Without OMPT** | **20** | 6 universities + 14 colleges |
+| **Without OMPT** | **21** | 5 universities + 16 colleges |
 
 Two rules were applied rather than assumed:
 
-- **Silence is not an exemption.** 19 institutions publish no OMPT rule at all (KSU among them); they are recorded as
+- **Silence is not an exemption.** 20 institutions publish no OMPT rule at all (KSU and LIK among them); they are recorded as
   `unconfirmed`, counted under *Without OMPT* (no published obligation) and never rendered as
-  "OMPT not required". The profile panel says so in writing.
+  "OMPT not required". The profile panel says so in writing. LIK is the newest of the 20.
 - **A published alternative is never called an exemption.** LSU and ISM run their own maths
   assessment, LCC adds a Skills and Knowledge Test, VDA/VCD use a portfolio, VBC/SMK an interview,
   KVK a competitive-score weighting. Those are recorded in `alternative` and the engine keeps any
@@ -535,7 +559,7 @@ in local mode, plus real PostgreSQL DDL for the migrations.
 
 | # | Test | Result |
 |---|---|---|
-| 1 | Homepage renders, counters show 25 / 14 / 11 | Pass |
+| 1 | Homepage renders, counters show 26 / 14 / 12 | Pass |
 | 2 | Directory search & filters | Pass (unchanged component) |
 | 3 | KTU profile (dates, fees, OMPT, sources, status panel) | Pass |
 | 4 | MRU profile (Bangladesh table, OMPT, exclusions) | Pass |
@@ -568,7 +592,7 @@ requires `npm run start` on port 3100 and `playwright` installed locally). **11/
 | E3 | MOI Accepted alone → 7 institutions | Pass |
 | E4 | Two options selected → union of 11, shared institutions counted once | Pass |
 | E5 | Active-filter indicator + clear-all button appear | Pass — "2 of 3 selected" |
-| E6 | Clear-all restores all 25 institutions | Pass |
+| E6 | Clear-all restores all 26 institutions | Pass |
 | E7 | English filter combines with the city filter | Pass — Vilnius-only subset |
 | E8 | Alternative-certificate result (14) and no IELTS/PTE/TOEFL anywhere in the alternative lists or chips | Pass |
 | E9 | 390 px mobile: single column, no horizontal overflow | Pass |

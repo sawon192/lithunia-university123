@@ -7,9 +7,10 @@
  * esbuild that already ships in node_modules, then executes it in Node).
  * Exits non-zero on any failure.
  */
-import { assessProfile } from "../src/lib/eligibility.ts";
+import { assessProfile, entryRules } from "../src/lib/eligibility.ts";
 import { checkOmptResult, getOmpt, omptBySlug, requiresOmpt } from "../src/lib/ompt.ts";
 import { derivedGapYears, effectiveGapYears, latestPassingYear, ratioCandidate } from "../src/lib/student-profile.ts";
+import { getEnglishAlternatives } from "../src/lib/english-alternatives.ts";
 import { getInstitution, institutions } from "../src/lib/research.ts";
 
 const results: { name: string; pass: boolean; detail: string }[] = [];
@@ -31,11 +32,11 @@ const without = institutions.filter((i) => !requiresOmpt(getOmpt(i.slug)));
 rec("O1. Every institution has an OMPT record", institutions.every((i) => omptBySlug[i.slug] !== undefined),
   `${Object.keys(omptBySlug).length} records / ${institutions.length} institutions`);
 
-rec("O2. With-OMPT set is 5 and Without-OMPT is 20", withOmpt.length === 5 && without.length === 20,
+rec("O2. With-OMPT set is 5 and Without-OMPT is 21", withOmpt.length === 5 && without.length === 21,
   `with=${withOmpt.length} without=${without.length} → ${withOmpt.map((i) => i.abbreviation).join(", ")}`);
 
 const silent = institutions.filter((i) => getOmpt(i.slug).status === "unconfirmed");
-rec("O3. Silence is 'unconfirmed', never 'none'", silent.length === 19 && !Object.values(omptBySlug).some((p) => (p.status as string) === "none"),
+rec("O3. Silence is 'unconfirmed', never 'none'", silent.length === 20 && !Object.values(omptBySlug).some((p) => (p.status as string) === "none"),
   `${silent.length} unconfirmed, 0 silently exempt`);
 
 const published = Object.entries(omptBySlug).filter(([, p]) => p.minimumPercent !== undefined);
@@ -160,6 +161,19 @@ const vbcLow = assessProfile({ ...base, qualifications: [{ id: "1", type: "diplo
 rec("D4. A diploma below VBC's published 60% is failed, not waved through",
   vbcLow.academicCheck === "fail" && vbcLow.verdict === "not-eligible",
   "2.2/4.00 = 55% < 60%");
+const likRule = entryRules["lithuanian-engineering-college"]!;
+rec("E1. LIK accepts the British Council EnglishScore at 400",
+  likRule.bachelor.english.tests.englishScore === 400 &&
+  getEnglishAlternatives("lithuanian-engineering-college").alternativeEnglishCertificates.includes("EnglishScore (British Council)"),
+  `EnglishScore ${likRule.bachelor.english.tests.englishScore}, level ${likRule.bachelor.english.cefr}`);
+const likPass = assessProfile({ ...base, englishTest: "englishScore" as const, englishScore: 420 })
+  .find((r) => r.institution.slug === "lithuanian-engineering-college");
+const likFail = assessProfile({ ...base, englishTest: "englishScore" as const, englishScore: 380 })
+  .find((r) => r.institution.slug === "lithuanian-engineering-college");
+rec("E2. EnglishScore is judged against LIK's published 400, both directions",
+  likPass.englishCheck === "pass" && likFail.englishCheck === "pending",
+  `420 → ${likPass.englishCheck}, 380 → ${likFail.englishCheck}`);
+
 rec("D5. Kauno kolegija's published 4-year Diploma in Engineering route passes",
   diploma.find((r) => r.institution.slug === "kauno-kolegija").routeCheck === "pass" &&
   getInstitution("kauno-kolegija")!.diplomaCgpa.diploma === "accepted",
