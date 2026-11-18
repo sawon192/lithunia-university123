@@ -31,11 +31,11 @@ const without = institutions.filter((i) => !requiresOmpt(getOmpt(i.slug)));
 rec("O1. Every institution has an OMPT record", institutions.every((i) => omptBySlug[i.slug] !== undefined),
   `${Object.keys(omptBySlug).length} records / ${institutions.length} institutions`);
 
-rec("O2. With-OMPT set is 5 and Without-OMPT is 19", withOmpt.length === 5 && without.length === 19,
+rec("O2. With-OMPT set is 5 and Without-OMPT is 20", withOmpt.length === 5 && without.length === 20,
   `with=${withOmpt.length} without=${without.length} → ${withOmpt.map((i) => i.abbreviation).join(", ")}`);
 
 const silent = institutions.filter((i) => getOmpt(i.slug).status === "unconfirmed");
-rec("O3. Silence is 'unconfirmed', never 'none'", silent.length === 18 && !Object.values(omptBySlug).some((p) => (p.status as string) === "none"),
+rec("O3. Silence is 'unconfirmed', never 'none'", silent.length === 19 && !Object.values(omptBySlug).some((p) => (p.status as string) === "none"),
   `${silent.length} unconfirmed, 0 silently exempt`);
 
 const published = Object.entries(omptBySlug).filter(([, p]) => p.minimumPercent !== undefined);
@@ -59,6 +59,11 @@ rec("O9. KTU: OMPT-D 60% fails on score", !checkOmptResult(ktu, { version: "D", 
 rec("O10. KTU: OMPT-C is not a named version", !checkOmptResult(ktu, { version: "C", scorePercent: 90 }).ok,
   checkOmptResult(ktu, { version: "C", scorePercent: 90 }).reasons[0]);
 rec("O11. KU silence never passes", !requiresOmpt(getOmpt("klaipeda-university")), "status " + getOmpt("klaipeda-university").status);
+
+const ksu = getOmpt("kazimieras-simonavicius-university");
+rec("O12. KSU publishes no OMPT rule, so it is 'unconfirmed', not exempt",
+  ksu.status === "unconfirmed" && !requiresOmpt(ksu) && ksu.minimumPercent === undefined,
+  `status ${ksu.status}, no score published, alternative: ${ksu.alternative}`);
 
 /* ── 3. Passing-year auto gap ───────────────────────────────────────── */
 const quals = [
@@ -132,7 +137,7 @@ const override = assessProfile({
   qualifications: [{ id: "1", type: "hsc", grade: 4.8, maxGrade: 5, passingYear: 2015 }],
 });
 rec("G7. An override replaces the derived figure in every row", override.every((r) => r.gapYears === 1 && r.gapSource === "override"),
-  "1 year in all 24 rows");
+  "1 year in all 25 rows");
 
 /* ── 7. Diploma route + legacy compatibility ────────────────────────── */
 const diploma = assessProfile({ ...base, hasDiploma: true, diplomaGrade: 3.2, diplomaMax: 4, hscGpa: undefined });

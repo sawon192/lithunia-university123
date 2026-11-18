@@ -322,6 +322,20 @@ export const entryRules: Record<string, InstitutionRule> = {
     notes: ["A gap of three or more years after high school may trigger additional knowledge tests.", "The motivational letter is screened with specialised software and must be written without AI assistance."],
     maxGapYears: 3,
   },
+  "kazimieras-simonavicius-university": {
+    slug: "kazimieras-simonavicius-university", levels: ["Bachelor", "Master"],
+    bachelor: {
+      grade: { metric: "none", note: "A completed secondary education is required, with proof of final-year school examinations in Mathematics and one other subject (Mathematics may be replaced by a science, IT or — for commerce profiles — commerce subject). KSU publishes no numerical grade minimum for foreign qualifications: eligibility is decided by document assessment plus the recorded interview.", status: "unconfirmed" },
+      english: { tests: {}, cefr: "B2", moi: "conditional", note: "No certificate is mandatory at Bachelor's level — an English certificate or test may be submitted, but KSU assesses English in the recorded introductory or University interview in every case. No numeric IELTS/TOEFL/PTE/Duolingo band is published.", status: "published" },
+    },
+    master: {
+      grade: { metric: "none", note: "An undergraduate diploma in the Bachelor's fields the programme names (Management, Business and other Social Sciences; Communication and other Social Sciences for Strategic Communication Studies). No published CGPA minimum.", status: "unconfirmed" },
+      english: { tests: {}, cefr: "B2", moi: "conditional", note: "B2 required: either an English grade of 8 or higher in the Bachelor's diploma supplement, or an internationally recognised certificate or test at B2+ (IELTS or TOEFL named as examples). KSU states the interview assessment takes priority over submitted certificates. No numeric band is published, so no PTE or Duolingo minimum is recorded.", status: "published" },
+    },
+    conditions: ["Motivation letter covering choice of field, financial planning, experience since the last qualification and future plans", "Recorded online University interview (an additional interview if the first is unsatisfactory)", "Full 1.5-year tuition paid in advance before acceptance and TRP support"],
+    notes: ["Entries are applied for through apply.ksu.lt (DreamApply); only one degree programme per applicant, and only one account is permitted.", "The €250 application registration fee is non-refundable even if the interview or document assessment fails.", "An academic gap of one to five years is generally acceptable; a longer gap may stop the application from being processed further."],
+    maxGapYears: 5,
+  },
 
   /* Colleges */
   "kauno-kolegija": {

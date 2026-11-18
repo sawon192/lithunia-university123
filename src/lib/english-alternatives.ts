@@ -212,6 +212,26 @@ export const englishAlternativesBySlug: Record<string, EnglishAlternatives> = {
     englishRequirementVerifiedAt: ON,
     englishRequirementStatus: "officially_confirmed",
   },
+  "kazimieras-simonavicius-university": {
+    moiAccepted: "conditional",
+    moiConditions:
+      "KSU does not require a certificate at all at Bachelor's level: an applicant may submit one, but English is assessed in the recorded interview regardless. At Master's level an English grade of 8 or higher in the Bachelor's diploma supplement removes the need for any certificate. KSU states the interview assessment takes priority over submitted grades, certificates and test results, so nothing is a guaranteed waiver.",
+    internalEnglishTest: {
+      available: true,
+      name: "Recorded University admission interview (English assessment)",
+      fee: "No separate fee — part of the admission process after the €250 registration fee",
+      format: "Recorded interview submitted through the KSU admission system (camera and microphone required)",
+      minimumLevel: "B2 at Master's level; assessed, not scored, at Bachelor's level",
+      notes:
+        "If the introductory interview is not judged satisfactory, KSU requires an additional University interview. No separate English placement test or English course fee is published.",
+    },
+    alternativeEnglishCertificates: [],
+    englishRequirementNotes:
+      "Bachelor's: a certificate or test result is optional — English is assessed in the recorded interview. Master's: either an English grade of 8+ in the Bachelor's diploma supplement, or an internationally recognised certificate/test at B2 or above (KSU names IELTS and TOEFL as examples). KSU publishes no numeric IELTS, TOEFL, PTE or Duolingo band at either level.",
+    englishRequirementSource: "ksuMAOrg",
+    englishRequirementVerifiedAt: ON,
+    englishRequirementStatus: "officially_confirmed",
+  },
   "kauno-kolegija": {
     moiAccepted: "not_accepted",
     moiConditions: "Kauno kolegija states explicitly that a Medium of Instruction letter is not accepted as proof of English proficiency.",
@@ -431,6 +451,7 @@ export const standardScoresBySlug: Record<string, StandardScores> = {
   "vilnius-academy-of-arts": { ielts: "5.5 (2026/27 MA instructions)", pte: NP, toefl: "75 (2026/27)" },
   "kaunas-university-of-technology": { ielts: "5.5 Bachelor / 6.0 Master", pte: "Not named in the published list", toefl: "75 Bachelor / 85 Master" },
   "mykolas-romeris-university": { ielts: "5.5–6.5", pte: "59–75", toefl: "72–94 iBT" },
+  "kazimieras-simonavicius-university": { ielts: NP25, pte: NP25, toefl: NP25 },
   "kauno-kolegija": { ielts: "5.5+", pte: "59+", toefl: "75+" },
   "lithuania-business-college": { ielts: NP, pte: NP, toefl: NP },
   "utenos-kolegija": { ielts: NP, pte: NP, toefl: NP },

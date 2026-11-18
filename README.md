@@ -8,7 +8,7 @@ A source-linked Lithuania university admissions guide **and** a student applicat
 Bangladeshi applicants, built with Next.js 16 (App Router, Turbopack), React 19, TypeScript and
 Tailwind CSS 4.
 
-- **Public site** — 24 researched institution profiles (13 universities + 11 colleges), the
+- **Public site** — 25 researched institution profiles (14 universities + 11 colleges), the
   eight-point admission research table per institution, programme spotlight, shortlist, and a
   multi-step September 2027 application form.
 - **Admin desk** — protected `/admin` area with dashboard counters, student table, filters,
@@ -148,7 +148,7 @@ schemas, and asserts the consent constraint and audit trigger behave correctly.
 
 | Route | Type | Description |
 |---|---|---|
-| `/` | static | Home, directory of 24 institutions |
+| `/` | static | Home, directory of 25 institutions |
 | `/universities/[slug]` | dynamic | Research profile: 8-point table, programmes, Bangladesh lens, sources |
 | `/shortlist` | static | Saved institutions + shareable link generator |
 | `/s/[slug]` | dynamic | Public read-only shared shortlist |
@@ -231,6 +231,41 @@ Explicitly flagged rather than invented: KTU's 2027/28 fee table, its Bangladesh
 list, MRU's 2027–28 tuition, and MRU's Alim / Diploma-in-Engineering exclusions (which MRU states
 positively).
 
+### What was added for KSU
+
+**Kazimieras Simonavičius University (KSU)** — Vilnius, private, slug
+`kazimieras-simonavicius-university`. Sources: `apply.ksu.lt` (its DreamApply international portal:
+application overview, 2027/28 programme catalogue and every programme page), plus
+`ksu.lt/en/admission-2027/`.
+
+Everything below is what KSU has published for the **Fall 2027/28** cycle:
+
+| Item | Published detail |
+|---|---|
+| Application fee | €250 non-refundable, paid by Flywire once the admissions team invites the applicant forward. Reduced €100 for Lithuanian applicants |
+| Applications open | 5 Nov 2026 (Business Management, Aviation Management, Communication and Digital Media); 1 Dec 2026 (Fashion Business and Communication, Film Business Management); 15 Oct 2026 (MA Fashion Management) |
+| Deadline | 1 March 2027, 23:59:59 EET — the same date on every open programme |
+| Studies begin | 1 October 2027 |
+| Bachelor's entry | Completed secondary education **plus** final-year exam proof in Mathematics and one other subject (Math replaceable by science/IT/commerce). Communication and Fashion instead require two subjects of choice |
+| Master's entry | Undergraduate diploma in the named fields (Management, Business and other Social Sciences; Communication for Strategic Communication Studies) |
+| English | Bachelor's: a certificate is **optional** — English is assessed in the recorded interview. Master's: diploma-supplement English grade 8+, or any B2+ certificate/test (IELTS/TOEFL named as examples). **No numeric band is published at either level** |
+| Tuition | €2,450/semester (BA Business Management, Communication, Fashion, Film); €6,000/year (BA Aviation); €4,000/semester (MA Aviation); €3,450/semester (MBA); €9,300/programme (MA Organizational Innovation, MA Strategic Communication); €7,800/programme (MA Fashion) |
+| Payment schedule | The **first payment must cover three semesters (1.5 years)** on the semester-priced bachelor's programmes, or the full programme fee on the 1.5-year master's — required before acceptance and before KSU will support a TRP application |
+| Study gap | 1–5 years generally acceptable; longer is treated as an academic risk factor that can stop processing |
+| OMPT | **Not mentioned anywhere** — recorded as `unconfirmed`, never as an exemption. The only maths element is the final-year Mathematics exam proof |
+
+Recorded as **unconfirmed rather than invented**: KSU's country-specific requirements page is served
+behind a security check that returned HTTP 454 to this build, so no Bangladesh-specific document list
+or HSC GPA threshold could be read. KSU's programme pages publish no numeric grade minimum for
+foreign qualifications either, so the profile says so in writing instead of quoting a number.
+The Admission 2027 page also shows a €200 fee figure in one block, which conflicts with the €250 on
+the portal and every programme page — that conflict is recorded, not resolved by guessing.
+
+KSU's English route is the one genuinely unusual finding here: it is the first institution in this
+guide where a **Bachelor's applicant can be admitted without any English certificate at all**, because
+KSU assesses English inside the mandatory recorded interview. The profile states that explicitly —
+and also states that this is an assessment, not a waiver a student can rely on in advance.
+
 ### English Test Alternatives
 
 A second, purpose-built layer sits on top of the eight research rows:
@@ -259,10 +294,10 @@ Published IELTS / PTE / TOEFL bands live next to it in `standardScoresBySlug` an
 
 | Filter option | Institutions | Which ones |
 |---|---|---|
-| MOI Accepted | **7** | Accepted: VMU, KVK. Conditional: VU, VILNIUS TECH, ISM, KTU, MRU |
-| University Internal English Test | **7** | KTU (free), MRU (free), VIKO (free), ISM, Kauno kolegija (€45), Alytus (€45), SMK (€50) |
+| MOI Accepted | **8** | Accepted: VMU, KVK. Conditional: VU, VILNIUS TECH, ISM, KTU, MRU, **KSU** |
+| University Internal English Test | **8** | KTU (free), MRU (free), VIKO (free), ISM, **KSU (recorded interview)**, Kauno kolegija (€45), Alytus (€45), SMK (€50) |
 | Alternative English Certificate | **14** | Duolingo, LanguageCert IESOL, Cambridge, EF SET, EnglishScore, IGCSE |
-| Any of the three | **16** | the union of the above |
+| Any of the three | **17** | the union of the above |
 
 **Explicitly *not* accepted:** LSU, LCC, Kauno kolegija and its Alytus faculty refuse an MOI
 certificate as proof of English — they are shown as "Not accepted", never as unknown.
@@ -307,11 +342,11 @@ read from it — so a count in the UI can never disagree with a verdict in a rep
 | Filter | Institutions | Which ones |
 |---|---|---|
 | **With OMPT** | **5** | VU (by programme, from 55%), VILNIUS TECH (≥60% / ≥50%), VMU (by programme, from 55%), KTU (A/D, 75%), MRU (A/D, 75%) |
-| **Without OMPT** | **19** | 5 universities + 14 colleges |
+| **Without OMPT** | **20** | 6 universities + 14 colleges |
 
 Two rules were applied rather than assumed:
 
-- **Silence is not an exemption.** 18 institutions publish no OMPT rule at all; they are recorded as
+- **Silence is not an exemption.** 19 institutions publish no OMPT rule at all (KSU among them); they are recorded as
   `unconfirmed`, counted under *Without OMPT* (no published obligation) and never rendered as
   "OMPT not required". The profile panel says so in writing.
 - **A published alternative is never called an exemption.** LSU and ISM run their own maths
@@ -472,7 +507,7 @@ in local mode, plus real PostgreSQL DDL for the migrations.
 
 | # | Test | Result |
 |---|---|---|
-| 1 | Homepage renders, counters show 24 / 13 / 14 | Pass |
+| 1 | Homepage renders, counters show 25 / 14 / 11 | Pass |
 | 2 | Directory search & filters | Pass (unchanged component) |
 | 3 | KTU profile (dates, fees, OMPT, sources, status panel) | Pass |
 | 4 | MRU profile (Bangladesh table, OMPT, exclusions) | Pass |
@@ -505,7 +540,7 @@ requires `npm run start` on port 3100 and `playwright` installed locally). **11/
 | E3 | MOI Accepted alone → 7 institutions | Pass |
 | E4 | Two options selected → union of 11, shared institutions counted once | Pass |
 | E5 | Active-filter indicator + clear-all button appear | Pass — "2 of 3 selected" |
-| E6 | Clear-all restores all 24 institutions | Pass |
+| E6 | Clear-all restores all 25 institutions | Pass |
 | E7 | English filter combines with the city filter | Pass — Vilnius-only subset |
 | E8 | Alternative-certificate result (14) and no IELTS/PTE/TOEFL anywhere in the alternative lists or chips | Pass |
 | E9 | 390 px mobile: single column, no horizontal overflow | Pass |

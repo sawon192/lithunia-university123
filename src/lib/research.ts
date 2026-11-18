@@ -104,6 +104,21 @@ export const sources = {
   mruLawTech: { label: "MRU MA Law, Technology and Business", url: "https://www.mruni.eu/en/study_program/law-technology-and-business/" },
   mruBizEcon: { label: "MRU MA Business Economics and Sustainable Development", url: "https://www.mruni.eu/en/study_program/business-economics-and-sustainable-development/" },
   mruFunding: { label: "MRU funding and scholarships", url: "https://www.mruni.eu/en/funding-and-scholarships/" },
+  // Kazimieras Simonavičius University (KSU)
+  ksuHome: { label: "KSU official site", url: "https://ksu.lt/en/" },
+  ksuAdmission2027: { label: "KSU Admission 2027", url: "https://ksu.lt/en/admission-2027/" },
+  ksuApply: { label: "KSU international application portal (apply.ksu.lt)", url: "https://apply.ksu.lt/en_GB/" },
+  ksuCatalogue: { label: "KSU 2027/28 programme catalogue", url: "https://apply.ksu.lt/en_GB/courses/search" },
+  ksuBA: { label: "KSU BA Business Management", url: "https://apply.ksu.lt/en_GB/courses/course/34-ba-business-management" },
+  ksuAviation: { label: "KSU BA Aviation Management", url: "https://apply.ksu.lt/en_GB/courses/course/32-ba-aviation-management" },
+  ksuComm: { label: "KSU BA Communication and Digital Media", url: "https://apply.ksu.lt/en_GB/courses/course/45-ba-communication-and-digital-media" },
+  ksuFashion: { label: "KSU BA Fashion Business and Communication", url: "https://apply.ksu.lt/en_GB/courses/course/18-ba-fashion-business-and-communication" },
+  ksuFilm: { label: "KSU BA Film Business Management", url: "https://apply.ksu.lt/en_GB/courses/course/44-ba-film-business-management" },
+  ksuMAOrg: { label: "KSU MA Organizational Innovation and Management", url: "https://apply.ksu.lt/en_GB/courses/course/36-ma-organizational-innovation-and-management" },
+  ksuMAStrat: { label: "KSU MA Strategic Communication Studies", url: "https://apply.ksu.lt/en_GB/courses/course/23-ma-strategic-communication-studies" },
+  ksuMAAviation: { label: "KSU MA Aviation Management", url: "https://apply.ksu.lt/en_GB/courses/course/43-ma-aviation-management" },
+  ksuMAFashion: { label: "KSU MA Fashion Management", url: "https://apply.ksu.lt/en_GB/courses/course/46-ma-fashion-management" },
+  ksuMBA: { label: "KSU Master of Business Administration (MBA)", url: "https://apply.ksu.lt/en_GB/courses/course/56-ma-master-business-administration-mba" },
   // Colleges
   kkApply: { label: "Kauno kolegija application", url: "https://kaunokolegija.lt/english/application/" },
   kkRules: { label: "KK admission procedure PDF", url: "https://kaunokolegija.lt/english/wp-content/uploads/sites/13/2025/12/PROCEDURE-FOR-THE-ADMISSION-OF-PERSONS-EDUCATED-ABROAD-TO-ENGLISH-TAUGHT-STUDY-PROGRAMMES-IN-2026.pdf" },
@@ -1132,6 +1147,186 @@ export const universities: University[] = [
       ],
     },
     officialLinks: ["mruAdmission", "mruCountry", "mruApply", "mruPsych", "mruOMPT"],
+  },
+  {
+    slug: "kazimieras-simonavicius-university",
+    name: "Kazimieras Simonavičius University",
+    abbreviation: "KSU",
+    city: "Vilnius",
+    accent: "#3c5f7a",
+    initial: "KS",
+    area: "Business · Aviation · Communication · Creative industries",
+    status: "dates",
+    verifiedOn: "17 November 2026",
+    description:
+      "A private university in Vilnius (formerly the Vilnius Academy of Business Law) with a business, aviation and creative-industries focus. KSU has already published its full September 2027 cycle on its own DreamApply portal, including per-programme tuition, deadlines and entry requirements.",
+    feeSummary: "€250",
+    deadlineSummary: "1 March 2027",
+    facts: {
+      fee: [
+        fact(
+          "€250 non-refundable application registration fee for international applicants, paid once the admissions team has reviewed the submitted application and invited the applicant to the next stage. A reduced €100 fee applies to Lithuanian applicants. Payment is accepted only through Flywire, using the link on the invoice the University issues; the applicant bears the international transfer charge.",
+          ["ksuApply", "ksuAdmission2027"]
+        ),
+        fact(
+          "The fee is non-refundable in every case, including an unsatisfactory interview, a failed academic assessment, unacceptable documents, or withdrawal — and paying it does not guarantee admission. KSU publishes this in bold on its application portal.",
+          ["ksuApply"]
+        ),
+        fact(
+          "Two further administrative charges are published: a €250 re-registration fee to change programme before an Acceptance Letter is issued, and a €500 study-place change fee after it is issued (plus any tuition difference). Duplicate DreamApply accounts can attract a €25 surcharge per duplicate application.",
+          ["ksuApply"]
+        ),
+        earlier(
+          "One block of the Admission 2027 page also states a standard fee of €200 alongside the €250 figure. The application portal and every programme page show €250, so budget €250 and confirm the amount on the invoice before paying.",
+          ["ksuAdmission2027", "ksuBA"]
+        ),
+      ],
+      opening: [
+        fact(
+          "KSU has opened the Fall semester 2027/28 cycle: applications for BA Business Management, BA Aviation Management and BA Communication and Digital Media opened on 5 November 2026; BA Fashion Business and Communication and BA Film Business Management open on 1 December 2026; MA Fashion Management opened on 15 October 2026.",
+          ["ksuBA", "ksuAviation", "ksuComm", "ksuFashion", "ksuFilm", "ksuMAFashion"]
+        ),
+        fact(
+          "A spring semester 2027 round runs in parallel for some programmes: the MBA closed on 31 December 2026 for a March 2027 start, and MA Organizational Innovation and Management closed its spring round on 1 November 2026 for a 1 March 2027 start.",
+          ["ksuMBA", "ksuMAOrg"]
+        ),
+        fact(
+          "Only one degree programme may be chosen per application. KSU states that an applicant may hold only one DreamApply account, and that programme availability can differ by citizenship and intake — if a programme is not shown after selecting citizenship, a quota or restriction is in force.",
+          ["ksuApply"]
+        ),
+      ],
+      deadline: [
+        fact(
+          "1 March 2027, 23:59:59 Eastern European Time is the published application deadline for the September 2027 (Fall 2027/28) intake on every open bachelor's and most master's programmes.",
+          ["ksuBA", "ksuAviation", "ksuComm", "ksuFashion", "ksuFilm", "ksuMAOrg"]
+        ),
+        fact(
+          "Studies for the Fall 2027/28 intake commence on 1 October 2027.",
+          ["ksuBA", "ksuAviation"]
+        ),
+        pending(
+          "a Bangladesh-specific deadline or earlier document cut-off. KSU applies the single 1 March 2027 date to all non-EU applicants on the programme pages consulted, but the country-specific requirements page is served behind a security check that blocked retrieval, so no separate Bangladesh date could be read.",
+          ["ksuAdmission2027"]
+        ),
+      ],
+      academic: [
+        fact(
+          "Bachelor's entry: completed secondary education. Applicants must also show proof of completed final-year school examinations in Mathematics and one other subject of choice; Mathematics may be replaced by a science or IT subject, and commerce-profile candidates may substitute any commerce-related subject. BA Communication and Digital Media and BA Fashion Business and Communication instead require two subjects of choice.",
+          ["ksuBA", "ksuAviation", "ksuComm", "ksuFashion"]
+        ),
+        fact(
+          "Entry qualification documents are accepted in English only. On-campus students must bring and submit the originals on arrival in Lithuania; online-format students submit originals only at the final stage if they come to Lithuania.",
+          ["ksuBA", "ksuMAOrg"]
+        ),
+        fact(
+          "Master's entry: an undergraduate diploma, with the accepted Bachelor's fields named per programme (Management, Business and other Social Sciences for the MBA, Organizational Innovation and Management, Fashion Management and Aviation Management; Communication and other Social Sciences for Strategic Communication Studies).",
+          ["ksuMBA", "ksuMAOrg", "ksuMAStrat", "ksuMAFashion", "ksuMAAviation"]
+        ),
+        fact(
+          "Academic gap: KSU assesses the period since the applicant's previous formal education. A gap of one to five years is generally acceptable at Bachelor's and Master's level; a longer gap is treated as an academic risk factor and the application may not be accepted for further processing.",
+          ["ksuApply"]
+        ),
+        pending(
+          "a Bangladesh-specific minimum HSC GPA or grade average. KSU's programme pages state no numerical grade minimum for foreign qualifications — entry is decided by document assessment plus the recorded interview — and the country-specific requirements page could not be retrieved, so no Bangladesh threshold is recorded here.",
+          ["ksuBA"]
+        ),
+      ],
+      english: [
+        fact(
+          "Bachelor's level: an English language certificate or test result may be submitted but is explicitly not mandatory. KSU states that the applicant's English — pronunciation, clarity of speech and ability to communicate in an academic environment — is assessed in the recorded introductory or University interview in every case.",
+          ["ksuBA", "ksuComm", "ksuFashion", "ksuAviation"]
+        ),
+        fact(
+          "Master's level: evidence is either an English language grade of 8 or higher in the Bachelor's diploma supplement, or an internationally recognised certificate or test confirming B2 or above (KSU names IELTS and TOEFL as examples). No additional certificate is required if the diploma grade requirement is met, and KSU states the interview assessment takes priority over submitted grades, certificates and test results.",
+          ["ksuMAOrg", "ksuMAAviation", "ksuMAFashion", "ksuMAStrat"]
+        ),
+        pending(
+          "a named IELTS/TOEFL/PTE/Duolingo score band. KSU publishes no numeric minimum for any test — only 'B2 or higher' at Master's level — so no score can be quoted to a student.",
+          ["ksuMAOrg"]
+        ),
+      ],
+      tuition: [
+        fact(
+          "Published 2027/28 tuition: BA Business Management, BA Communication and Digital Media, BA Fashion Business and Communication and BA Film Business Management are €2,450 per semester (€4,900 per academic year) on campus; BA Aviation Management is €6,000 per year; BA Business Management in the online-plus-final-semester format is €1,500 per semester.",
+          ["ksuBA", "ksuComm", "ksuFashion", "ksuFilm", "ksuAviation"]
+        ),
+        fact(
+          "Published 2027/28 Master's tuition: MA Aviation Management €4,000 per semester; MBA €3,450 per semester; MA Organizational Innovation and Management €9,300 per programme (1.5 years); MA Strategic Communication Studies €9,300 per programme; MA Fashion Management €7,800 per programme; the online-plus-final-semester master's variants are €2,100 per semester.",
+          ["ksuMAAviation", "ksuMBA", "ksuMAOrg", "ksuMAStrat", "ksuMAFashion"]
+        ),
+        fact(
+          "Payment schedule for applicants from abroad: the first mandatory payment must cover three semesters (1.5 years of study) on the €2,450-per-semester bachelor's programmes, and the full programme fee for the whole 1.5-year period on the master's programmes, before KSU can accept the applicant and support a temporary residence permit application.",
+          ["ksuBA", "ksuMAOrg", "ksuMAFashion"]
+        ),
+        pending(
+          "scholarships, discounts or tuition reductions for international students in the 2027/28 cycle. No scholarship scheme appears on the programme pages or the application portal consulted.",
+          ["ksuApply"]
+        ),
+      ],
+      programmes: [
+        fact(
+          "KSU's 2027/28 catalogue lists 6 bachelor's programmes: Aviation Management (3.5 years, 210 ECTS), Business Management (3.5 years, 210 ECTS), Business Management in the online-plus-final-semester format (3.5 years, distance learning), Communication and Digital Media (3.5 years), Fashion Business and Communication (3.5 years) and Film Business Management (3 years, 180 ECTS).",
+          ["ksuCatalogue", "ksuBA", "ksuAviation", "ksuComm", "ksuFashion", "ksuFilm"]
+        ),
+        fact(
+          "The same catalogue lists 7 master's programmes: Aviation Management (1.5 years, 90 ECTS), Fashion Management (1.5 years), Master of Business Administration (1 year, 60 ECTS), Organizational Innovation and Management (1.5 years) and its online variant, Strategic Communication Studies (1.5 years) and its online variant.",
+          ["ksuCatalogue", "ksuMAAviation", "ksuMAFashion", "ksuMBA", "ksuMAOrg", "ksuMAStrat"]
+        ),
+        fact(
+          "BA Film Business Management is flagged on its own programme page as 'Programme is being accredited', so its status for the 2027/28 intake should be confirmed before a student relies on it.",
+          ["ksuFilm"]
+        ),
+      ],
+      ompt: [
+        pending(
+          "OMPT: no OMPT requirement, version, passing score or exemption is published on any KSU programme page or on the application portal. The only mathematics element published is proof of a Mathematics (or science/IT/commerce substitute) exam in the final school year. Silence is not a formal exemption — confirm with KSU admissions before assuming no test is needed.",
+          ["ksuBA", "ksuAviation", "ksuApply"]
+        ),
+      ],
+    },
+    featuredProgrammes: [
+      { name: "Business Management", level: "Bachelor", duration: "3.5 years", language: "English", intake: "October 2027", tuition: "€4,900 / year · 2 × €2,450 semester", source: "ksuBA" },
+      { name: "Aviation Management", level: "Bachelor", duration: "3.5 years", language: "English", intake: "October 2027", tuition: "€6,000 / year", source: "ksuAviation" },
+      { name: "Communication and Digital Media", level: "Bachelor", duration: "3.5 years", language: "English", intake: "October 2027", tuition: "€4,900 / year · 2 × €2,450 semester", source: "ksuComm" },
+      { name: "Fashion Business and Communication", level: "Bachelor", duration: "3.5 years", language: "English", intake: "October 2027", tuition: "€4,900 / year · 2 × €2,450 semester", source: "ksuFashion" },
+      { name: "Organizational Innovation and Management", level: "Master", duration: "1.5 years", language: "English", intake: "October 2027", tuition: "€6,200 / year · €9,300 per 1.5-year programme", source: "ksuMAOrg" },
+      { name: "Aviation Management", level: "Master", duration: "1.5 years", language: "English", intake: "October 2027", tuition: "€8,000 / year · 2 × €4,000 semester", source: "ksuMAAviation" },
+    ],
+    eligibility:
+      "Probably, subject to document assessment. KSU publishes no numerical HSC GPA minimum for foreign qualifications: a completed secondary education with final-year exam proof in Mathematics (or a science/IT/commerce substitute) plus one other subject is what is published, and the decision is made by document review plus a recorded interview. English is assessed in that interview, so an IELTS certificate is not compulsory at Bachelor's level.",
+    bestFor: [
+      "Aviation Management · applicants targeting airlines, airports and ground handling",
+      "Business Management · applicants wanting a semester-based fee and a recorded-interview entry route",
+      "Communication and Digital Media · media, brand and social-media careers",
+    ],
+    importantNotes: [
+      fact(
+        "Budget the first payment at 1.5 years, not one semester: on-campus bachelor's applicants from abroad must pay three semesters (€7,350 on the €2,450/semester programmes) before KSU accepts them and issues the documents for a temporary residence permit.",
+        ["ksuBA"]
+      ),
+      fact(
+        "A motivation letter addressing four points — choice of field, financial planning, academic and professional experience since the last qualification, and future plans — is mandatory, and a recorded interview through the admission system is a required stage. If the introductory interview is judged unsatisfactory, an additional University interview is required.",
+        ["ksuBA", "ksuApply"]
+      ),
+      fact(
+        "A study gap longer than five years is treated as an academic risk factor that can stop the application from being processed further. A student who finished HSC more than five years ago should expect the gap to be examined rather than assumed acceptable.",
+        ["ksuApply"]
+      ),
+      fact(
+        "The application fee is non-refundable even if the interview or document assessment fails, so the documents should be checked before payment. Programme changes afterwards cost €250 (before the Acceptance Letter) or €500 (after it), plus any tuition difference.",
+        ["ksuApply"]
+      ),
+    ],
+    diplomaCgpa: {
+      diploma: "unconfirmed",
+      diplomaSummary: "No published diploma route",
+      cgpaSummary: "No published grade minimum",
+      facts: [
+        fact("Bachelor's entry is a completed secondary education with proof of final-year examinations in Mathematics and one other subject (Mathematics replaceable by a science, IT or — for commerce profiles — commerce subject). No numeric grade minimum is published for foreign qualifications.", ["ksuBA", "ksuAviation"]),
+        pending("how a Bangladesh Diploma-in-Engineering is treated at entry, and whether it can replace the secondary-education requirement. No statement appears on the programme pages or the application portal consulted.", ["ksuApply"]),
+      ],
+    },
+    officialLinks: ["ksuAdmission2027", "ksuApply", "ksuCatalogue", "ksuBA", "ksuAviation"],
   },
 ];
 
