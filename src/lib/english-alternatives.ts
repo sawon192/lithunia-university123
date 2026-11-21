@@ -145,10 +145,10 @@ export const englishAlternativesBySlug: Record<string, EnglishAlternatives> = {
       available: false,
       notes: "VMU states it does not organise an English admissions test.",
     },
-    alternativeEnglishCertificates: ["Duolingo English Test"],
+    alternativeEnglishCertificates: ["Duolingo English Test", "EnglishScore (British Council)", "Cambridge English", "IGCSE / GCSE English"],
     englishRequirementNotes:
-      "When previous studies were not in English, recent valid B2 evidence is required: IELTS 5.5–6.5, TOEFL iBT 87–109, PTE 59, Duolingo 100–125. The programme sets its point within the range.",
-    englishRequirementSource: "vmuApply",
+      "When previous studies were not in English, recent valid B2 evidence is required: IELTS 5.5–6.5, TOEFL iBT 87–109, PTE Academic 59, Duolingo 100–125, EnglishScore 400–499 (CoreSkills), Cambridge FCE or BEC Vantage 161–180, Michigan ECCE 650+, PTE General Level 3, TOEIC 785 (L&R) / 310 (S&W), or Cambridge IGCSE English First or Second Language grade B. The programme sets its point within the range.",
+    englishRequirementSource: "vmuFaq",
     englishRequirementVerifiedAt: ON,
     englishRequirementStatus: "officially_confirmed",
   },
@@ -212,6 +212,26 @@ export const englishAlternativesBySlug: Record<string, EnglishAlternatives> = {
     englishRequirementVerifiedAt: ON,
     englishRequirementStatus: "officially_confirmed",
   },
+  "kazimieras-simonavicius-university": {
+    moiAccepted: "conditional",
+    moiConditions:
+      "KSU does not require a certificate at all at Bachelor's level: an applicant may submit one, but English is assessed in the recorded interview regardless. At Master's level an English grade of 8 or higher in the Bachelor's diploma supplement removes the need for any certificate. KSU states the interview assessment takes priority over submitted grades, certificates and test results, so nothing is a guaranteed waiver.",
+    internalEnglishTest: {
+      available: true,
+      name: "Recorded University admission interview (English assessment)",
+      fee: "No separate fee — part of the admission process after the €250 registration fee",
+      format: "Recorded interview submitted through the KSU admission system (camera and microphone required)",
+      minimumLevel: "B2 at Master's level; assessed, not scored, at Bachelor's level",
+      notes:
+        "If the introductory interview is not judged satisfactory, KSU requires an additional University interview. No separate English placement test or English course fee is published.",
+    },
+    alternativeEnglishCertificates: [],
+    englishRequirementNotes:
+      "Bachelor's: a certificate or test result is optional — English is assessed in the recorded interview. Master's: either an English grade of 8+ in the Bachelor's diploma supplement, or an internationally recognised certificate/test at B2 or above (KSU names IELTS and TOEFL as examples). KSU publishes no numeric IELTS, TOEFL, PTE or Duolingo band at either level.",
+    englishRequirementSource: "ksuMAOrg",
+    englishRequirementVerifiedAt: ON,
+    englishRequirementStatus: "officially_confirmed",
+  },
   "kauno-kolegija": {
     moiAccepted: "not_accepted",
     moiConditions: "Kauno kolegija states explicitly that a Medium of Instruction letter is not accepted as proof of English proficiency.",
@@ -269,16 +289,21 @@ export const englishAlternativesBySlug: Record<string, EnglishAlternatives> = {
   "vilnius-business-college": {
     moiAccepted: "unconfirmed",
     internalEnglishTest: {
-      available: false,
+      available: true,
+      name: "Oxford Online Placement Test (sat online at VBC)",
+      fee: "€50",
+      format:
+        "Online written test, pre-registered at least two working days ahead, followed by an oral check",
+      minimumLevel: "CEFR B2",
       notes:
-        "VBC runs an online Academic English Preparatory Programme (one semester, €3,400/year) for applicants below the required level, completed before arrival. This is a preparatory course, not an admission test.",
+        "VBC's published route for applicants holding none of its listed international certificates. Separately, applicants below B2 can still be admitted on condition of completing one semester of the Academic English Preparatory Programme (€1,700, online, 28 ECTS) before the degree.",
     },
-    alternativeEnglishCertificates: [],
+    alternativeEnglishCertificates: ["Cambridge English", "Oxford English Test"],
     englishRequirementNotes:
-      "Programme pages require at least CEFR B2. The preparatory programme is the published route for applicants who fall short; no MOI rule is stated.",
-    englishRequirementSource: "vbcEbusiness",
+      "CEFR B2 or higher. VBC's published list: Cambridge B2 First/First for Schools, Cambridge B2 Business Vantage, IELTS Academic 5.5–6.5, Pearson PTE Level 3 (B2), TOEFL iBT 60, TOEIC 785, LCCI English for Business Level 2 Credit/Level 2 Distinction/Level 3 Pass, or the €50 Oxford Online Placement Test at the College. Duolingo is not on the list.",
+    englishRequirementSource: "vbcAdmission2026",
     englishRequirementVerifiedAt: ON,
-    englishRequirementStatus: "not_officially_confirmed",
+    englishRequirementStatus: "officially_confirmed",
   },
   "vilnius-college-of-design": {
     moiAccepted: "unconfirmed",
@@ -346,6 +371,16 @@ export const englishAlternativesBySlug: Record<string, EnglishAlternatives> = {
     alternativeEnglishCertificates: ["EnglishScore (British Council)"],
     englishRequirementNotes: "Kauno kolegija's requirements apply: IELTS 5.5+, TOEFL 75+, PTE 59+ or EnglishScore 400+.",
     englishRequirementSource: "kkApply",
+    englishRequirementVerifiedAt: ON,
+    englishRequirementStatus: "officially_confirmed",
+  },
+  "lithuanian-engineering-college": {
+    moiAccepted: "unconfirmed",
+    internalEnglishTest: { available: false },
+    alternativeEnglishCertificates: ["EnglishScore (British Council)"],
+    englishRequirementNotes:
+      "CEFR B2. Published scores: Academic IELTS 5.5, Pearson PTE Academic 59, TOEFL 72, CAE 160 and English Score 400 — the British Council EnglishScore certificate is named on the Degree Studies page. A motivational interview in English is required even when a certificate is supplied. The formal 2026 admission-procedure PDF omits EnglishScore, so that acceptance rests on the Degree Studies page.",
+    englishRequirementSource: "likDegreeStudies",
     englishRequirementVerifiedAt: ON,
     englishRequirementStatus: "officially_confirmed",
   },
@@ -431,11 +466,12 @@ export const standardScoresBySlug: Record<string, StandardScores> = {
   "vilnius-academy-of-arts": { ielts: "5.5 (2026/27 MA instructions)", pte: NP, toefl: "75 (2026/27)" },
   "kaunas-university-of-technology": { ielts: "5.5 Bachelor / 6.0 Master", pte: "Not named in the published list", toefl: "75 Bachelor / 85 Master" },
   "mykolas-romeris-university": { ielts: "5.5–6.5", pte: "59–75", toefl: "72–94 iBT" },
+  "kazimieras-simonavicius-university": { ielts: NP25, pte: NP25, toefl: NP25 },
   "kauno-kolegija": { ielts: "5.5+", pte: "59+", toefl: "75+" },
   "lithuania-business-college": { ielts: NP, pte: NP, toefl: NP },
   "utenos-kolegija": { ielts: NP, pte: NP, toefl: NP },
   "smk-college": { ielts: "5.5+", pte: "59+", toefl: "69+" },
-  "vilnius-business-college": { ielts: NP, pte: NP, toefl: NP },
+  "vilnius-business-college": { ielts: "5.5–6.5 Academic (B2)", pte: "Level 3 (B2), no numeric score published", toefl: "60 iBT" },
   "vilnius-college-of-design": { ielts: NP25, pte: NP25, toefl: NP25 },
   "vilniaus-kolegija": { ielts: "5.5–6.0 (2-year validity)", pte: NP, toefl: "72–94 (2-year validity)" },
   "klaipeda-state-college": { ielts: "4.5–5.0", pte: "40.8", toefl: "42–71 iBT" },

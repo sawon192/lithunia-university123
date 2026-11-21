@@ -115,8 +115,16 @@ export const omptBySlug: Record<string, OmptProfile> = {
     verifiedOn: ON,
     note: "MRU's Bangladesh country table requires an OMPT result with the application. The published requirement is OMPT-A or OMPT-D at 75% minimum, taken by 1 April, with at most two attempts.",
   },
+  "kazimieras-simonavicius-university": {
+    ...silence("KSU's 2027/28 programme pages and its apply.ksu.lt admission portal"),
+    alternative: "Proof of a final-year school examination in Mathematics, or a science/IT/commerce substitute subject",
+  },
 
   /* ── Colleges ─────────────────────────────────────────────────────── */
+  "lithuanian-engineering-college": {
+    ...silence("LIK's Degree Studies page and its 2026 admission procedure"),
+    alternative: "The college's own mathematics test (70% pass mark) plus a motivational interview in English",
+  },
   "kauno-kolegija": {
     ...silence("Kauno kolegija's admission procedure and programme pages"),
     alternative: "Key competence test (score ≥3) and, on many programmes, a motivation interview",

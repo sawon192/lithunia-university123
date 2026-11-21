@@ -8,7 +8,7 @@ A source-linked Lithuania university admissions guide **and** a student applicat
 Bangladeshi applicants, built with Next.js 16 (App Router, Turbopack), React 19, TypeScript and
 Tailwind CSS 4.
 
-- **Public site** — 24 researched institution profiles (13 universities + 11 colleges), the
+- **Public site** — 26 researched institution profiles (11 universities + 15 colleges), the
   eight-point admission research table per institution, programme spotlight, shortlist, and a
   multi-step September 2027 application form.
 - **Admin desk** — protected `/admin` area with dashboard counters, student table, filters,
@@ -148,11 +148,11 @@ schemas, and asserts the consent constraint and audit trigger behave correctly.
 
 | Route | Type | Description |
 |---|---|---|
-| `/` | static | Home, directory of 24 institutions |
+| `/` | static | Home, directory of 26 institutions |
 | `/universities/[slug]` | dynamic | Research profile: 8-point table, programmes, Bangladesh lens, sources |
 | `/shortlist` | static | Saved institutions + shareable link generator |
 | `/s/[slug]` | dynamic | Public read-only shared shortlist |
-| `/apply` | static | 8-step student application (no account) |
+| `/apply` | static | Admission enquiry QR panel — scans/links to the Go Abroad BD enquiry form |
 | `/methodology` | static | Verification standard |
 | `/privacy` | static | Student data notice |
 | `/admin/login` | dynamic | Staff sign-in |
@@ -231,6 +231,41 @@ Explicitly flagged rather than invented: KTU's 2027/28 fee table, its Bangladesh
 list, MRU's 2027–28 tuition, and MRU's Alim / Diploma-in-Engineering exclusions (which MRU states
 positively).
 
+### What was added for KSU
+
+**Kazimieras Simonavičius University (KSU)** — Vilnius, private, slug
+`kazimieras-simonavicius-university`. Sources: `apply.ksu.lt` (its DreamApply international portal:
+application overview, 2027/28 programme catalogue and every programme page), plus
+`ksu.lt/en/admission-2027/`.
+
+Everything below is what KSU has published for the **Fall 2027/28** cycle:
+
+| Item | Published detail |
+|---|---|
+| Application fee | €250 non-refundable, paid by Flywire once the admissions team invites the applicant forward. Reduced €100 for Lithuanian applicants |
+| Applications open | 5 Nov 2026 (Business Management, Aviation Management, Communication and Digital Media); 1 Dec 2026 (Fashion Business and Communication, Film Business Management); 15 Oct 2026 (MA Fashion Management) |
+| Deadline | 1 March 2027, 23:59:59 EET — the same date on every open programme |
+| Studies begin | 1 October 2027 |
+| Bachelor's entry | Completed secondary education **plus** final-year exam proof in Mathematics and one other subject (Math replaceable by science/IT/commerce). Communication and Fashion instead require two subjects of choice |
+| Master's entry | Undergraduate diploma in the named fields (Management, Business and other Social Sciences; Communication for Strategic Communication Studies) |
+| English | Bachelor's: a certificate is **optional** — English is assessed in the recorded interview. Master's: diploma-supplement English grade 8+, or any B2+ certificate/test (IELTS/TOEFL named as examples). **No numeric band is published at either level** |
+| Tuition | €2,450/semester (BA Business Management, Communication, Fashion, Film); €6,000/year (BA Aviation); €4,000/semester (MA Aviation); €3,450/semester (MBA); €9,300/programme (MA Organizational Innovation, MA Strategic Communication); €7,800/programme (MA Fashion) |
+| Payment schedule | The **first payment must cover three semesters (1.5 years)** on the semester-priced bachelor's programmes, or the full programme fee on the 1.5-year master's — required before acceptance and before KSU will support a TRP application |
+| Study gap | 1–5 years generally acceptable; longer is treated as an academic risk factor that can stop processing |
+| OMPT | **Not mentioned anywhere** — recorded as `unconfirmed`, never as an exemption. The only maths element is the final-year Mathematics exam proof |
+
+Recorded as **unconfirmed rather than invented**: KSU's country-specific requirements page is served
+behind a security check that returned HTTP 454 to this build, so no Bangladesh-specific document list
+or HSC GPA threshold could be read. KSU's programme pages publish no numeric grade minimum for
+foreign qualifications either, so the profile says so in writing instead of quoting a number.
+The Admission 2027 page also shows a €200 fee figure in one block, which conflicts with the €250 on
+the portal and every programme page — that conflict is recorded, not resolved by guessing.
+
+KSU's English route is the one genuinely unusual finding here: it is the first institution in this
+guide where a **Bachelor's applicant can be admitted without any English certificate at all**, because
+KSU assesses English inside the mandatory recorded interview. The profile states that explicitly —
+and also states that this is an assessment, not a waiver a student can rely on in advance.
+
 ### English Test Alternatives
 
 A second, purpose-built layer sits on top of the eight research rows:
@@ -255,19 +290,82 @@ counts and labels can never disagree.
 
 Published IELTS / PTE / TOEFL bands live next to it in `standardScoresBySlug` and are shown verbatim.
 
-**Classification counts (recomputed from the data, 16 November 2026):**
+**Classification counts (recomputed from the data, 18 November 2026):**
 
 | Filter option | Institutions | Which ones |
 |---|---|---|
-| MOI Accepted | **7** | Accepted: VMU, KVK. Conditional: VU, VILNIUS TECH, ISM, KTU, MRU |
-| University Internal English Test | **7** | KTU (free), MRU (free), VIKO (free), ISM, Kauno kolegija (€45), Alytus (€45), SMK (€50) |
-| Alternative English Certificate | **14** | Duolingo, LanguageCert IESOL, Cambridge, EF SET, EnglishScore, IGCSE |
-| Any of the three | **16** | the union of the above |
+| MOI Accepted | **8** | Accepted: VMU, KVK. Conditional: VU, VILNIUS TECH, ISM, KTU, MRU, **KSU** (LIK publishes no MOI rule) |
+| University Internal English Test | **9** | KTU (free), MRU (free), VIKO (free), ISM, **KSU (recorded interview)**, **VBC (€50 Oxford placement test)**, Kauno kolegija (€45), Alytus (€45), SMK (€50) |
+| Alternative English Certificate | **16** | Duolingo, LanguageCert IESOL, Cambridge, EF SET, EnglishScore, IGCSE |
+| Any of the three | **19** | the union of the above |
 
 **Explicitly *not* accepted:** LSU, LCC, Kauno kolegija and its Alytus faculty refuse an MOI
 certificate as proof of English — they are shown as "Not accepted", never as unknown.
-**Not officially confirmed:** VDA, LBC, Utenos, SMK, VBC, VCD, VIKO, Panevėžio, Šiaulių, ILK,
-Kolpingo, LCSS. LCSS is a research institute without its own degree intake.
+**Not officially confirmed:** VDA, LBC, Utenos, SMK, VCD, VIKO, Panevėžio, Šiaulių, ILK,
+Kolpingo, LCSS. LCSS is a research institute without its own degree intake. VBC is no longer in this
+list: its admission page publishes the exact accepted-certificate table, the €50 Oxford Online
+Placement Test it runs itself, and the B2 preparatory-course route (see below).
+
+**VBC (re-verified 17 November 2026).** The English profile was previously an approximate
+CEFR-to-score mapping because only "B2" had been read from a programme page. VBC's Admission page and
+FAQ actually publish the whole table: Cambridge B2 First / B2 Business Vantage, IELTS Academic
+5.5–6.5, Pearson PTE **Level 3 (B2)**, TOEFL iBT **60**, TOEIC 785, LCCI Level 2/3 — plus the
+**€50 Oxford Online Placement Test** VBC runs online, and one semester of the AEPP (**€1,700**, not
+the €3,400 previously recorded) for applicants below B2. Two corrections followed: **Duolingo is not
+on VBC's list**, so its invented Duolingo 105 and a guessed TOEFL 72 were removed, and VBC now shows
+as having its own English test.
+
+**VMU also accepts the EnglishScore (18 November 2026).** Vytautas Magnus University's own
+admission FAQ publishes *"EnglishScore 400–499 (CoreSkills)"* in the B2 list — the same band it
+applies to Duolingo 100–125 and IELTS 5.5–6.5, at both Bachelor's and Master's level. It is now
+recorded in the facts, in `entryRules` (`englishScore: 400`) and in the alternative-certificate grid.
+
+Reading that FAQ also exposed certificates our VMU row was silently missing, all now recorded:
+Cambridge FCE and BEC Vantage 161–180, Michigan ECCE 650+, PTE General Level 3, TOEIC 785 (L&R) /
+310 (S&W), Cambridge IGCSE English First or Second Language at grade B, and TOEFL PBT 534–633. The
+FAQ also states plainly that VMU offers **no preparatory programme and no English admissions test**,
+so a B2 certificate or an MOI is required with the application.
+
+**LIK and the British Council EnglishScore (17 November 2026).** Lietuvos inžinerijos kolegija
+(`lik.tech`) was not in the dataset at all — note that it is a *different* institution from ILK,
+St. Ignatius of Loyola College, which already listed EnglishScore. It is now a full profile, and its
+Degree Studies page publishes the EnglishScore acceptance directly:
+
+| Test | LIK minimum |
+|---|---|
+| Academic IELTS | 5.5 overall |
+| Pearson PTE Academic | 59 |
+| TOEFL | 72 |
+| CAE | 160 |
+| **British Council EnglishScore** | **400** |
+
+Everything else the profile now records, from the same page and the 2026 admission-procedure PDF:
+a 7.5/10 (65%) entry score averaged over Mathematics, English, Physics and Chemistry/IT — with
+Biology and Geography added for Environmental Engineering — the college's own **mathematics test at
+70%**, a mandatory English interview, **€4,000/year** tuition, a **15 April** deadline with **no
+spring intake**, and two years of tuition payable before the residence-permit stage.
+
+One discrepancy is recorded rather than smoothed over: the formal admission-procedure PDF lists only
+IELTS, PTE, TOEFL and CAE, and does **not** name EnglishScore. The Degree Studies page does, and it is
+the more specific and more recent statement, so EnglishScore 400 is marked accepted with the
+discrepancy documented in the fact itself.
+
+**Diploma routes, audited college by college (17 November 2026).** Every college's diploma
+status was re-checked against its own pages, so no college is left at "awaiting confirmation":
+
+| College | Route | What the college publishes |
+|---|---|---|
+| SMK | Accepted | diploma listed as an entry document |
+| Vilnius Business College | Accepted | "certificate of secondary education or diploma"; 60% overall, 70% English + 70% one subject |
+| Kauno kolegija (incl. Alytus Faculty) | Accepted | "If you have a 4-year Diploma in Engineering qualification, you are eligible for admission to higher education in engineering" — Bangladesh HSC GPA ≥ 3.50 otherwise |
+| LTVK, Utenos, VCD, VIKO, KVK, Panevėžys, Šiauliai, ILK, Kolpingo, LIK | Conditional | the document class is a diploma/qualification and admission turns on academic recognition, not on a named school-leaving certificate |
+| LCSS | Not applicable | no bachelor's intake |
+
+The important distinction this audit produced: a *conditional* route is not a hidden "yes". It means
+the college accepts a qualification document in principle but the decision is a recognition
+decision, so the profile names the threshold where one exists (Kolpingo 55% CGPA, Šiauliai
+competitive score 2.0/10, ILK 46% exam average, KVK 50% in the required subject) and says what to
+ask the admissions office where one does not.
 
 Two results worth calling out because they contradict the usual agent advice:
 
@@ -302,18 +400,18 @@ read from it — so a count in the UI can never disagree with a verdict in a rep
 }
 ```
 
-**Classification (recomputed from the data, 17 November 2026):**
+**Classification (recomputed from the data, 18 November 2026):**
 
 | Filter | Institutions | Which ones |
 |---|---|---|
 | **With OMPT** | **5** | VU (by programme, from 55%), VILNIUS TECH (≥60% / ≥50%), VMU (by programme, from 55%), KTU (A/D, 75%), MRU (A/D, 75%) |
-| **Without OMPT** | **19** | 5 universities + 14 colleges |
+| **Without OMPT** | **21** | 5 universities + 16 colleges |
 
 Two rules were applied rather than assumed:
 
-- **Silence is not an exemption.** 18 institutions publish no OMPT rule at all; they are recorded as
+- **Silence is not an exemption.** 20 institutions publish no OMPT rule at all (KSU and LIK among them); they are recorded as
   `unconfirmed`, counted under *Without OMPT* (no published obligation) and never rendered as
-  "OMPT not required". The profile panel says so in writing.
+  "OMPT not required". The profile panel says so in writing. LIK is the newest of the 20.
 - **A published alternative is never called an exemption.** LSU and ISM run their own maths
   assessment, LCC adds a Skills and Knowledge Test, VDA/VCD use a portfolio, VBC/SMK an interview,
   KVK a competitive-score weighting. Those are recorded in `alternative` and the engine keeps any
@@ -358,31 +456,93 @@ silently fills an OMPT obligation.
 `src/lib/eligibility.ts` (engine), `src/components/eligibility-tool.tsx` (form + report),
 `src/components/ompt-panel.tsx` (profile panel), `src/components/university-directory.tsx`
 (with/without filter + chips), `src/app/globals.css` (`.ompt-*`, `.el-row*`, `.el-gap-*`, `.el-tally`),
-`scripts/eligibility-features.check.ts` (28 acceptance checks).
+`scripts/eligibility-features.check.ts` (44 acceptance checks).
+
+---
+
+### Qualification backgrounds and streams (A9)
+
+A qualification row now records *what the student studied*, not only *what level they reached*.
+A student can say "SSC in Science", "HSC in Business Studies", "Diploma in Mechanical Engineering"
+or "BSc in Computer Science", and the same for masters level.
+
+- `streamOptions` in `src/lib/student-profile.ts` — **102 options** across nine types:
+  SSC 5, HSC 5, Alim/Fazil 2, O-Level 3, A-Level 4, Diploma 23, Bachelor 49, Master 10, Other 1.
+  The list is deliberately longer than the handful of examples in the request (science,
+  humanities, commerce, BBA, BSc CS, EEE, mechanical) so it reads as exhaustive; every type ends
+  with an "Other …" entry plus a free-text field, so a student is never blocked by a missing option.
+- Diploma streams cover Civil, Electrical, Electronics, Mechanical, Computer, Automobile,
+  Construction, Textile, Chemical, Agriculture, Fisheries, Livestock, Forestry, Medical, Nursing,
+  Pharmacy, Business, Accounting, Marketing, Tourism, IT and Design.
+- Bachelor streams cover BBA/BCom variants, the BA family, BSc CS/SE/IT/Data, EEE, Electrical,
+  Mechanical, Civil, Chemical, Industrial, Textile, Automobile, Aeronautical, Architecture, the
+  science family, Pharmacy, Nursing, Agriculture, Environmental, LLB, B.Ed, B.Arch, MBBS,
+  Design and Journalism.
+
+Two rules keep this from becoming a hidden upgrade path:
+
+1. **A stream describes the student, never the institution.** It is used only to *find* the
+   programme the student names; the verdict still comes exclusively from the institution's
+   published `entryRules`. S5 asserts this.
+2. **Streams never rewrite a grade scale.** `defaultMaxGrade`, the HSC-scale rules and the
+   no-cross-scale-conversion rule are untouched, so adding a stream cannot move a verdict either
+   way on its own.
+
+`eligibility.ts` passes the recorded stream words into `subjectMatchFor`, so a programme named
+"Software Engineering" matches `BSc — Software Engineering` and a "Physiotherapy" programme
+matches `BSc — Physiotherapy`, without loosening the grade checks. `disciplineOf()` buckets each
+stream (`science`, `humanities`, `business`, `engineering`, `it`, `health`, `design`, `law`,
+`education`, `agriculture`, `other`); engineering and IT are kept apart on purpose, so
+`Diploma in Electrical Engineering` and `BSc — Computer Science` do not collapse into one another.
+
+**Taxonomy in the enquiry pipeline.** `src/lib/validation.ts` accepts **18** qualification labels
+(SSC, O-Level, HSC, A-Level, Alim, Fazil, Diploma, Diploma in Engineering, Bachelors, BBA, BSc,
+BEng, LLB, MBBS, Masters, MBA, MSc, Other) — validating at 40 characters instead of 20 so
+"Diploma in Engineering" is not truncated into an invalid value. `src/components/apply-form.tsx`
+offers the same 18 labels with per-label group hints. The stored `student_education` rows now carry
+a `discipline` column.
+
+**Migration required:** `supabase/migrations/0003_education_taxonomy.sql` replaces the anonymous
+`qualification` CHECK with a named 18-value constraint and adds `discipline` + an index. Until it
+is run against the Supabase project, an application that uses one of the new labels is rejected by
+the database (the CHECK still lists the original six). The page itself is unaffected — `/apply`
+has no form of its own.
+
 
 ---
 
 ---
 
-## 7. Student application form
+## 7. Admission enquiry (`/apply`)
 
-`/apply` — eight steps, no account, mobile-first:
+`/apply` is deliberately **one thing**: a QR panel that puts a student in front of a real
+counsellor. It contains no form of its own.
 
-1. Personal · 2. Contact · 3. Academics (unlimited qualifications) · 4. English tests ·
-5. Study preferences (multiple universities) · 6. Documents · 7. Background · 8. Consent.
+- Large, high-contrast QR at a fixed 240 px (200 px on small screens) as the scan target, generated
+  from the same URL the printed artwork encodes:
+  `https://app.leadsnimble.com/go-abroad-bd/f/admission-inquiry`
+- The Go Abroad BD poster beside it as the visual anchor (WebP 141 KB + JPG fallback, served from
+  `public/qr/`; the 5 MB PNG is kept as the print master and is not loaded by the page).
+- A visible text fallback link for desktop visitors, who cannot scan their own screen.
+- Plain `<img>` rather than `next/image` for the QR: the optimiser can alter the module pattern.
 
-On submit the server returns a reference (`GBD-2027-001001`), the student sees a printable summary
-(`window.print()` → save as PDF), and any chosen files are uploaded afterwards.
+All existing "Apply" links (header, footer, homepage, `/diploma`, `/eligibility`, the report
+footnote, `/s/[slug]`) keep their labels and land on this panel.
 
-Guards:
+**The in-house application form is retired from the page.** `src/components/apply-form.tsx` and the
+`/api/applications*` routes remain in the codebase but are no longer reachable from the UI, so
+nothing new reaches the `/admin` pipeline. Existing applications, notes, status workflow, audit
+history and CSV export all keep working from the `/admin` desk. Re-enabling the form is a matter of
+rendering `ApplyForm` on a page again — the validation, store and database layers are untouched.
 
-- every field is re-validated server-side in `src/lib/validation.ts`,
-- consent is required at the database level (`student_applications_consent` check),
-- duplicates are blocked for 24 h on the same email + name + first choice,
-- 5 submissions per IP per hour, 40 uploads per IP per hour,
-- uploads restricted to PDF/JPG/PNG/WEBP, ≤10 MB.
+Because submissions are now collected by the enquiry system, `/privacy` carries a short note saying
+where the form lives and that this site no longer stores application forms or uploaded documents.
 
----
+**Assets:** `public/qr/admission-inquiry-qr.png` (generated, error-correction level H, verified by
+decoding), `public/qr/admission-poster.webp`, `public/qr/admission-poster.jpg`,
+`public/qr/admission-poster.png` (source, not referenced by the page).
+
+> Regenerate the QR with the same URL only. Changing it silently breaks every printed poster.
 
 ## 8. Admin workflow
 
@@ -448,7 +608,7 @@ npm run start       # serve the production build
 npm run lint        # eslint
 npm run typecheck   # tsc --noEmit
 npm run check:db    # run migrations against embedded Postgres
-npm run test:eligibility  # 28 checks over the OMPT table, open profiles and the auto gap
+npm run test:eligibility  # 44 checks over the OMPT table, open profiles, streams and the auto gap
 npm run verify      # typecheck + lint + build
 ```
 
@@ -461,12 +621,12 @@ in local mode, plus real PostgreSQL DDL for the migrations.
 
 | # | Test | Result |
 |---|---|---|
-| 1 | Homepage renders, counters show 24 / 13 / 14 | Pass |
+| 1 | Homepage renders, counters show 26 / 11 / 15 | Pass |
 | 2 | Directory search & filters | Pass (unchanged component) |
 | 3 | KTU profile (dates, fees, OMPT, sources, status panel) | Pass |
 | 4 | MRU profile (Bangladesh table, OMPT, exclusions) | Pass |
 | 5–9 | Programme spotlight, methodology, shortlist, privacy, eligibility notes | Pass |
-| 10 | Apply form renders all 8 steps | Pass |
+| 10 | `/apply` renders the QR panel: QR + poster + fallback URL, no form markup | Pass (structure checked in the rendered HTML) |
 | 11 | Server validation rejects bad name/email/phone/consent → 422 | Pass |
 | 12 | Document upload accepts PDF, rejects .exe → 415 | Pass |
 | 13 | Application persisted with education/English/preferences rows | Pass |
@@ -494,7 +654,7 @@ requires `npm run start` on port 3100 and `playwright` installed locally). **11/
 | E3 | MOI Accepted alone → 7 institutions | Pass |
 | E4 | Two options selected → union of 11, shared institutions counted once | Pass |
 | E5 | Active-filter indicator + clear-all button appear | Pass — "2 of 3 selected" |
-| E6 | Clear-all restores all 24 institutions | Pass |
+| E6 | Clear-all restores all 26 institutions | Pass |
 | E7 | English filter combines with the city filter | Pass — Vilnius-only subset |
 | E8 | Alternative-certificate result (14) and no IELTS/PTE/TOEFL anywhere in the alternative lists or chips | Pass |
 | E9 | 390 px mobile: single column, no horizontal overflow | Pass |
@@ -504,7 +664,7 @@ requires `npm run start` on port 3100 and `playwright` installed locally). **11/
 ### Queued eligibility features — acceptance checks
 
 `npm run test:eligibility` (bundles `scripts/eligibility-features.check.ts` with the project's own
-esbuild, then runs it in Node). **28/28 pass.**
+esbuild, then runs it in Node). **44/44 pass.**
 
 | # | Test | Result |
 |---|---|---|
@@ -515,6 +675,10 @@ esbuild, then runs it in Node). **28/28 pass.**
 | A1–A3 | Recorded OMPT satisfies KTU; missing OMPT keeps it conditional; an own test is never substituted | Pass |
 | G1–G7 | Latest passing year wins, 2024 → 3 years, override wins, unknown gap is not zero, 9-year gap flags MRU | Pass |
 | D1–D2 | Legacy flat fields still work and agree with the open list | Pass |
+| D5–D6 | Kauno kolegija's published 4-year Diploma in Engineering route passes; every college has a resolved diploma route | Pass |
+| E1–E4 | EnglishScore appears only where an institution publishes it; VMU's 400 floor is judged both directions; Vilnius University is never treated as accepting it | Pass |
+| S1–S5 | Every stream option resolves to a label and a discipline; codes are unique per type; engineering and IT stay apart; a written-in stream survives; a student's own group never becomes an institution rule | Pass |
+| T1–T2 | Every qualification label the form offers is accepted by server validation; the diploma-in-engineering and degree names the user asked for are all present | Pass |
 
 DOM-level checks (needs a headless Chromium, as with E1–E11): the with/without filter, its live
 counts, the card chips, the profile OMPT panel, adding/removing qualification and assessment rows,

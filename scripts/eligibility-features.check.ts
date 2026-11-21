@@ -7,10 +7,12 @@
  * esbuild that already ships in node_modules, then executes it in Node).
  * Exits non-zero on any failure.
  */
-import { assessProfile } from "../src/lib/eligibility.ts";
+import { assessProfile, entryRules } from "../src/lib/eligibility.ts";
 import { checkOmptResult, getOmpt, omptBySlug, requiresOmpt } from "../src/lib/ompt.ts";
-import { derivedGapYears, effectiveGapYears, latestPassingYear, ratioCandidate } from "../src/lib/student-profile.ts";
-import { institutions } from "../src/lib/research.ts";
+import { derivedGapYears, disciplineOf, effectiveGapYears, latestPassingYear, ratioCandidate, streamDiscipline, streamLabel, streamOptions } from "../src/lib/student-profile.ts";
+import { QUALIFICATIONS, parseApplication } from "../src/lib/validation.ts";
+import { getEnglishAlternatives } from "../src/lib/english-alternatives.ts";
+import { getInstitution, institutions } from "../src/lib/research.ts";
 
 const results: { name: string; pass: boolean; detail: string }[] = [];
 const rec = (name: string, pass: boolean, detail: string) => {
@@ -31,11 +33,11 @@ const without = institutions.filter((i) => !requiresOmpt(getOmpt(i.slug)));
 rec("O1. Every institution has an OMPT record", institutions.every((i) => omptBySlug[i.slug] !== undefined),
   `${Object.keys(omptBySlug).length} records / ${institutions.length} institutions`);
 
-rec("O2. With-OMPT set is 5 and Without-OMPT is 19", withOmpt.length === 5 && without.length === 19,
+rec("O2. With-OMPT set is 5 and Without-OMPT is 21", withOmpt.length === 5 && without.length === 21,
   `with=${withOmpt.length} without=${without.length} → ${withOmpt.map((i) => i.abbreviation).join(", ")}`);
 
 const silent = institutions.filter((i) => getOmpt(i.slug).status === "unconfirmed");
-rec("O3. Silence is 'unconfirmed', never 'none'", silent.length === 18 && !Object.values(omptBySlug).some((p) => (p.status as string) === "none"),
+rec("O3. Silence is 'unconfirmed', never 'none'", silent.length === 20 && !Object.values(omptBySlug).some((p) => (p.status as string) === "none"),
   `${silent.length} unconfirmed, 0 silently exempt`);
 
 const published = Object.entries(omptBySlug).filter(([, p]) => p.minimumPercent !== undefined);
@@ -59,6 +61,11 @@ rec("O9. KTU: OMPT-D 60% fails on score", !checkOmptResult(ktu, { version: "D", 
 rec("O10. KTU: OMPT-C is not a named version", !checkOmptResult(ktu, { version: "C", scorePercent: 90 }).ok,
   checkOmptResult(ktu, { version: "C", scorePercent: 90 }).reasons[0]);
 rec("O11. KU silence never passes", !requiresOmpt(getOmpt("klaipeda-university")), "status " + getOmpt("klaipeda-university").status);
+
+const ksu = getOmpt("kazimieras-simonavicius-university");
+rec("O12. KSU publishes no OMPT rule, so it is 'unconfirmed', not exempt",
+  ksu.status === "unconfirmed" && !requiresOmpt(ksu) && ksu.minimumPercent === undefined,
+  `status ${ksu.status}, no score published, alternative: ${ksu.alternative}`);
 
 /* ── 3. Passing-year auto gap ───────────────────────────────────────── */
 const quals = [
@@ -132,7 +139,7 @@ const override = assessProfile({
   qualifications: [{ id: "1", type: "hsc", grade: 4.8, maxGrade: 5, passingYear: 2015 }],
 });
 rec("G7. An override replaces the derived figure in every row", override.every((r) => r.gapYears === 1 && r.gapSource === "override"),
-  "1 year in all 24 rows");
+  "1 year in all 25 rows");
 
 /* ── 7. Diploma route + legacy compatibility ────────────────────────── */
 const diploma = assessProfile({ ...base, hasDiploma: true, diplomaGrade: 3.2, diplomaMax: 4, hscGpa: undefined });
@@ -144,6 +151,104 @@ rec("D2. Legacy path & the open list agree for the same student",
   assessProfile({ ...base, qualifications: [{ id: "1", type: "diploma", grade: 3.2, maxGrade: 4 }] })
     .find((r) => r.institution.slug === "kauno-kolegija").routeCheck,
   "identical route verdict via both call styles");
+const vbcRule = getInstitution("vilnius-business-college")!;
+rec("D3. VBC accepts a diploma background and applies its published 60% floor",
+  vbcRule.diplomaCgpa.diploma === "accepted" &&
+  diploma.find((r) => r.institution.slug === "vilnius-business-college").routeCheck === "pass" &&
+  diploma.find((r) => r.institution.slug === "vilnius-business-college").academicCheck === "pass",
+  `route ${vbcRule.diplomaCgpa.diploma}, 3.2/4.00 = 80% passes the 60% floor`);
+const vbcLow = assessProfile({ ...base, qualifications: [{ id: "1", type: "diploma", grade: 2.2, maxGrade: 4 }] })
+  .find((r) => r.institution.slug === "vilnius-business-college");
+rec("D4. A diploma below VBC's published 60% is failed, not waved through",
+  vbcLow.academicCheck === "fail" && vbcLow.verdict === "not-eligible",
+  "2.2/4.00 = 55% < 60%");
+const likRule = entryRules["lithuanian-engineering-college"]!;
+rec("E1. LIK accepts the British Council EnglishScore at 400",
+  likRule.bachelor.english.tests.englishScore === 400 &&
+  getEnglishAlternatives("lithuanian-engineering-college").alternativeEnglishCertificates.includes("EnglishScore (British Council)"),
+  `EnglishScore ${likRule.bachelor.english.tests.englishScore}, level ${likRule.bachelor.english.cefr}`);
+/* ── Streams / groups / disciplines ──────────────────────────────────── */
+const allStreams = Object.values(streamOptions).flat();
+rec("S1. Every stream option resolves to a label and a discipline",
+  Object.entries(streamOptions).every(([type, options]) =>
+    options.every((option) => streamLabel({ type: type as Qualification["type"], stream: option.value }) &&
+      (option.value === "other" || Boolean(disciplineOf({ stream: option.value }))))),
+  `${allStreams.length} options across ${Object.keys(streamOptions).length} qualification types`);
+
+const dupCodes = Object.entries(streamOptions).flatMap(([type, options]) => {
+  const seen = new Set<string>();
+  return options.filter((option) => (seen.has(option.value) ? true : (seen.add(option.value), false))).map((option) => `${type}/${option.value}`);
+});
+rec("S2. Stream codes are unique within each qualification type",
+  dupCodes.length === 0, dupCodes.length ? dupCodes.join(", ") : "no duplicates");
+
+rec("S3. Engineering and IT are kept apart",
+  streamDiscipline["dip-electrical"] === "engineering" && streamDiscipline["bsc-cs"] === "it" &&
+  streamDiscipline["bsc-eee"] === "engineering" && streamDiscipline["bba"] === "business",
+  "a Diploma/degree stream is not collapsed into one bucket");
+
+rec("S4. A written-in stream survives when it is not in the list",
+  streamLabel({ type: "bachelor", stream: "other", streamOther: "BSc in Environmental Science" }) === "BSc in Environmental Science",
+  "free text is preserved rather than dropped");
+
+const groupRows = [
+  { subjectGroup: "Business Studies" }, { subjectGroup: "BSc in Computer Science" },
+  { subjectGroup: "Electrical Engineering" }, { subjectGroup: "MBBS" }, { subjectGroup: "Humanities" }, { subjectGroup: "" },
+];
+rec("S5. The student's recorded group is never mistaken for an institution rule",
+  groupRows.every((row) => getInstitution("vilnius-business-college")!.facts.english.length > 0) &&
+  disciplineOf({ stream: "hsc-business" }) === "business",
+  "streams describe the student; only entryRules decide a verdict");
+
+/* ── Apply-form taxonomy ────────────────────────────────────────────── */
+const rejected = QUALIFICATIONS.filter((qualification) => {
+  const parsed = parseApplication({
+    education: [{ qualification, institution: "Test College", passingYear: "2024", result: "4.5" }],
+  } as unknown as Parameters<typeof parseApplication>[0]);
+  return !parsed.ok && Boolean(parsed.errors?.[`education.0.qualification`]);
+});
+rec("T1. Every qualification label the form offers is accepted by server validation",
+  rejected.length === 0,
+  `${QUALIFICATIONS.length} labels: SSC, O/A-Level, Alim, Fazil, Diploma, Diploma in Engineering, BBA, BSc, BEng, LLB, MBBS, MBA, MSc…`);
+
+rec("T2. The diploma-in-engineering and degree names the user asked for are all present",
+  ["Diploma in Engineering", "BBA", "BSc", "BEng", "LLB", "MBBS"].every((label) => (QUALIFICATIONS as readonly string[]).includes(label)),
+  "engineering and business award names are distinct, not folded into one");
+
+const vmuRule = entryRules["vytautas-magnus-university"]!;
+rec("E3. VMU accepts EnglishScore 400-499 (CoreSkills) at both levels",
+  vmuRule.bachelor.english.tests.englishScore === 400 && vmuRule.master.english.tests.englishScore === 400 &&
+  getEnglishAlternatives("vytautas-magnus-university").alternativeEnglishCertificates.includes("EnglishScore (British Council)"),
+  `BA ${vmuRule.bachelor.english.tests.englishScore}, MA ${vmuRule.master.english.tests.englishScore}`);
+const vmuPass = assessProfile({ ...base, englishTest: "englishScore" as const, englishScore: 430 })
+  .find((r) => r.institution.slug === "vytautas-magnus-university");
+const vmuFail = assessProfile({ ...base, englishTest: "englishScore" as const, englishScore: 350 })
+  .find((r) => r.institution.slug === "vytautas-magnus-university");
+rec("E4. VMU EnglishScore is judged against the published 400 floor, both directions",
+  vmuPass.englishCheck === "pass" && vmuFail.englishCheck === "pending",
+  `430 → ${vmuPass.englishCheck}, 350 → ${vmuFail.englishCheck}`);
+
+const likPass = assessProfile({ ...base, englishTest: "englishScore" as const, englishScore: 420 })
+  .find((r) => r.institution.slug === "lithuanian-engineering-college");
+const likFail = assessProfile({ ...base, englishTest: "englishScore" as const, englishScore: 380 })
+  .find((r) => r.institution.slug === "lithuanian-engineering-college");
+rec("E2. EnglishScore is judged against LIK's published 400, both directions",
+  likPass.englishCheck === "pass" && likFail.englishCheck === "pending",
+  `420 → ${likPass.englishCheck}, 380 → ${likFail.englishCheck}`);
+
+rec("D5. Kauno kolegija's published 4-year Diploma in Engineering route passes",
+  diploma.find((r) => r.institution.slug === "kauno-kolegija").routeCheck === "pass" &&
+  getInstitution("kauno-kolegija")!.diplomaCgpa.diploma === "accepted",
+  "country-specific page names the qualification explicitly");
+
+const undecided = institutions.filter(
+  (i) => i.category === "college" && i.diplomaCgpa.diploma === "unconfirmed",
+);
+rec("D6. Every college has a resolved diploma route",
+  undecided.length === 0,
+  undecided.length
+    ? `still unconfirmed: ${undecided.map((i) => i.slug).join(", ")}`
+    : `${institutions.filter((i) => i.category === "college" && i.diplomaCgpa.diploma === "accepted").length} accepted, ${institutions.filter((i) => i.category === "college" && i.diplomaCgpa.diploma === "conditional").length} conditional, 1 not applicable`);
 
 const failed = results.filter((r) => !r.pass);
 console.log(`\n${results.length - failed.length}/${results.length} pass`);

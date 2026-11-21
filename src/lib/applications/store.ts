@@ -150,6 +150,27 @@ function localReference(rows: StoredApplication[]) {
 // Public API used by the routes
 // ---------------------------------------------------------------------------
 
+/**
+ * Cheap server-side bucket for a free-text group/discipline. Kept deliberately
+ * simple: it groups applications for the desk and never drives an eligibility
+ * decision (the public engine reads the student's own recorded stream code).
+ */
+function disciplineOfSubjectGroup(group?: string): string | null {
+  if (!group) return null;
+  const value = group.toLowerCase();
+  if (/(computer|software|information tech|\bit\b|data science|artificial)/.test(value)) return "it";
+  if (/(engineering|mechanical|electrical|electronic|civil|automobile|aero|textile|chemical|architecture)/.test(value)) return "engineering";
+  if (/(business|commerce|accounting|finance|marketing|management|bba)/.test(value)) return "business";
+  if (/(science|physics|chemistry|biology|mathematics|statistics|environment)/.test(value)) return "science";
+  if (/(humanities|arts|history|english|bangla|islamic|philosophy|sociolog|political|psycholog)/.test(value)) return "humanities";
+  if (/(nursing|medical|pharmacy|mbbs|health|dental)/.test(value)) return "health";
+  if (/(design|fashion|fine arts|multimedia)/.test(value)) return "design";
+  if (/(law|llb|legal)/.test(value)) return "law";
+  if (/(education|b\.?ed)/.test(value)) return "education";
+  if (/(agriculture|fisheries|forestry|livestock)/.test(value)) return "agriculture";
+  return "other";
+}
+
 export async function createApplication(input: ApplicationInput, meta: { ipHash: string }): Promise<CreateResult> {
   const dedupe = dedupeHash(input);
   const supabase = getServiceSupabase();
@@ -196,6 +217,7 @@ export async function createApplication(input: ApplicationInput, meta: { ipHash:
         qualification: row.qualification,
         institution: row.institution,
         subject_group: row.subjectGroup ?? null,
+        discipline: disciplineOfSubjectGroup(row.subjectGroup),
         passing_year: row.passingYear ?? null,
         result_text: row.result ?? null,
         awarding_body: row.awardingBody ?? null,

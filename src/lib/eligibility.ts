@@ -21,6 +21,7 @@ import {
   ofType,
   qualificationLabels,
   ratioCandidate,
+  streamLabel,
 } from "./student-profile";
 import type { Qualification, StudentAssessment } from "./student-profile";
 
@@ -258,11 +259,11 @@ export const entryRules: Record<string, InstitutionRule> = {
     slug: "vytautas-magnus-university", levels: ["Bachelor", "Master"],
     bachelor: {
       grade: { metric: "ratio", min: 0.6, note: "At least 60% CGPA in the previous relevant diploma/transcript. Bangladesh document route: HSC + SSC with transcripts.", status: "published" },
-      english: { tests: { ielts: 5.5, toefl: 87, pte: 59, duolingo: 100 }, moi: "accepted", note: "B2 evidence when previous studies were not in English: IELTS 5.5–6.5 / TOEFL iBT 87–109 / PTE 59 / Duolingo 100–125 (programme sets the point in range). Official MOI certificate accepted for English-medium studies.", status: "published" },
+      english: { tests: { ielts: 5.5, toefl: 87, pte: 59, duolingo: 100, englishScore: 400 }, moi: "accepted", note: "B2 evidence when previous studies were not in English: IELTS 5.5–6.5 / TOEFL iBT 87–109 / PTE Academic 59 / Duolingo 100–125 / EnglishScore 400–499 (CoreSkills) / Cambridge FCE or BEC Vantage 161–180 / TOEIC 785. Programme sets the point in range. Official MOI certificate accepted for English-medium studies.", status: "published" },
     },
     master: {
       grade: { metric: "ratio", min: 0.6, note: "Same 60% rule on the relevant Bachelor diploma/transcript.", status: "published" },
-      english: { tests: { ielts: 5.5, toefl: 87, pte: 59, duolingo: 100 }, moi: "accepted", note: "Same B2 band as Bachelor level; official MOI certificate accepted.", status: "published" },
+      english: { tests: { ielts: 5.5, toefl: 87, pte: 59, duolingo: 100, englishScore: 400 }, moi: "accepted", note: "Same B2 band as Bachelor level, including EnglishScore 400–499 (CoreSkills); official MOI certificate accepted.", status: "published" },
     },
     conditions: [],
     notes: [],
@@ -322,15 +323,29 @@ export const entryRules: Record<string, InstitutionRule> = {
     notes: ["A gap of three or more years after high school may trigger additional knowledge tests.", "The motivational letter is screened with specialised software and must be written without AI assistance."],
     maxGapYears: 3,
   },
+  "kazimieras-simonavicius-university": {
+    slug: "kazimieras-simonavicius-university", levels: ["Bachelor", "Master"],
+    bachelor: {
+      grade: { metric: "none", note: "A completed secondary education is required, with proof of final-year school examinations in Mathematics and one other subject (Mathematics may be replaced by a science, IT or — for commerce profiles — commerce subject). KSU publishes no numerical grade minimum for foreign qualifications: eligibility is decided by document assessment plus the recorded interview.", status: "unconfirmed" },
+      english: { tests: {}, cefr: "B2", moi: "conditional", note: "No certificate is mandatory at Bachelor's level — an English certificate or test may be submitted, but KSU assesses English in the recorded introductory or University interview in every case. No numeric IELTS/TOEFL/PTE/Duolingo band is published.", status: "published" },
+    },
+    master: {
+      grade: { metric: "none", note: "An undergraduate diploma in the Bachelor's fields the programme names (Management, Business and other Social Sciences; Communication and other Social Sciences for Strategic Communication Studies). No published CGPA minimum.", status: "unconfirmed" },
+      english: { tests: {}, cefr: "B2", moi: "conditional", note: "B2 required: either an English grade of 8 or higher in the Bachelor's diploma supplement, or an internationally recognised certificate or test at B2+ (IELTS or TOEFL named as examples). KSU states the interview assessment takes priority over submitted certificates. No numeric band is published, so no PTE or Duolingo minimum is recorded.", status: "published" },
+    },
+    conditions: ["Motivation letter covering choice of field, financial planning, experience since the last qualification and future plans", "Recorded online University interview (an additional interview if the first is unsatisfactory)", "Full 1.5-year tuition paid in advance before acceptance and TRP support"],
+    notes: ["Entries are applied for through apply.ksu.lt (DreamApply); only one degree programme per applicant, and only one account is permitted.", "The €250 application registration fee is non-refundable even if the interview or document assessment fails.", "An academic gap of one to five years is generally acceptable; a longer gap may stop the application from being processed further."],
+    maxGapYears: 5,
+  },
 
   /* Colleges */
   "kauno-kolegija": {
     slug: "kauno-kolegija", levels: ["Bachelor"],
     bachelor: {
-      grade: { metric: "ratio", min: 0.5, note: "Notarised secondary certificate and transcript with at least a 50% GPA (SKVC country rules apply). A competitive score ≥3.2 is needed for non-state-funded places.", status: "published" },
+      grade: { metric: "ratio", min: 0.5, note: "Notarised secondary certificate and transcript with at least a 50% GPA (SKVC country rules apply). For Bangladesh the country page sets the HSC bar at a GPA of at least 3.50 and states that a 4-year Diploma in Engineering qualifies the holder for admission to engineering programmes. A competitive score ≥3.2 is needed for non-state-funded places.", status: "published" },
       english: { tests: { ielts: 5.5, toefl: 75, pte: 59, englishScore: 400 }, moi: "not-accepted", note: "IELTS 5.5 / TOEFL 75 / PTE 59 / EnglishScore 400 (CEFR B2). MOI letters are expressly not accepted; the college's own €45 test is an alternative.", status: "published" },
     },
-    conditions: ["Key competence test (score ≥3)", "Motivation interview on many programmes"],
+    conditions: ["Key competence test (score ≥3)", "Motivation interview on many programmes", "Bangladesh: HSC GPA ≥3.50, or a 4-year Diploma in Engineering for engineering programmes"],
     notes: [],
   },
   "lithuania-business-college": {
@@ -363,11 +378,11 @@ export const entryRules: Record<string, InstitutionRule> = {
   "vilnius-business-college": {
     slug: "vilnius-business-college", levels: ["Bachelor"],
     bachelor: {
-      grade: { metric: "none", note: "Secondary education or high school diploma with transcripts; no Bangladesh-specific minimum grade is published.", status: "unconfirmed" },
-      english: { tests: { ielts: 5.5, toefl: 72, pte: 59, duolingo: 105 }, cefr: "B2", provisionalMapping: true, moi: "unconfirmed", note: "CEFR B2 required on programme pages. A preparatory English programme is offered below B2. Bangladesh MOI acceptance is unconfirmed. Numeric bands shown are an approximate CEFR mapping.", status: "published" },
+      grade: { metric: "ratio", min: 0.6, note: "Published floors: cumulative secondary average including final exams at least 60%. On top of that, Business Studies needs at least 70% in English and 70% in one additional subject (Mathematics, Geography, Biology or Economics); IT Studies needs at least 70% in both Mathematics and English. The 60% overall figure is the one checked automatically — the 70% subject floors are listed as conditions.", status: "published" },
+      english: { tests: { ielts: 5.5, toefl: 60 }, cefr: "B2", moi: "unconfirmed", note: "CEFR B2. Published accepted proof: IELTS Academic 5.5–6.5, TOEFL iBT 60, Cambridge B2 First/B2 Business Vantage, Pearson PTE Level 3 (B2), TOEIC 785, LCCI Level 2/3. Duolingo is NOT on VBC's list, so no Duolingo minimum is recorded. No certificate? The €50 Oxford Online Placement Test can be sat at the College. Below B2, one semester of the €1,700 preparatory programme is required before the degree.", status: "published" },
     },
-    conditions: ["Admission interview with a VBC officer", "Affidavit of support and bank evidence (~€7,000/year)"],
-    notes: [],
+    conditions: ["Average grade of at least 70% in English (and 70% in one more subject for Business, or in Mathematics for IT)", "Admission interview with a VBC officer (identity verified)", "SKVC recognition of the certificate/diploma — SKVC makes the final eligibility decision", "Affidavit of support and bank evidence (~€7,000/year)"],
+    notes: ["VBC states it has no separate entrance examinations.", "Duolingo English Test is not on VBC's published accepted list — do not quote it as an option.", "Pearson PTE is accepted only as Level 3 (B2), which VBC does not express as a numeric score."],
   },
   "vilnius-college-of-design": {
     slug: "vilnius-college-of-design", levels: ["Bachelor"],
@@ -408,11 +423,20 @@ export const entryRules: Record<string, InstitutionRule> = {
   "alytus-college": {
     slug: "alytus-college", levels: ["Bachelor"],
     bachelor: {
-      grade: { metric: "ratio", min: 0.5, note: "Kauno kolegija rules apply through the Alytus Faculty: at least 50% GPA (SKVC country rules), competitive score ≥3.2 for non-state-funded places.", status: "published" },
+      grade: { metric: "ratio", min: 0.5, note: "Kauno kolegija rules apply through the Alytus Faculty: at least 50% GPA (SKVC country rules), HSC GPA ≥3.50 for Bangladesh, 4-year Diploma in Engineering accepted for engineering programmes, competitive score ≥3.2 for non-state-funded places.", status: "published" },
       english: { tests: { ielts: 5.5, toefl: 75, pte: 59, englishScore: 400 }, moi: "not-accepted", note: "Kauno kolegija's English rules apply: IELTS 5.5 / TOEFL 75 / PTE 59 / EnglishScore 400; MOI letters expressly not accepted (own €45 test available).", status: "published" },
     },
     conditions: ["Key competence test (score ≥3)", "Motivation interview", "Apply through Kauno kolegija — no separate Alytus application"],
     notes: [],
+  },
+  "lithuanian-engineering-college": {
+    slug: "lithuanian-engineering-college", levels: ["Bachelor"],
+    bachelor: {
+      grade: { metric: "ratio", min: 0.65, note: "Published entry score of 7.5/10, which the admission procedure states as 7.5/10 or 65%. The score averages Mathematics, English, Physics and Chemistry/IT (Biology and Geography replace Chemistry/IT for Environmental Engineering programmes), using final-year grades or final-examination results — the higher of the two where both are shown.", status: "published" },
+      english: { tests: { ielts: 5.5, toefl: 72, pte: 59, englishScore: 400 }, cefr: "B2", moi: "unconfirmed", note: "CEFR B2. Published: Academic IELTS 5.5, PTE Academic 59, TOEFL 72, CAE 160 and British Council EnglishScore 400. The 2026 admission-procedure PDF lists only IELTS/PTE/TOEFL/CAE and omits EnglishScore, so the web page is the specific source for that band. An English interview is required regardless of any certificate.", status: "published" },
+    },
+    conditions: ["Mathematics test set by the college — pass mark 70%", "Motivational interview in English (required even with a certificate)", "Two years of tuition paid before the residence-permit stage", "Bank certificate of at least €6,228 for one year of living costs"],
+    notes: ["EnglishScore 400 (British Council) is accepted per the Degree Studies page; carry the certificate and be ready to point at that page.", "Entry requirements are identical across both faculties, with Biology and Geography added for Environmental Engineering.", "Applications close 15 April and there is no spring intake."],
   },
   "siauliai-state-college": {
     slug: "siauliai-state-college", levels: ["Bachelor"],
@@ -462,17 +486,25 @@ const tuitionOf = (institution: Institution): number | undefined => {
   return fallback ? Number(fallback[1].replace(/[.,]/g, (m) => (m === "," ? "" : m))) : undefined;
 };
 
-function subjectMatchFor(institution: Institution, subject: string): string | undefined {
-  const needle = subject.toLowerCase().trim();
-  if (!needle) return undefined;
-  const words = needle.split(/\s+/).filter((word) => word.length > 3);
+/**
+ * Which programme (if any) the student's stated interests point at. Searches
+ * the free-text preference first, then the recorded stream labels. This only
+ * ranks and explains — it never turns a failing check into a pass.
+ */
+function subjectMatchFor(institution: Institution, subject: string, streamWords: string[] = []): string | undefined {
   const pool = [
     ...institution.featuredProgrammes.map((programme) => programme.name),
     ...institution.bestFor,
   ];
-  for (const entry of pool) {
-    const lower = entry.toLowerCase();
-    if (lower.includes(needle) || words.some((word) => lower.includes(word))) return entry;
+  const needles = [subject.toLowerCase().trim(), ...streamWords.map((word) => word.toLowerCase())].filter(Boolean);
+  for (const needle of needles) {
+    const words = needle.split(/[\s/·—-]+/).filter((word) => word.length > 3);
+    for (const entry of pool) {
+      const lower = entry.toLowerCase();
+      if (lower.includes(needle)) return entry;
+      const hit = words.find((word) => lower.includes(word));
+      if (hit) return entry;
+    }
   }
   return undefined;
 }
@@ -754,7 +786,10 @@ export function assessProfile(input: StudentProfile): Assessment[] {
     else if (missing.length) verdict = "conditional";
     else verdict = "eligible";
 
-    const matchedProgramme = subjectMatchFor(institution, profile.subject);
+    const streamWords = profile.qualifications
+      .map((item) => streamLabel(item))
+      .filter((label): label is string => Boolean(label));
+    const matchedProgramme = subjectMatchFor(institution, profile.subject, streamWords);
     const cityMatch = profile.city !== "any" && institution.city.toLowerCase().includes(profile.city === "other" ? "\u0000" : profile.city);
     const tuitionEur = tuitionOf(institution);
     const budgetFit = profile.budgetEur && tuitionEur ? tuitionEur <= profile.budgetEur : undefined;
