@@ -30,7 +30,29 @@ type EnglishRow = { testType: string; score: string; testDate: string };
 
 type PreferenceRow = { universitySlug: string; universityName: string; programmeName: string; level: string; subjectArea: string };
 
-const QUALIFICATIONS = ["SSC", "HSC", "Diploma", "Bachelors", "Masters", "Other"];
+const QUALIFICATIONS = ["SSC", "O-Level", "HSC", "A-Level", "Alim", "Fazil", "Diploma", "Diploma in Engineering", "Bachelors", "BBA", "BSc", "BEng", "LLB", "MBBS", "Masters", "MBA", "MSc", "Other"];
+
+/** Suggested groups per qualification — the field stays free text, these are datalist hints. */
+const SUBJECT_GROUP_HINTS: Record<string, string[]> = {
+  SSC: ["Science", "Humanities", "Business Studies", "Vocational", "General"],
+  "O-Level": ["Science", "Humanities", "Business Studies"],
+  HSC: ["Science", "Humanities", "Business Studies", "Vocational (BTEB)"],
+  "A-Level": ["Science", "Humanities", "Business Studies", "Art & Design"],
+  Alim: ["General (Alim)"],
+  Fazil: ["Fazil"],
+  Diploma: ["Civil Engineering", "Electrical Engineering", "Electronics", "Mechanical Engineering", "Computer Science", "Automobile", "Textile", "Chemical", "Agriculture", "Medical Technology", "Nursing", "Pharmacy", "Business Studies", "Accounting", "IT", "Design"],
+  "Diploma in Engineering": ["Civil", "Electrical", "Electronics", "Mechanical", "Computer", "Automobile", "Construction", "Textile", "Chemical"],
+  Bachelors: ["BA General", "BSc", "BSS", "BCom", "LLB", "B.Ed", "Design"],
+  BBA: ["Accounting & Finance", "Marketing", "HR / Management", "Banking & Insurance", "Tourism & Hospitality"],
+  BSc: ["Computer Science", "Software Engineering", "IT", "Data Science / AI", "Electrical & Electronic Engineering", "Electrical Engineering", "Mechanical Engineering", "Civil Engineering", "Chemical Engineering", "Industrial & Production", "Textile Engineering", "Aeronautical", "Mathematics / Statistics", "Physics", "Chemistry", "Biology / Botany / Zoology", "Biotechnology", "Pharmacy", "Nursing / Public Health", "Agriculture", "Environmental Science", "Architecture"],
+  BEng: ["Civil", "Electrical & Electronic", "Mechanical", "Chemical", "Industrial & Production", "Textile", "Automobile", "Aeronautical"],
+  LLB: ["Law"],
+  MBBS: ["Medicine", "Dentistry"],
+  Masters: ["MA", "MSS", "MSc", "MBA", "LLM"],
+  MBA: ["Business Administration"],
+  MSc: ["Computer Science / IT", "Engineering", "Natural Sciences", "Public Health"],
+  Other: [],
+};
 const TEST_TYPES = ["IELTS", "PTE", "TOEFL", "Duolingo", "Other", "None"];
 const DOCUMENT_SLOTS: { kind: string; label: string; optional?: boolean }[] = [
   { kind: "passport", label: "Passport", optional: true },
@@ -279,8 +301,16 @@ export function ApplyForm({ universities, subjects }: { universities: Option[]; 
                   <input value={row.institution} onChange={(e) => setEducationRow(index, { institution: e.target.value })} placeholder="School or college name" />
                 </Field>
                 <div className="apply-grid-2">
-                  <Field label="Group / subject">
-                    <input value={row.subjectGroup} onChange={(e) => setEducationRow(index, { subjectGroup: e.target.value })} placeholder="Science / Business Studies" />
+                  <Field label="Group / subject" hint="Your stream, or the exact award — e.g. Science, Business Studies, BSc in Computer Science.">
+                    <input
+                      list={`groups-${index}`}
+                      value={row.subjectGroup}
+                      onChange={(e) => setEducationRow(index, { subjectGroup: e.target.value })}
+                      placeholder="Science / Business Studies / BSc in Computer Science"
+                    />
+                    <datalist id={`groups-${index}`}>
+                      {(SUBJECT_GROUP_HINTS[row.qualification] ?? []).map((hint) => <option key={hint} value={hint} />)}
+                    </datalist>
                   </Field>
                   <Field label="GPA / CGPA / result">
                     <input value={row.result} onChange={(e) => setEducationRow(index, { result: e.target.value })} placeholder="4.75" />

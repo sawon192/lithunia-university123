@@ -915,6 +915,7 @@ h2{font-size:clamp(36px,4.1vw,55px);line-height:1.12}
 .el-row-head strong{font-size:11.5px;color:#0d2d50;letter-spacing:.01em}
 .el-remove{display:inline-flex;align-items:center;gap:4px;background:none;border:none;padding:2px;font-size:10px;font-weight:700;color:#a8877f;cursor:pointer;font-family:inherit}
 .el-remove:hover{color:#a75a4d}
+.el-row-stream{font-weight:500;color:#566d7c}
 .el-row-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px 14px}
 .el-row-grid .el-field input,.el-row-grid .el-field select{padding:9px 10px;font-size:12px}
 .el-gap-card{border:1px solid #e3d9c3;border-left:3px solid #bc8940;border-radius:10px;background:#fdfbf6;padding:14px 16px;margin:4px 0 16px}

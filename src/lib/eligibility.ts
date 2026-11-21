@@ -21,6 +21,7 @@ import {
   ofType,
   qualificationLabels,
   ratioCandidate,
+  streamLabel,
 } from "./student-profile";
 import type { Qualification, StudentAssessment } from "./student-profile";
 
@@ -485,17 +486,25 @@ const tuitionOf = (institution: Institution): number | undefined => {
   return fallback ? Number(fallback[1].replace(/[.,]/g, (m) => (m === "," ? "" : m))) : undefined;
 };
 
-function subjectMatchFor(institution: Institution, subject: string): string | undefined {
-  const needle = subject.toLowerCase().trim();
-  if (!needle) return undefined;
-  const words = needle.split(/\s+/).filter((word) => word.length > 3);
+/**
+ * Which programme (if any) the student's stated interests point at. Searches
+ * the free-text preference first, then the recorded stream labels. This only
+ * ranks and explains — it never turns a failing check into a pass.
+ */
+function subjectMatchFor(institution: Institution, subject: string, streamWords: string[] = []): string | undefined {
   const pool = [
     ...institution.featuredProgrammes.map((programme) => programme.name),
     ...institution.bestFor,
   ];
-  for (const entry of pool) {
-    const lower = entry.toLowerCase();
-    if (lower.includes(needle) || words.some((word) => lower.includes(word))) return entry;
+  const needles = [subject.toLowerCase().trim(), ...streamWords.map((word) => word.toLowerCase())].filter(Boolean);
+  for (const needle of needles) {
+    const words = needle.split(/[\s/·—-]+/).filter((word) => word.length > 3);
+    for (const entry of pool) {
+      const lower = entry.toLowerCase();
+      if (lower.includes(needle)) return entry;
+      const hit = words.find((word) => lower.includes(word));
+      if (hit) return entry;
+    }
   }
   return undefined;
 }
@@ -777,7 +786,10 @@ export function assessProfile(input: StudentProfile): Assessment[] {
     else if (missing.length) verdict = "conditional";
     else verdict = "eligible";
 
-    const matchedProgramme = subjectMatchFor(institution, profile.subject);
+    const streamWords = profile.qualifications
+      .map((item) => streamLabel(item))
+      .filter((label): label is string => Boolean(label));
+    const matchedProgramme = subjectMatchFor(institution, profile.subject, streamWords);
     const cityMatch = profile.city !== "any" && institution.city.toLowerCase().includes(profile.city === "other" ? "\u0000" : profile.city);
     const tuitionEur = tuitionOf(institution);
     const budgetFit = profile.budgetEur && tuitionEur ? tuitionEur <= profile.budgetEur : undefined;

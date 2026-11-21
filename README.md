@@ -8,7 +8,7 @@ A source-linked Lithuania university admissions guide **and** a student applicat
 Bangladeshi applicants, built with Next.js 16 (App Router, Turbopack), React 19, TypeScript and
 Tailwind CSS 4.
 
-- **Public site** — 26 researched institution profiles (14 universities + 12 colleges), the
+- **Public site** — 26 researched institution profiles (11 universities + 15 colleges), the
   eight-point admission research table per institution, programme spotlight, shortlist, and a
   multi-step September 2027 application form.
 - **Admin desk** — protected `/admin` area with dashboard counters, student table, filters,
@@ -456,7 +456,58 @@ silently fills an OMPT obligation.
 `src/lib/eligibility.ts` (engine), `src/components/eligibility-tool.tsx` (form + report),
 `src/components/ompt-panel.tsx` (profile panel), `src/components/university-directory.tsx`
 (with/without filter + chips), `src/app/globals.css` (`.ompt-*`, `.el-row*`, `.el-gap-*`, `.el-tally`),
-`scripts/eligibility-features.check.ts` (37 acceptance checks).
+`scripts/eligibility-features.check.ts` (44 acceptance checks).
+
+---
+
+### Qualification backgrounds and streams (A9)
+
+A qualification row now records *what the student studied*, not only *what level they reached*.
+A student can say "SSC in Science", "HSC in Business Studies", "Diploma in Mechanical Engineering"
+or "BSc in Computer Science", and the same for masters level.
+
+- `streamOptions` in `src/lib/student-profile.ts` — **102 options** across nine types:
+  SSC 5, HSC 5, Alim/Fazil 2, O-Level 3, A-Level 4, Diploma 23, Bachelor 49, Master 10, Other 1.
+  The list is deliberately longer than the handful of examples in the request (science,
+  humanities, commerce, BBA, BSc CS, EEE, mechanical) so it reads as exhaustive; every type ends
+  with an "Other …" entry plus a free-text field, so a student is never blocked by a missing option.
+- Diploma streams cover Civil, Electrical, Electronics, Mechanical, Computer, Automobile,
+  Construction, Textile, Chemical, Agriculture, Fisheries, Livestock, Forestry, Medical, Nursing,
+  Pharmacy, Business, Accounting, Marketing, Tourism, IT and Design.
+- Bachelor streams cover BBA/BCom variants, the BA family, BSc CS/SE/IT/Data, EEE, Electrical,
+  Mechanical, Civil, Chemical, Industrial, Textile, Automobile, Aeronautical, Architecture, the
+  science family, Pharmacy, Nursing, Agriculture, Environmental, LLB, B.Ed, B.Arch, MBBS,
+  Design and Journalism.
+
+Two rules keep this from becoming a hidden upgrade path:
+
+1. **A stream describes the student, never the institution.** It is used only to *find* the
+   programme the student names; the verdict still comes exclusively from the institution's
+   published `entryRules`. S5 asserts this.
+2. **Streams never rewrite a grade scale.** `defaultMaxGrade`, the HSC-scale rules and the
+   no-cross-scale-conversion rule are untouched, so adding a stream cannot move a verdict either
+   way on its own.
+
+`eligibility.ts` passes the recorded stream words into `subjectMatchFor`, so a programme named
+"Software Engineering" matches `BSc — Software Engineering` and a "Physiotherapy" programme
+matches `BSc — Physiotherapy`, without loosening the grade checks. `disciplineOf()` buckets each
+stream (`science`, `humanities`, `business`, `engineering`, `it`, `health`, `design`, `law`,
+`education`, `agriculture`, `other`); engineering and IT are kept apart on purpose, so
+`Diploma in Electrical Engineering` and `BSc — Computer Science` do not collapse into one another.
+
+**Taxonomy in the enquiry pipeline.** `src/lib/validation.ts` accepts **18** qualification labels
+(SSC, O-Level, HSC, A-Level, Alim, Fazil, Diploma, Diploma in Engineering, Bachelors, BBA, BSc,
+BEng, LLB, MBBS, Masters, MBA, MSc, Other) — validating at 40 characters instead of 20 so
+"Diploma in Engineering" is not truncated into an invalid value. `src/components/apply-form.tsx`
+offers the same 18 labels with per-label group hints. The stored `student_education` rows now carry
+a `discipline` column.
+
+**Migration required:** `supabase/migrations/0003_education_taxonomy.sql` replaces the anonymous
+`qualification` CHECK with a named 18-value constraint and adds `discipline` + an index. Until it
+is run against the Supabase project, an application that uses one of the new labels is rejected by
+the database (the CHECK still lists the original six). The page itself is unaffected — `/apply`
+has no form of its own.
+
 
 ---
 
@@ -557,7 +608,7 @@ npm run start       # serve the production build
 npm run lint        # eslint
 npm run typecheck   # tsc --noEmit
 npm run check:db    # run migrations against embedded Postgres
-npm run test:eligibility  # 37 checks over the OMPT table, open profiles and the auto gap
+npm run test:eligibility  # 44 checks over the OMPT table, open profiles, streams and the auto gap
 npm run verify      # typecheck + lint + build
 ```
 
@@ -570,7 +621,7 @@ in local mode, plus real PostgreSQL DDL for the migrations.
 
 | # | Test | Result |
 |---|---|---|
-| 1 | Homepage renders, counters show 26 / 14 / 12 | Pass |
+| 1 | Homepage renders, counters show 26 / 11 / 15 | Pass |
 | 2 | Directory search & filters | Pass (unchanged component) |
 | 3 | KTU profile (dates, fees, OMPT, sources, status panel) | Pass |
 | 4 | MRU profile (Bangladesh table, OMPT, exclusions) | Pass |
@@ -613,7 +664,7 @@ requires `npm run start` on port 3100 and `playwright` installed locally). **11/
 ### Queued eligibility features — acceptance checks
 
 `npm run test:eligibility` (bundles `scripts/eligibility-features.check.ts` with the project's own
-esbuild, then runs it in Node). **28/28 pass.**
+esbuild, then runs it in Node). **44/44 pass.**
 
 | # | Test | Result |
 |---|---|---|
@@ -624,6 +675,10 @@ esbuild, then runs it in Node). **28/28 pass.**
 | A1–A3 | Recorded OMPT satisfies KTU; missing OMPT keeps it conditional; an own test is never substituted | Pass |
 | G1–G7 | Latest passing year wins, 2024 → 3 years, override wins, unknown gap is not zero, 9-year gap flags MRU | Pass |
 | D1–D2 | Legacy flat fields still work and agree with the open list | Pass |
+| D5–D6 | Kauno kolegija's published 4-year Diploma in Engineering route passes; every college has a resolved diploma route | Pass |
+| E1–E4 | EnglishScore appears only where an institution publishes it; VMU's 400 floor is judged both directions; Vilnius University is never treated as accepting it | Pass |
+| S1–S5 | Every stream option resolves to a label and a discipline; codes are unique per type; engineering and IT stay apart; a written-in stream survives; a student's own group never becomes an institution rule | Pass |
+| T1–T2 | Every qualification label the form offers is accepted by server validation; the diploma-in-engineering and degree names the user asked for are all present | Pass |
 
 DOM-level checks (needs a headless Chromium, as with E1–E11): the with/without filter, its live
 counts, the card chips, the profile OMPT panel, adding/removing qualification and assessment rows,

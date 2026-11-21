@@ -4,7 +4,32 @@
  * and every rule is enforced again on the server regardless of the client state.
  */
 
-export const QUALIFICATIONS = ["SSC", "HSC", "Diploma", "Bachelors", "Masters", "Other"] as const;
+/**
+ * Qualification names as the applicant sees them. Kept as a widened list (not
+ * free text) so the desk can group and filter applications reliably; the
+ * spread of award names matters more than a tidy enum, so BBA / BSc / BEng /
+ * MBBS are distinct rather than folded into "Bachelors".
+ */
+export const QUALIFICATIONS = [
+  "SSC",
+  "O-Level",
+  "HSC",
+  "A-Level",
+  "Alim",
+  "Fazil",
+  "Diploma",
+  "Diploma in Engineering",
+  "Bachelors",
+  "BBA",
+  "BSc",
+  "BEng",
+  "LLB",
+  "MBBS",
+  "Masters",
+  "MBA",
+  "MSc",
+  "Other",
+] as const;
 export const TEST_TYPES = ["IELTS", "PTE", "TOEFL", "Duolingo", "Other", "None"] as const;
 export const LEVELS = ["Bachelor", "Master"] as const;
 
@@ -136,7 +161,9 @@ export function parseApplication(body: unknown): { ok: true; value: ApplicationI
   const education: EducationRow[] = [];
   educationRaw.forEach((row, index) => {
     const item = (row ?? {}) as Record<string, unknown>;
-    const qualification = str(item.qualification, 20) as Qualification;
+    // "Diploma in Engineering" is the longest accepted label; keep headroom so
+    // a legitimate value is never silently truncated into an invalid one.
+    const qualification = str(item.qualification, 40) as Qualification;
     if (!QUALIFICATIONS.includes(qualification)) {
       if (str(item.institution) || str(item.result)) errors[`education.${index}.qualification`] = "Choose a qualification.";
       return;

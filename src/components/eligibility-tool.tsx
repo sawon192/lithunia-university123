@@ -17,6 +17,8 @@ import {
   makeId,
   qualificationLabels,
   qualificationSummary,
+  streamLabel,
+  streamOptions,
 } from "@/lib/student-profile";
 import type { AssessmentType, Qualification, QualificationType, StudentAssessment } from "@/lib/student-profile";
 import { omptStatusLabels } from "@/lib/ompt";
@@ -152,7 +154,10 @@ export function EligibilityTool() {
         {qualifications.map((item) => (
           <div className="el-row" key={item.id}>
             <div className="el-row-head">
-              <strong>{item.type === "other" ? item.label || "Other qualification" : qualificationLabels[item.type]}</strong>
+              <strong>
+                {item.type === "other" ? item.label || "Other qualification" : qualificationLabels[item.type]}
+                {streamLabel(item) ? <span className="el-row-stream"> · {streamLabel(item)}</span> : null}
+              </strong>
               <button type="button" className="el-remove" onClick={() => removeQualification(item.id)} aria-label={`Remove ${qualificationLabels[item.type]}`}><Trash2 size={13} /> Remove</button>
             </div>
             <div className="el-row-grid">
@@ -163,6 +168,22 @@ export function EligibilityTool() {
               </Field>
               {item.type === "other" && (
                 <Field label="Name"><input value={item.label ?? ""} onChange={(event) => setQualification(item.id, { label: event.target.value })} placeholder="e.g. Fazil, BTEB short course" /></Field>
+              )}
+              <Field label="Group / subject" note="Your stream or discipline. It never changes a verdict — institutions rule on grades and documents.">
+                <select
+                  value={item.stream ?? ""}
+                  onChange={(event) => setQualification(item.id, { stream: event.target.value || undefined, streamOther: undefined })}
+                >
+                  <option value="">Not recorded</option>
+                  {streamOptions[item.type].map((option) => (
+                    <option key={option.value} value={option.value}>{option.label}</option>
+                  ))}
+                </select>
+              </Field>
+              {item.stream === "other" && (
+                <Field label="Group / subject name">
+                  <input value={item.streamOther ?? ""} onChange={(event) => setQualification(item.id, { streamOther: event.target.value })} placeholder="e.g. BSc in Environmental Science" />
+                </Field>
               )}
               <Field label="Result"><input type="number" step="0.01" min="0" value={item.grade ?? ""} onChange={(event) => setQualification(item.id, { grade: number(event.target.value) })} placeholder="e.g. 4.75" /></Field>
               <Field label="Scale max"><input type="number" step="0.01" min="1" value={item.maxGrade ?? ""} onChange={(event) => setQualification(item.id, { maxGrade: number(event.target.value) })} placeholder="5 or 4" /></Field>
